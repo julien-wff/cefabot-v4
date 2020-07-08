@@ -8,7 +8,7 @@
     let isOpen = false;
 </script>
 
-<header class="fixed top-0 left-0 w-full bg-gray-900 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3">
+<header class="fixed top-0 left-0 w-full bg-gray-900 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3 z-10">
 
     <div class="flex items-center justify-between px-4 py-3 sm:p-0">
 
