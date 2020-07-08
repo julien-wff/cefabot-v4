@@ -1,0 +1,17 @@
+yarn.lock
+package.lock
+/build/
+/tmp/
+/node_modules/
+.env
+
+# Idea configs
+.idea/dataSources
+.idea/cefabot-v4.iml
+.idea/compiler.xml
+.idea/discord.xml
+.idea/jsLibraryMappings.xml
+.idea/modules.xml
+.idea/statistic.xml
+.idea/vcs.xml
+.idea/workspace.xml

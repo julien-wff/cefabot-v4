@@ -1,0 +1,32 @@
+import { Client, PresenceData } from 'discord.js';
+import { Command } from '../commands/commands';
+
+export interface Bot {
+    token: string;
+    name: string;
+    clientID: string;
+    enabled: boolean;
+    guildsID: string[];
+    commands: string[];
+    events: string[];
+    commandStart: string;
+    _id: any;
+    presence?: PresenceData;
+}
+
+export interface BotInstance {
+    client: Client;
+    config: Bot;
+    commands: Command[];
+}
+
+export interface BotPacket<T = undefined> {
+    type: 'reboot' | 'resolved-role' | 'resolved-guild';
+    data: T;
+}
+
+export interface CorePacket<T = undefined> {
+    type: 'start' | 'reboot' | 'shutdown' | 'reload-commands' | 'reload-events' | 'external-reboot'
+        | 'resolve-role' | 'resolve-guild';
+    data: T;
+}
