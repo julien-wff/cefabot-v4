@@ -12,6 +12,7 @@ import guild from './routes/api/bots/guild';
 import postData from './routes/api/data/post-data';
 import deleteData from './routes/api/data/delete-data';
 import createBot from './routes/api/bots/create-bot';
+import { getWebAccesses } from './routes/api/web-accesses/get-web-accesses';
 
 const connectionRouter = Router();
 
@@ -42,5 +43,7 @@ apiRouter.get('/events', events);
 apiRouter.get('/data', getMultipleData);
 apiRouter.post('/data', postData);
 apiRouter.delete('/data/:dataID', deleteData);
+// Web accesses
+apiRouter.get('/web-accesses', getWebAccesses);
 
 export { connectionRouter, apiRouter };
