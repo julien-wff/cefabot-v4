@@ -1,6 +1,7 @@
 import { CommandFlag, RealValueType } from '../../../../commands/commands';
+import { BotInstance } from '../../../botTypes';
 
-export default function getCommandFlag(flagData: CommandFlag, content: string): ParseFlagResult {
+export default function getCommandFlag(flagData: CommandFlag, content: string, bot: BotInstance): ParseFlagResult {
 
     let result: ParseFlagResult | undefined;
 
@@ -11,13 +12,13 @@ export default function getCommandFlag(flagData: CommandFlag, content: string): 
 
     if (!flag)  // If the flag is not found
         if (required)
-            return { error: `drapeau ${help} est manquant` };
+            return { error: bot.localeService.translate('error.missing flag', { flag: help }) };
         else
             return {};
 
     if (duplicatedFlag) // If there is more than one trigger it means that it's duplicated
         return {
-            error: `le drapeau ${help} est présent sous plusieurs versions (${duplicatedFlag}, ${help})`,
+            error: bot.localeService.translate('error.flag present under multiple versions', { flag: help }) + ` (${help}, ${duplicatedFlag})`,
         };
 
     const flagRegex = new RegExp(`${flag}( +|$)`, 'i');
@@ -55,7 +56,7 @@ export default function getCommandFlag(flagData: CommandFlag, content: string): 
 
         } else {
 
-            return { error: `le drapeau ${flag} est invalide` };
+            return { error: bot.localeService.translate('error.the flag is invalid', { flag }) };
 
         }
     }
@@ -67,13 +68,13 @@ export default function getCommandFlag(flagData: CommandFlag, content: string): 
             const value = extractNextValue(flag);
             const intValue = parseInt(value);
             if (isNaN(intValue))
-                return { error: `${value} n'est pas un nombre valide` };
+                return { error: bot.localeService.translate('error.invalid integer', { number: value }) };
             else
                 result = { data: { name, value: intValue } };
 
         } else {
 
-            return { error: `le drapeau ${flag} est invalide` };
+            return { error: bot.localeService.translate('error.the flag is invalid', { flag }) };
 
         }
     }
@@ -85,13 +86,13 @@ export default function getCommandFlag(flagData: CommandFlag, content: string): 
             const value = extractNextValue(flag);
             const floatValue = parseFloat(value);
             if (isNaN(floatValue))
-                return { error: `${value} n'est pas un nombre valide` };
+                return { error: bot.localeService.translate('error.not a valid number', { number: value }) };
             else
                 result = { data: { name, value: floatValue } };
 
         } else {
 
-            return { error: `le drapeau ${flag} est invalide` };
+            return { error: bot.localeService.translate('error.the flag is invalid', { flag }) };
 
         }
     }
@@ -100,14 +101,14 @@ export default function getCommandFlag(flagData: CommandFlag, content: string): 
     if (result && content.match(flagRegex)) // If the deleted flag is still present in the content
         result = {
             ...result,
-            error: `le drapeau ${flag} est présent plus d'une fois`,
+            error: bot.localeService.translate('error.flag present under multiple versions', { flag }),
         };
 
     // Return the result. If there is no result, return an error.
     if (result)
         return result;
     else
-        return { error: 'une erreur inconnue est survenue' };
+        return { error: bot.localeService.translate('error.something went wrong', { code: 'ERR_NO_FLAG_RESULT' }) };
 
 
     // The extracting functions

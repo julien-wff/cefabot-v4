@@ -1,7 +1,8 @@
 import { Command } from '../../../../commands/commands';
 import { GuildMember, PermissionString } from 'discord.js';
+import { BotInstance } from '../../../botTypes';
 
-export default function checkUserPermissions(command: Command, member: GuildMember): HasUserPerms {
+export default function checkUserPermissions(command: Command, member: GuildMember, bot: BotInstance): HasUserPerms {
 
     if (member.guild.ownerID === member.id) // The owner has all the rights
         return {
@@ -17,7 +18,7 @@ export default function checkUserPermissions(command: Command, member: GuildMemb
             if (!userPerms[command.permission])
                 return {
                     perm: false,
-                    error: `tu n'as pas les droits nécessaires pour faire cette commande (${command.permission})`,
+                    error: bot.localeService.translate('error.you dont have the permission to perform this command', { permission: command.permission }),
                 };
             else
                 return {
@@ -30,7 +31,7 @@ export default function checkUserPermissions(command: Command, member: GuildMemb
                 if (!userPerms[perm as PermissionString])   // If one permission is missing then the user is not authorized
                     return {
                         perm: false,
-                        error: `tu n'as pas les droits nécessaires pour faire cette commande (${perm})`,
+                        error: bot.localeService.translate('error.you dont have the permission to perform this command', { permission: perm }),
                     };
             }
 

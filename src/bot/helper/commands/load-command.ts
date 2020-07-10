@@ -17,7 +17,7 @@ export default function loadCommand(name: string, addExt = false, botID?: any): 
             if (command && command.properties)
                 return command.properties;
         } catch (e) {
-            if (botID) botLog('error', `Impossible de charger la commande ${name} : ${e}`, botID, {
+            if (botID) botLog('error', `Unable to load the command ${name} : ${e}`, botID, {
                 location: 'load-command.ts',
                 data: e,
             });

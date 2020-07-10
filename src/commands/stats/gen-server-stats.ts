@@ -20,6 +20,6 @@ export default async function genServerStats(message: Message, bot: BotInstance)
         xp: usersStats.reduce((previous, current) => previous + current.xp.count, 0),
     };
 
-    return await createStats(serverStats);
+    return await createStats(serverStats, bot.localeService);
 
 }

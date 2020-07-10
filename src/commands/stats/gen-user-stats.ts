@@ -39,6 +39,6 @@ export default async function genUserStats(message: Message, member: string, bot
     //     .sort({ messagesCount: 'desc' })
     //     .limit(count);
 
-    return await createStats(userStats);
+    return await createStats(userStats, bot.localeService);
 
 }

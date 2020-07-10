@@ -2,6 +2,7 @@ import { createCanvas } from 'canvas';
 import writePng from './helper/write-png';
 import placeSquareImage from './helper/place-square-image';
 import moment from 'moment';
+import LocaleService from '../services/LocaleService';
 
 moment.locale('FR');
 
@@ -17,7 +18,7 @@ export interface Stats {
     members?: number,
 }
 
-export default async function createStats(stats: Stats): Promise<string> {
+export default async function createStats(stats: Stats, ls: LocaleService): Promise<string> {
 
     stats.level = Math.floor(stats.xp / 250);
     stats.levelProgression = (stats.xp - (250 * stats.level)) / 250;
@@ -46,13 +47,13 @@ export default async function createStats(stats: Stats): Promise<string> {
     ctx.textAlign = 'left';
     ctx.textBaseline = 'middle';
     // Header
-    const headerX = stats.avatarURL ? 140 : 20
+    const headerX = stats.avatarURL ? 140 : 20;
     ctx.fillText(stats.name, headerX, 45, 360);
     ctx.font = '24px sans-serif';
     if (stats.memberFor)
-        ctx.fillText(`Membre depuis ${moment.duration(stats.memberFor).humanize()}`, headerX, 95, 360);
+        ctx.fillText(ls.translate('canvas.member since', { date: moment.duration(stats.memberFor).humanize() }), headerX, 95, 360);
     else if (stats.members)
-        ctx.fillText(`${stats.members} membre${stats.members > 1 ? 's' : ''}`, headerX, 95, 360);
+        ctx.fillText(ls.translate('canvas.member', { count: stats.members }), headerX, 95, 360);
     // Progress bar
     ctx.fillRect(50, 140 - 4, stats.levelProgression * 400, 8);
     ctx.font = '18px sans-serif';
@@ -63,9 +64,9 @@ export default async function createStats(stats: Stats): Promise<string> {
     //Stats
     ctx.font = '20px sans-serif';
     ctx.fillText(`${stats.xp} XP`, 20, 180, 220);
-    ctx.fillText(`Niveau ${stats.level}`, 20, 220, 220);
-    ctx.fillText(`${stats.messages} messages`, 250, 180, 220);
-    ctx.fillText(`${stats.commands} commandes`, 250, 220, 220);
+    ctx.fillText(ls.translate('canvas.level', { level: stats.level }), 20, 220, 220);
+    ctx.fillText(ls.translate('canvas.message', { level: stats.messages }), 250, 180, 220);
+    ctx.fillText(ls.translate('canvas.command', { level: stats.commands }), 250, 220, 220);
     // ctx.fillText('N°2 du serveur', 250, 220, 220);  // TODO: Get position
 
     return await writePng(canvas);

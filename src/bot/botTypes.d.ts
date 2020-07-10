@@ -1,9 +1,11 @@
 import { Client, PresenceData } from 'discord.js';
 import { Command } from '../commands/commands';
+import LocaleService from '../services/LocaleService';
 
 export interface Bot {
     token: string;
     name: string;
+    lang: 'en' | 'fr',
     clientID: string;
     enabled: boolean;
     guildsID: string[];
@@ -18,6 +20,7 @@ export interface BotInstance {
     client: Client;
     config: Bot;
     commands: Command[];
+    localeService: LocaleService;
 }
 
 export interface BotPacket<T = undefined> {

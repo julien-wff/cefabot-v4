@@ -11,6 +11,10 @@ const BotSchema = new Schema({
         type: String,
         required: true,
     },
+    lang: {
+        type: String,
+        default: 'en',
+    },
     clientID: {
         type: String,
         required: true,

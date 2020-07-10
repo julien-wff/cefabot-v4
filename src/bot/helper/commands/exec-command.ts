@@ -49,16 +49,19 @@ export default async function execCommand(message: Message, bot: BotInstance) {
         });
         // If the channel was not found or if the channel type is not in the allowed ones
         if (!msgChannel || !channel?.includes(msgChannel.channelType)) {
-            return tempMessage(message, bot, 'cette commande ne peut pas être effectuée dans ce salon.', '5s', true);
+            return tempMessage(
+                message, bot,
+                bot.localeService.translate('error.this command cant be done in this channel'),
+                '5s', true);
         }
     }
 
     // Check if the user has the permission to run the command
-    const hasPerm = checkUserPermissions(command, message.member!);
+    const hasPerm = checkUserPermissions(command, message.member!, bot);
     if (!hasPerm.perm)
         return message.reply(hasPerm.error
             ? hasPerm.error
-            : 'impossible d\'effctuer la commande, une erreur est survenue. Code : `ERR_NO_PERM`',
+            : bot.localeService.translate('error.unable to perform the command, something went wrong', { code: 'ERR_NO_PERM' }),
         );
 
     // Get the getMultipleData from the string

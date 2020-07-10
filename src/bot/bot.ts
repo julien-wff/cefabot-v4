@@ -9,6 +9,8 @@ import execTasks from './helper/schedule/exec-tasks';
 import loadAllEvents from './helper/events/load-all-events';
 import handlePrivateMessage from './helper/private/handlePrivateMessage';
 import handleCoreMessages from './helper/handleCoreMessages';
+import LocaleService from '../services/LocaleService';
+import i18nProvider from '../services/i18n-provider';
 
 process.on('message', async (msg: CorePacket<string>) => {
 
@@ -33,6 +35,9 @@ async function startBot(botId: string) {
     const config = await BotModel.findById(botId) as Bot;
     const client = new Client({});
 
+    const localeService = new LocaleService(i18nProvider);
+    localeService.setLocale(config.lang);
+
     await botLog('debug', `Bot ${config.name} started!`, botId);
     const commands = await loadAllCommands(config.commands, config._id);
 
@@ -40,6 +45,7 @@ async function startBot(botId: string) {
         client,
         config,
         commands,
+        localeService,
     };
 
 

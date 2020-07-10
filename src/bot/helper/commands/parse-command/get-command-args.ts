@@ -1,9 +1,10 @@
 import { CommandPath } from '../../../../commands/commands';
 import ms from 'ms';
+import { BotInstance } from '../../../botTypes';
 
 const MAX_32_BITS_INT = 2 ** 31 - 1;
 
-export default function getCommandArgs(path: CommandPath, commandArgs: string[]) {
+export default function getCommandArgs(path: CommandPath, commandArgs: string[], bot: BotInstance) {
 
     let result: any = {},
         error: string | undefined,
@@ -21,7 +22,7 @@ export default function getCommandArgs(path: CommandPath, commandArgs: string[])
 
         if (!element) {
             if (!arg.optional)
-                error = `argument ${arg.displayName} manquant`;
+                error = bot.localeService.translate('error.argument missing', { arg: arg.displayName });
             breakLoop = true;
             return;
         }
@@ -38,7 +39,7 @@ export default function getCommandArgs(path: CommandPath, commandArgs: string[])
             case 'int':
                 const intArg = parseInt(element);
                 if (isNaN(intArg))
-                    error = `${element} n'est pas un nombre entier valide`;
+                    error = bot.localeService.translate('error.not a valid integer', { number: element });
                 else
                     result[arg.valueName] = intArg;
                 break;
@@ -46,7 +47,7 @@ export default function getCommandArgs(path: CommandPath, commandArgs: string[])
             case 'float':
                 const floatArg = parseFloat(element);
                 if (isNaN(floatArg))
-                    error = `${element} n'est pas un nombre valide`;
+                    error = bot.localeService.translate('error.not a valid number', { number: element });
                 else
                     result[arg.valueName] = floatArg;
                 break;
@@ -54,9 +55,9 @@ export default function getCommandArgs(path: CommandPath, commandArgs: string[])
             case 'duration':
                 const durationArg = ms(element);
                 if (!durationArg)
-                    error = `${element} n'est pas une durée valide`;
+                    error = bot.localeService.translate('error.not a valid duration', { duration: element });
                 if (arg.forTimer && durationArg >= MAX_32_BITS_INT)
-                    error = `impossible de définir une durée de plus de 24 jours`;
+                    error = bot.localeService.translate('error.cannot define a duration greater than 24 days');
                 else
                     result[arg.valueName] = durationArg;
                 break;
@@ -67,7 +68,7 @@ export default function getCommandArgs(path: CommandPath, commandArgs: string[])
                 break;
 
             default:
-                error = 'une erreur est survenue. Code : `ERR_UNKNOWN_ARG_TYPE`';
+                error = bot.localeService.translate('error.something went wrong', { code: 'ERR_UNKNOWN_ARG_TYPE' });
         }
 
     });
