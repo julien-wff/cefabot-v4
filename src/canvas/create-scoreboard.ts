@@ -1,6 +1,6 @@
 import { UserStats } from '../models/UserStatsModel';
 import { Guild } from 'discord.js';
-import { createCanvas, Image } from 'canvas';
+import { createCanvas } from 'canvas';
 import writePng from './helper/write-png';
 import placeSquareImage from './helper/place-square-image';
 

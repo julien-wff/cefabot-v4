@@ -1,5 +1,5 @@
 import { DMChannel, Message } from 'discord.js';
-import { BotInstance, BotPacket } from '../../botTypes';
+import { BotInstance } from '../../botTypes';
 import GlobalSettings from '../../../models/GlobalSettings';
 import appLog from '../../../logs/app-log';
 import WebPanelAccess, { WebPanelAccess as WebPanelAccessType } from '../../../models/WebPanelAccess';

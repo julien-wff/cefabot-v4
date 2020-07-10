@@ -5,7 +5,6 @@ import botLog from '../logs/bot-log';
 import loadAllCommands from './helper/commands/load-all-commands';
 import { Bot, BotInstance, CorePacket } from './botTypes';
 import execCommand from './helper/commands/exec-command';
-import * as mongoose from 'mongoose';
 import execTasks from './helper/schedule/exec-tasks';
 import loadAllEvents from './helper/events/load-all-events';
 import handlePrivateMessage from './helper/private/handlePrivateMessage';

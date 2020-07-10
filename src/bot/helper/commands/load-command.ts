@@ -2,7 +2,6 @@ import { resolve } from 'path';
 import { existsSync } from 'fs';
 import { Command } from '../../../commands/commands';
 import botLog from '../../../logs/bot-log';
-import { BotInstance } from '../../botTypes';
 
 export default function loadCommand(name: string, addExt = false, botID?: any): Command | false {
 

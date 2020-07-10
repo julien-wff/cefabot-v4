@@ -3,7 +3,7 @@ import BotModel from '../../models/BotModel';
 import loadAllCommands from './commands/load-all-commands';
 import getAvailableEvents from '../../commands/event/get-available-events';
 import { RoleResolve } from '../../web/routes/api/helper/resolve-role';
-import { Guild, ImageSize, Role } from 'discord.js';
+import { ImageSize, Role } from 'discord.js';
 import { ResolveGuild } from '../../web/routes/api/helper/resolve-guild';
 
 export default async function handleCoreMessages(msg: CorePacket<any>, bot: BotInstance) {
