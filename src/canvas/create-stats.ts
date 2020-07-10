@@ -4,8 +4,6 @@ import placeSquareImage from './helper/place-square-image';
 import moment from 'moment';
 import LocaleService from '../services/LocaleService';
 
-moment.locale('FR');
-
 export interface Stats {
     name: string,
     avatarURL?: string,
@@ -19,6 +17,8 @@ export interface Stats {
 }
 
 export default async function createStats(stats: Stats, ls: LocaleService): Promise<string> {
+
+    moment.locale(ls.getCurrentLocale());
 
     stats.level = Math.floor(stats.xp / 250);
     stats.levelProgression = (stats.xp - (250 * stats.level)) / 250;
@@ -65,8 +65,8 @@ export default async function createStats(stats: Stats, ls: LocaleService): Prom
     ctx.font = '20px sans-serif';
     ctx.fillText(`${stats.xp} XP`, 20, 180, 220);
     ctx.fillText(ls.translate('canvas.level', { level: stats.level }), 20, 220, 220);
-    ctx.fillText(ls.translate('canvas.message', { level: stats.messages }), 250, 180, 220);
-    ctx.fillText(ls.translate('canvas.command', { level: stats.commands }), 250, 220, 220);
+    ctx.fillText(ls.translate('canvas.message_plural', { count: stats.messages }), 250, 180, 220);
+    ctx.fillText(ls.translate('canvas.command_plural', { count: stats.commands }), 250, 220, 220);
     // ctx.fillText('N°2 du serveur', 250, 220, 220);  // TODO: Get position
 
     return await writePng(canvas);
