@@ -1,4 +1,5 @@
 {
+  "hello": "Salut !",
   "error.this command cant be done in this channel": "cette commande ne peut pas être effectuée dans ce salon.",
   "error.unable to perform the command, something went wrong": "impossible d'effectuer cette command, une erreur est survenue. Code : `{{code}}`.",
   "error.you dont have the permission to perform this command": "tu n'as pas la permission d'effectuer cette commande ({{permission}})",

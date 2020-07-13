@@ -2,6 +2,7 @@ import { Command } from './commands';
 import sendMessage from './bot/send-message';
 import changeUsername from './bot/change-username';
 import changePresence from './bot/change-presence';
+import changeLang from './bot/change-lang';
 
 
 // noinspection JSUnusedGlobalSymbols
@@ -30,6 +31,15 @@ const properties: Command = {
                 { argType: 'dynamic', valueType: 'listUntilEnd', valueName: 'name', displayName: 'nom' },
             ],
             run: changeUsername,
+        },
+        {
+            help: 'lang <langue>',
+            description: 'Changer la langue du bot',
+            args: [
+                { argType: 'static', triggers: [ 'lang', 'language' ] },
+                { argType: 'dynamic', valueType: 'string', valueName: 'lang', displayName: 'langue' },
+            ],
+            run: changeLang,
         },
         {
             help: 'presence',
