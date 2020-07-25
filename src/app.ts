@@ -1,5 +1,4 @@
-require('dotenv').config();
-
+import 'dotenv/config';
 import WebServer from './web/WebServer';
 import path from 'path';
 import appLog from './logs/app-log';
