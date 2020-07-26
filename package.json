@@ -12,7 +12,7 @@
     "dev": "ts-node-dev --respawn --watch=src --clear src/app.ts",
     "dev:nodemon": "nodemon --watch src --exec ts-node src/app.ts",
     "build": "tsc",
-    "prod": "pm2 start dist/app.js --name cefabot-v4 --time"
+    "prod": "pm2 start lib/app.js --name cefabot-v4 --time"
   },
   "private": true,
   "devDependencies": {
