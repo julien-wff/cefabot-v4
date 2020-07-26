@@ -84,10 +84,13 @@ async function startBot(botId: string) {
 
 
     client.login(config.token)
-        .catch(reason => botLog('error', `Unable to connect bot ${config.name}. Reason: ${reason}`, botId, {
-            errorType: 'startup',
-            data: reason,
-            location: 'get-bot.ts',
-        }));
+        .catch(reason => {
+            botLog('error', `Unable to connect bot ${config.name}. Reason: ${reason}`, botId, {
+                errorType: 'startup',
+                data: reason,
+                location: 'bot.ts',
+            });
+            process.exit(-1);
+        });
 
 }
