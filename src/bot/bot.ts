@@ -11,6 +11,7 @@ import handlePrivateMessage from './helper/private/handlePrivateMessage';
 import handleCoreMessages from './helper/handleCoreMessages';
 import LocaleService from '../services/LocaleService';
 import i18nProvider from '../services/i18n-provider';
+import setupStorage from './helper/setupStorage';
 
 process.on('message', async (msg: CorePacket<string>) => {
 
@@ -37,6 +38,8 @@ async function startBot(botId: string) {
 
     const localeService = new LocaleService(i18nProvider);
     localeService.setLocale(config.lang);
+
+    await setupStorage(botId);
 
     await botLog('debug', `Bot ${config.name} started!`, botId);
     const commands = await loadAllCommands(config.commands, config._id);

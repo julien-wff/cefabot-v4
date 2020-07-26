@@ -32,6 +32,7 @@ Variable | Description
 NODE_ENV | `dev` or `prod`
 BOT_KEY | Bots encryption key used to secure the keys in the DB
 DB_URI | The URI of the mongoDB server
+STORAGE_PATH | The path to store uploaded files, absolute or relative to the project root
 WEB_BASE_URL | The root URL of the web server (ex: http://host.ext, or https://192.168.1.2:8000) 
 WEB_PORT | The port of the web panel
 

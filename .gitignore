@@ -1,9 +1,12 @@
 yarn.lock
 package.lock
-/build/
-/tmp/
 /node_modules/
 .env
+
+# Production files
+/build/
+/tmp/
+/storage/
 
 # Idea configs
 .idea/dataSources
