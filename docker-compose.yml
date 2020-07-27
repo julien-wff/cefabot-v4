@@ -1,0 +1,30 @@
+version: '3.7'
+
+services:
+  cefabot:
+    container_name: cefabot-v4
+    image: cefadrom/cefabot-v4
+    #    build:
+    #      context: .
+    #      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - 8000:8000
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=prod
+      - DB_URI=mongodb://mongo-cefabot-v4/cefabot-v4
+      - WEB_BASE_URL=http://192.168.1.29
+      - WEB_PORT=8000
+    links:
+      - mongodb
+    depends_on:
+      - mongodb
+  mongodb:
+    container_name: mongo-cefabot-v4
+    image: mongo
+    volumes:
+      - /data/cefabot-v4-db:/data/db
+    ports:
+      - 8001:27017

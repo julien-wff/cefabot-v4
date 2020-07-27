@@ -1,0 +1,22 @@
+# Project files
+.idea
+.git
+Dockerfile
+.dockerignore
+
+# The bot
+node_modules
+.gitignore
+.env
+tmp
+storage
+lib
+yarn.lock
+package.lock
+
+# The web panel
+web/node_modules
+web/.gitignore
+web/yarn.lock
+web/package.lock
+web/public/build
