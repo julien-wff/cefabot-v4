@@ -11,7 +11,7 @@ export default function setEnvVars() {
 
     // Determining the folder relative to the project root
     const folder = __dirname.split(path.sep).slice(-2)[0];
-    if (folder !== 'src' && folder !== 'dist')
+    if (folder !== 'src' && folder !== 'lib')
         throw new Error(`The folder "${folder}" is invalid.`);
     process.env.FILES_FOLDER = folder;
 
