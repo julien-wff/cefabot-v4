@@ -9,6 +9,7 @@
       "esnext.asynciterable"
     ],
     "sourceMap": false,
+    "skipLibCheck": true,
     "outDir": "./lib",
     "moduleResolution": "node",
     "removeComments": true,
@@ -26,7 +27,8 @@
     "baseUrl": "."
   },
   "exclude": [
-    "./node_modules"
+    "node_modules",
+    "web"
   ],
   "include": [
     "./src/**/*.ts"
