@@ -15,7 +15,6 @@ interface MuteParams {
 
 const mute: PathRun<MuteParams> = async (msg, params, bot) => {
 
-    console.log(params);
     const muteUserID = extractUserIDFromTag(msg, params.person);
     if (!muteUserID)
         if (params.person.match(/<@&\d{18}>/))

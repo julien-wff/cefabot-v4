@@ -44,7 +44,6 @@ let lastCrashs: { [botID: string]: [ number, number | null ] } = {}; // Array: [
 export async function handleBotManagerCrash(bot: Bot, err: any) {
 
     const lastBotCrashes = lastCrashs[bot._id];
-    console.log(lastBotCrashes);
 
     botLog('error', err, bot._id, { data: err, location: 'app.ts' });
 

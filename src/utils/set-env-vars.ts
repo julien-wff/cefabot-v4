@@ -15,8 +15,6 @@ export default function setEnvVars() {
         throw new Error(`The folder "${folder}" is invalid.`);
     process.env.FILES_FOLDER = folder;
 
-    console.log(`Starting bots with file extension ".${process.env.FILES_EXT}" and folder "${process.env.FILES_FOLDER}".`);
-
     // Setting the storage path
     const storagePath = path.resolve(process.env.STORATE_PATH || './storage');
     if (!fs.existsSync(storagePath))
