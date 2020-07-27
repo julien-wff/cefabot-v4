@@ -23,11 +23,7 @@ let webServer: WebServer;
 
 (async function () {
 
-    try {
-        await initDB();
-    } catch (e) {
-        console.error(e);
-    }
+    await initDB();
 
     webServer = new WebServer();
 
