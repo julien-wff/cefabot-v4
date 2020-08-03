@@ -2,6 +2,11 @@
   "name": "cefabot-v4-panel",
   "author": "cefadrom <cefadrom1@gmail.com>",
   "version": "1.0.0",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cefadrom/cefabot-v4.git"
+  },
   "scripts": {
     "watch:tailwind": "postcss public/global.css -o public/build/global.css -w",
     "build:tailwind": "cross-env NODE_ENV=production postcss public/global.css -o public/build/global.css",
