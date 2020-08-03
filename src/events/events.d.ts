@@ -15,7 +15,7 @@ export interface BotEvent {
 /**
  * The function to run to start the event
  */
-export type EventRun = (bot: BotInstance) => Promise<void | string>;
+export type EventRun = (bot: BotInstance) => any | Promise<any>;
 
 
 /**
