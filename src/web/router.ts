@@ -13,6 +13,9 @@ import postData from './routes/api/data/post-data';
 import deleteData from './routes/api/data/delete-data';
 import createBot from './routes/api/bots/create-bot';
 import { getWebAccesses } from './routes/api/web-accesses/get-web-accesses';
+import getFilesList from './routes/api/storage/get-files-list';
+import getFile from './routes/api/storage/get-file';
+import deleteFile from './routes/api/storage/delete-file';
 
 const connectionRouter = Router();
 
@@ -45,5 +48,9 @@ apiRouter.post('/data', postData);
 apiRouter.delete('/data/:dataID', deleteData);
 // Web accesses
 apiRouter.get('/web-accesses', getWebAccesses);
+// Storage
+apiRouter.get('/storage/:botID', getFilesList);
+apiRouter.get('/storage/:botID/file', getFile);
+apiRouter.delete('/storage/:botID/file', deleteFile);
 
 export { connectionRouter, apiRouter };

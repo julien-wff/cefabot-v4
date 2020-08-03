@@ -10,6 +10,7 @@
     import Events from '../components/bot/Events.svelte';
     import DataStorage from '../components/bot/DataStorage.svelte';
     import Guilds from '../components/bot/Guilds.svelte';
+    import Storage from '../components/bot/Storage.svelte';
 
     export let id;
 
@@ -25,6 +26,8 @@
     setContext('data-storage', dataStorage);
     let guilds = writable([]);
     setContext('guilds', guilds);
+    let files = writable([]);
+    setContext('files', files);
 
     async function getBotData() {
         try {
@@ -34,14 +37,21 @@
                 position: 'top-end',
                 showConfirmButton: false,
             });
-            let [bt, cmd, evt, dataStg] = await Promise.all([fetch(`/api/bots/${id}`), fetch('/api/commands'), fetch('/api/events'), fetch(`/api/data?botID=${id}`)]);
-            [bt, cmd, evt, dataStg] = await Promise.all([bt.json(), cmd.json(), evt.json(), dataStg.json()]);
+            let [bt, cmd, evt, dataStg, fls] = await Promise.all([
+                fetch(`/api/bots/${id}`),
+                fetch('/api/commands'),
+                fetch('/api/events'),
+                fetch(`/api/data?botID=${id}`),
+                fetch(`/api/storage/${id}`),
+            ]);
+            [bt, cmd, evt, dataStg, fls] = await Promise.all([bt.json(), cmd.json(), evt.json(), dataStg.json(), fls.json()]);
             if (bt && bt.error) throw new Error(bot.error);
             $bot = bt;
             $initialData = bt;
             $commands = cmd;
             $events = evt;
             $dataStorage = dataStg;
+            $files = fls;
             if (bt.enabled)
                 $guilds = await Promise.all($bot.guildsID.map(g => fetch(`/api/bots/${id}/guild/${g}?iconsSize=64`).then(d => d.json())));
         } catch (e) {
@@ -106,5 +116,6 @@
         <Events/>
         <DataStorage/>
         <Guilds/>
+        <Storage/>
     </div>
 {/if}

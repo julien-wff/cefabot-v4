@@ -1,8 +1,9 @@
-<!--suppress CheckEmptyScriptTag, UnnecessaryLabelJS -->
+<!--suppress UnnecessaryLabelJS, CheckEmptyScriptTag -->
 <script>
     export let enabled = false;
     export let size = 18;
 
+    let color;
     $: color = enabled ? '#16c60c' : '#e81224';
 </script>
 
