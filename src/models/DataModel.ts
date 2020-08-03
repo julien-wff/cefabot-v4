@@ -1,4 +1,5 @@
 import { model, Schema, Document } from 'mongoose';
+import { decrypt, encrypt } from '../utils/crypto';
 
 const DataSchema = new Schema({
     botID: {
@@ -23,6 +24,19 @@ const DataSchema = new Schema({
         default: 'string',
     },
     secret: Boolean,
+});
+
+// Secret values encryption and decryption
+
+DataSchema.pre<Document & DataStorage>('save', function (next) {
+    if (this.secret)
+        this.value = encrypt(this.value);
+    next();
+});
+
+DataSchema.post<Document & DataStorage>('init', function (doc) {
+    if (doc.secret)
+        doc.value = decrypt(doc.value);
 });
 
 
