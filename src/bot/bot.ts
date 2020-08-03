@@ -61,7 +61,7 @@ async function startBot(botId: string) {
 
         await execTasks(bot);
 
-        loadAllEvents(bot.config.events)
+        loadAllEvents(bot.config.events, botId)
             .forEach(event => event.run(bot));
 
         if (bot.config.presence)

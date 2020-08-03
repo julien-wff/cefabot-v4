@@ -26,7 +26,7 @@ export default async function handleCoreMessages(msg: CorePacket<any>, bot: BotI
 
     if (msg.type === 'reload-events') {
         const config = await BotModel.findById(bot.config._id) as Bot;
-        const availableEvents = getAvailableEvents();
+        const availableEvents = getAvailableEvents(bot.config._id);
         // Stop removed events
         const oldEvents = bot.config.events.filter(evt => !config.events.includes(evt));
         oldEvents.forEach(evtName => {

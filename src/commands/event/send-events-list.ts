@@ -6,7 +6,7 @@ import getAvailableEvents from './get-available-events';
  */
 const sendEventsList: PathRun = async (message, params, bot) => {
 
-    const events = getAvailableEvents();
+    const events = getAvailableEvents(bot.config._id);
 
     const eventsStr = events
         .map(evt =>
