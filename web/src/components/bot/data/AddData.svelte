@@ -5,7 +5,7 @@
 
     let dataStorage = getContext('data-storage');
     let guilds = getContext('guilds');
-    let data = getContext('data');
+    let bot = getContext('bot');
     let getBotData = getContext('get-bot-data');
 
     async function addKey() {
@@ -102,7 +102,7 @@
 
                 return fetch(`/api/data`, {
                     method: 'POST',
-                    body: JSON.stringify({ key, type, guildID, value, botID: $data.id }),
+                    body: JSON.stringify({ key, type, guildID, value, botID: $bot.id }),
                     headers: {
                         'Accept': 'application/json',
                         'Content-Type': 'application/json'
