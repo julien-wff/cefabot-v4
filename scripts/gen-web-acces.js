@@ -57,9 +57,8 @@ const WebPanelAccess = mongoose.model('WebPanelAccess', WebPanelAccessSchema);
     await access.save();
 
     console.log(`Access created. You can access to the panel through the following link once the bot started.
-${process.env.WEB_BASE_URL}:${process.env.WEB_PORT}/connect?token=${token}`);
+${process.env.WEB_BASE_URL}/connect?token=${token}`);
 
 })()
     .catch(console.error)
     .finally(() => process.exit(0));
-
