@@ -24,12 +24,12 @@ export interface BotInstance {
 }
 
 export interface BotPacket<T = undefined> {
-    type: 'reboot' | 'resolved-role' | 'resolved-guild';
+    type: 'reboot' | 'resolved-role' | 'resolved-guild' | 'resolved-channel' | 'resolved-member';
     data: T;
 }
 
 export interface CorePacket<T = undefined> {
     type: 'start' | 'reboot' | 'shutdown' | 'reload-commands' | 'reload-events' | 'external-reboot'
-        | 'resolve-role' | 'resolve-guild';
+        | 'resolve-role' | 'resolve-guild' | 'resolve-channel' | 'resolve-member';
     data: T;
 }

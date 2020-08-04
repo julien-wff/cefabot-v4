@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 import DataModel, { DataStorage, DataType } from '../../../../models/DataModel';
 import { isMongooseID } from '../helper/isID';
 import resolveRole from '../helper/resolve-role';
+import resolveChannel from '../helper/resolve-channel';
+import resolveMember from '../helper/resolve-member';
 
 export default async function getMultipleData(req: Request, res: Response) {
 
@@ -34,6 +36,16 @@ export default async function getMultipleData(req: Request, res: Response) {
         if (dataStg.type === 'discord-role') {
             try {
                 dataStg.role = await resolveRole(dataStg.value, dataStg.guildID, dataStg.botID);
+            } catch {}
+        }
+        if (dataStg.type === 'discord-channel') {
+            try {
+                dataStg.channel = await resolveChannel(dataStg.value, dataStg.guildID, dataStg.botID);
+            } catch {}
+        }
+        if (dataStg.type === 'discord-user') {
+            try {
+                dataStg.user = await resolveMember(dataStg.value, dataStg.guildID, dataStg.botID);
             } catch {}
         }
         return dataStg;

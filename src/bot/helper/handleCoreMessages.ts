@@ -3,8 +3,10 @@ import BotModel from '../../models/BotModel';
 import loadAllCommands from './commands/load-all-commands';
 import getAvailableEvents from '../../commands/event/get-available-events';
 import { RoleResolve } from '../../web/routes/api/helper/resolve-role';
-import { ImageSize, Role } from 'discord.js';
+import { GuildChannel, GuildMember, ImageSize, Role } from 'discord.js';
 import { ResolveGuild } from '../../web/routes/api/helper/resolve-guild';
+import { ChannelResolve } from '../../web/routes/api/helper/resolve-channel';
+import { MemberResolve } from '../../web/routes/api/helper/resolve-member';
 
 export default async function handleCoreMessages(msg: CorePacket<any>, bot: BotInstance) {
 
@@ -60,6 +62,45 @@ export default async function handleCoreMessages(msg: CorePacket<any>, bot: BotI
                 permissions: role.permissions,
             },
         } as BotPacket<Partial<Role>>);
+    }
+
+    if (msg.type === 'resolve-channel') {
+        const channelData: ChannelResolve = msg.data;
+        const channel = await bot
+            .client
+            .guilds
+            .resolve(msg.data.guildID)
+            ?.channels
+            .resolve(channelData.channelID)!;
+        if (!channel) return;
+        process.send?.({
+            type: 'resolved-channel', data: {
+                id: channel.id,
+                name: channel.name,
+                deleted: channel.deleted,
+                members: channel.members,
+            },
+        } as BotPacket<Partial<GuildChannel>>);
+    }
+
+    if (msg.type === 'resolve-member') {
+        const memberData: MemberResolve = msg.data;
+        const member = await bot
+            .client
+            .guilds
+            .resolve(msg.data.guildID)
+            ?.member(memberData.memberID)
+        if (!member) return;
+        process.send?.({
+            type: 'resolved-member', data: {
+                id: member.id,
+                displayName: member.displayName,
+                displayHexColor: member.displayHexColor,
+                user: member.user,
+                deleted: member.deleted,
+                roles: member.roles.cache.toJSON()
+            },
+        } as BotPacket<Partial<GuildMember>>);
     }
 
     if (msg.type === 'resolve-guild') {
