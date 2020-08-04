@@ -16,6 +16,7 @@ import { getWebAccesses } from './routes/api/web-accesses/get-web-accesses';
 import getFilesList from './routes/api/storage/get-files-list';
 import getFile from './routes/api/storage/get-file';
 import deleteFile from './routes/api/storage/delete-file';
+import getLogs from './routes/api/logs/get-logs';
 
 const connectionRouter = Router();
 
@@ -52,5 +53,7 @@ apiRouter.get('/web-accesses', getWebAccesses);
 apiRouter.get('/storage/:botID', getFilesList);
 apiRouter.get('/storage/:botID/file', getFile);
 apiRouter.delete('/storage/:botID/file', deleteFile);
+// Logs
+apiRouter.get('/logs', getLogs);
 
 export { connectionRouter, apiRouter };
