@@ -11,7 +11,7 @@
     let filePreview = writable([]);
     setContext('file-preview', filePreview);
 
-    const getFilesCount = f => f.filter(e => e.type === 'file').length + f.reduce((prev, val) => val.children ? getFilesCount(val.children) : 0, 0);
+    const getFilesCount = f => f.filter(e => e.type === 'file').length + f.reduce((prev, val) => val.children ? prev + getFilesCount(val.children) : prev, 0);
 
     let filesCount;
     $: filesCount = getFilesCount($files);
