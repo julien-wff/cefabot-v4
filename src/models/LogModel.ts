@@ -17,7 +17,7 @@ const Log = new Schema({
     },
     errorType: String,
     location: String,
-    botId: Schema.Types.ObjectId,
+    botID: Schema.Types.ObjectId,
     data: Schema.Types.Mixed,
     date: {
         type: Date,
@@ -42,7 +42,7 @@ export interface Log {
     location?: string,
 
     /** The ID of the bot associated with the log. */
-    botId?: any,
+    botID?: any,
 
     /** Some additional data about the log. */
     data?: any,
