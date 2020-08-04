@@ -3,10 +3,10 @@ import sendMessageAction from './actions/send-message';
 import { BotInstance } from '../bot/botTypes';
 import deleteMessageAction from './actions/delete-message';
 import rebootPacketAction from './actions/reboot-packet';
-import botLog from '../logs/bot-log';
 import editMessageAction from './actions/edit-message';
 import removeRoleAction from './actions/remove-role';
 import deletePrivateMessageAction from './actions/delete-private-message';
+import logger from '../logs/logger';
 
 export default function execTask(task: ScheduleDoc, bot: BotInstance) {
 
@@ -30,13 +30,17 @@ export default function execTask(task: ScheduleDoc, bot: BotInstance) {
             exec(deletePrivateMessageAction);
             break;
         default:
-            botLog('error', `Cannot find task with type ${task.type}`, bot.config._id, { location: 'exec-task.ts' });
+            logger('bot', 'error', `Cannot find task with type ${task.type}`, {
+                location: 'exec-task.ts',
+                botID: bot.config._id,
+                data: task,
+            });
     }
 
 
     function exec(fn: (action: ScheduleDoc, bot: BotInstance) => Promise<any>) {
         fn(task, bot)
-            .catch(err => botLog('error', err, bot.config._id, { location: 'exec-task.ts' }));
+            .catch(err => logger('bot', 'error', err, { location: 'exec-task.ts', botID: bot.config._id, data: task }));
     }
 
 }

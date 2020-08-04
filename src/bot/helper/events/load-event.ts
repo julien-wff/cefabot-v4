@@ -1,7 +1,7 @@
-import { resolve } from "path";
-import { existsSync } from "fs";
+import { resolve } from 'path';
+import { existsSync } from 'fs';
 import { BotEvent } from '../../../events/events';
-import botLog from '../../../logs/bot-log';
+import logger from '../../../logs/logger';
 
 export default function loadEvent(name: string, addExt = false, botID?: any): BotEvent | false {
 
@@ -17,9 +17,10 @@ export default function loadEvent(name: string, addExt = false, botID?: any): Bo
             if (event && event.properties)
                 return event.properties;
         } catch (e) {
-            if (botID) botLog('error', `Unable to load the event ${name} : ${e.message}`, botID, {
+            if (botID) logger('bot', 'error', `Unable to load the event ${name} : ${e.message}`, {
                 location: 'load-event.ts',
                 data: e,
+                botID,
             });
         }
 

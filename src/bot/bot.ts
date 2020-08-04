@@ -1,7 +1,6 @@
 import { Client } from 'discord.js';
 import BotModel from '../models/BotModel';
 import initDB from '../database/init';
-import botLog from '../logs/bot-log';
 import loadAllCommands from './helper/commands/load-all-commands';
 import { Bot, BotInstance, CorePacket } from './botTypes';
 import execCommand from './helper/commands/exec-command';
@@ -12,6 +11,7 @@ import handleCoreMessages from './helper/handleCoreMessages';
 import LocaleService from '../services/LocaleService';
 import i18nProvider from '../services/i18n-provider';
 import setupStorage from './helper/setupStorage';
+import logger from '../logs/logger';
 
 process.on('message', async (msg: CorePacket<string>) => {
 
@@ -21,10 +21,14 @@ process.on('message', async (msg: CorePacket<string>) => {
             await initDB();
         } catch (e) {
             console.error(e);
+            process.exit(-1);
         }
 
         startBot(msg.data)
-            .catch(console.error);
+            .catch(err => {
+                logger('bot', 'error', err.message, { botID: msg.data, location: 'bot.ts', data: err });
+                process.exit(-1);
+            });
 
     }
 
@@ -41,7 +45,7 @@ async function startBot(botId: string) {
 
     await setupStorage(botId);
 
-    await botLog('debug', `Bot ${config.name} started!`, botId);
+    await logger('bot', 'debug', `Bot ${config.name} started!`, { botID: botId });
     const commands = await loadAllCommands(config.commands, config._id);
 
     const bot: BotInstance = {
@@ -57,7 +61,7 @@ async function startBot(botId: string) {
 
     client.on('ready', async () => {
 
-        await botLog('debug', `Bot ${config.name} connected!`, botId);
+        await logger('bot', 'debug', `Bot ${config.name} connected!`, { botID: botId });
 
         await execTasks(bot);
 
@@ -85,10 +89,10 @@ async function startBot(botId: string) {
 
     client.login(config.token)
         .catch(reason => {
-            botLog('error', `Unable to connect bot ${config.name}. Reason: ${reason}`, botId, {
-                errorType: 'startup',
+            logger('bot', 'error', `Unable to connect bot ${config.name}. Reason: ${reason}`, {
                 data: reason,
                 location: 'bot.ts',
+                botID: botId,
             });
             process.exit(-1);
         });

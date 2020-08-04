@@ -4,7 +4,7 @@ import { BotInstance } from '../bot/botTypes';
 import getData from './helper/get-data';
 import { DataStorage } from '../models/DataModel';
 import UserStatsModel from '../models/UserStatsModel';
-import botLog from '../logs/bot-log';
+import logger from '../logs/logger';
 
 
 let botInstance: BotInstance | undefined = undefined;
@@ -28,11 +28,11 @@ async function userJoin(member: GuildMember | PartialGuildMember) {
         .resolve(roleID);
 
     if (!role) {
-        return await botLog(
+        return logger(
+            'bot',
             'error',
             `Impossible de trouver le role ${roleID} et de l'ajouter à ${member.displayName}`,
-            botInstance!.config._id,
-            { location: 'user-join-role.ts' },
+            { location: 'user-join-role.ts', botID: botInstance!.config._id },
         );
     }
 
@@ -44,7 +44,7 @@ async function userJoin(member: GuildMember | PartialGuildMember) {
 const run: EventRun = async bot => {
     const gotData = await getData(bot, properties);
     if (gotData.error) {
-        await botLog('error', gotData.error, bot.config._id, { location: 'user-join-role.ts' });
+        await logger('bot', 'error', gotData.error, { location: 'user-join-role.ts', botID: bot.config._id });
         return gotData.error;
     }
     data = gotData.data;

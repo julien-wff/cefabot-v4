@@ -1,11 +1,11 @@
 import { BotEvent, EventCancel, EventRun } from './events';
 import getData from './helper/get-data';
-import botLog from '../logs/bot-log';
 import { BotInstance } from '../bot/botTypes';
 import { DataStorage } from '../models/DataModel';
 import { TextChannel } from 'discord.js';
 import axios from 'axios';
 import { MessageEmbed } from 'discord.js';
+import logger from '../logs/logger';
 
 let botInstance: BotInstance;
 let data: DataStorage[];
@@ -57,9 +57,10 @@ async function youtubeOWL() {
         ?.channels
         .resolve(announcementChannelKey.value) as TextChannel | null;
     if (!announcementChannel) {
-        return botLog('error', 'Unable to find the announcement channel for the OWL', botInstance.config._id, {
+        return logger('bot', 'error', 'Unable to find the announcement channel for the OWL', {
             data: announcementChannelKey,
             location: 'youtube-owl.ts',
+            botID: botInstance.config._id,
         });
     }
 
@@ -120,7 +121,7 @@ async function youtubeOWL() {
 const run: EventRun = async bot => {
     const dataKeys = await getData(bot, properties);
     if (dataKeys.error) {
-        await botLog('error', dataKeys.error, bot.config._id, { location: 'youtube-owl.ts' });
+        await logger('bot', 'error', dataKeys.error, { location: 'youtube-owl.ts', botID: bot.config._id });
         return dataKeys.error;
     }
     data = dataKeys.data;

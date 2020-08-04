@@ -1,15 +1,14 @@
 import 'dotenv/config';
 import WebServer from './web/WebServer';
 import path from 'path';
-import appLog from './logs/app-log';
 import initDB from './database/init';
 import { Bot, BotPacket, CorePacket } from './bot/botTypes';
 import BotModel from './models/BotModel';
 import { ChildProcess, fork } from 'child_process';
-import botLog from './logs/bot-log';
 import setEnvVars from './utils/set-env-vars';
 import verifyEnvVars from './utils/verify-env-vars';
 import { existsSync } from 'fs';
+import logger from './logs/logger';
 
 setEnvVars();
 verifyEnvVars();
@@ -27,7 +26,7 @@ let webServer: WebServer;
 
     webServer = new WebServer();
 
-    await appLog('debug', 'Starting cefabot...');
+    logger('app', 'debug', 'Starting cefabot...');
 
     const bots: Bot[] = await BotModel.find({ enabled: true });
 
@@ -45,7 +44,7 @@ export async function handleBotManagerCrash(bot: Bot, err: any) {
 
     const lastBotCrashes = lastCrashs[bot._id];
 
-    botLog('error', err, bot._id, { data: err, location: 'app.ts' });
+    logger('bot', 'error', err, { data: err, location: 'app.ts', botID: bot._id });
 
     if (!lastBotCrashes) {
 
@@ -65,11 +64,11 @@ export async function handleBotManagerCrash(bot: Bot, err: any) {
         lastCrashs[bot._id][1] = lastBotCrashes[0];
         lastCrashs[bot._id][0] = Date.now();
 
-        botLog(
+        logger(
+            'bot',
             'error',
             `The bot ${bot.name} crashes too many times, please check the error and restart it manually`,
-            bot._id,
-            { data: err, location: 'app.ts' },
+            { data: err, location: 'app.ts', botID: bot._id },
         );
 
     }
@@ -99,10 +98,10 @@ export async function startBot(bot: Bot) {
 
 
     async function handleBotExit(code: number) {
-        await botLog('error', `Bot exited with code ${code}${code !== 0 ? '. Restarting...' : '.'}`, bot, {
-            errorType: 'exit',
+        await logger('bot', 'error', `Bot exited with code ${code}${code !== 0 ? '. Restarting...' : '.'}`, {
             data: code,
             location: 'app.ts',
+            botID: bot._id,
         });
         if (code !== 0) startBot(bot)
             .catch(err => handleBotManagerCrash(bot, err));
@@ -111,14 +110,18 @@ export async function startBot(bot: Bot) {
 
     async function handleBotError(error: Error | string) {
         if (typeof error === 'string')
-            await botLog('error', error, bot);
+            await logger('bot', 'error', error, { botID: bot._id, location: 'app.ts' });
         else
-            await botLog('error', error.message, bot, { errorType: 'log', data: error.stack, location: 'app.ts' });
+            await logger('bot', 'error', error.message, {
+                data: error.stack,
+                location: 'app.ts',
+                botID: bot._id,
+            });
     }
 
 
     async function handleBotLog(message: string) {
-        await botLog('log', message, bot);
+        await logger('bot', 'log', message, { botID: bot._id, location: 'app.ts' });
     }
 
 
@@ -135,7 +138,7 @@ export async function startBot(bot: Bot) {
 
     async function rebootBot() {
 
-        await botLog('log', 'Bot restart requested', bot._id, { location: 'core.js' });
+        await logger('bot', 'log', 'Bot restart requested', { location: 'core.js', botID: bot._id });
 
 
         botProcess.send('reboot');

@@ -1,11 +1,11 @@
 import { BotInstance } from '../../botTypes';
 import { Message } from 'discord.js';
-import botLog from '../../../logs/bot-log';
 import { Command, CommandPath } from '../../../commands/commands';
 import parseCommand from './parse-command/parse-command';
 import checkUserPermissions from './parse-command/check-user-perms';
 import Channel from '../../../models/Channel';
 import tempMessage from '../../../utils/temp-message';
+import logger from '../../../logs/logger';
 
 export default async function execCommand(message: Message, bot: BotInstance) {
 
@@ -84,7 +84,7 @@ export default async function execCommand(message: Message, bot: BotInstance) {
 
     // Handle the error from the command execution
     async function handleExecError(err: any) {
-        await botLog('error', err, bot.config._id, { location: 'exec-command.ts' });
+        await logger('bot', 'error', err, { location: 'exec-command.ts', botID: bot.config._id, data: err });
     }
 
 }

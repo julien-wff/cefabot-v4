@@ -1,7 +1,7 @@
 import { resolve } from 'path';
 import { existsSync } from 'fs';
 import { Command } from '../../../commands/commands';
-import botLog from '../../../logs/bot-log';
+import logger from '../../../logs/logger';
 
 export default function loadCommand(name: string, addExt = false, botID?: any): Command | false {
 
@@ -17,9 +17,10 @@ export default function loadCommand(name: string, addExt = false, botID?: any): 
             if (command && command.properties)
                 return command.properties;
         } catch (e) {
-            if (botID) botLog('error', `Unable to load the command ${name} : ${e}`, botID, {
+            if (botID) logger('bot', 'error', `Unable to load the command ${name} : ${e}`, {
                 location: 'load-command.ts',
                 data: e,
+                botID: botID,
             });
         }
 
