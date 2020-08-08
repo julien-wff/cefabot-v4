@@ -17,6 +17,7 @@ import getFilesList from './routes/api/storage/get-files-list';
 import getFile from './routes/api/storage/get-file';
 import deleteFile from './routes/api/storage/delete-file';
 import getLogs from './routes/api/logs/get-logs';
+import deleteLogs from './routes/api/logs/delete-logs';
 
 const connectionRouter = Router();
 
@@ -55,5 +56,6 @@ apiRouter.get('/storage/:botID/file', getFile);
 apiRouter.delete('/storage/:botID/file', deleteFile);
 // Logs
 apiRouter.get('/logs', getLogs);
+apiRouter.delete('/logs', deleteLogs);
 
 export { connectionRouter, apiRouter };

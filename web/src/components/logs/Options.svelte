@@ -1,6 +1,7 @@
 <script>
 
     import { getContext } from 'svelte';
+    import Swal from 'sweetalert2/dist/sweetalert2';
 
     let options = getContext('options');
     let filters = getContext('filters');
@@ -46,7 +47,34 @@
             } else {
                 $selectedLogs = [...$selectedLogs, l._id];
             }
-        })
+        });
+    }
+
+    let deletingLogs = false;
+
+    async function deleteSelectedLogs() {
+        deletingLogs = true;
+        const res = await fetch('/api/logs', {
+            method: 'DELETE',
+            body: JSON.stringify($selectedLogs),
+            headers: new Headers({
+                'Content-Type': 'application/json'
+            })
+        });
+        deletingLogs = false;
+        refreshLogs();
+        if (!res.ok) {
+            let error = 'Erreur inconnue.';
+            try {
+                error = (await res.json()).error;
+            } catch {}
+            await Swal.fire({
+                icon: 'error',
+                title: 'Erreur',
+                text: error,
+            });
+        }
+        $selectedLogs = [];
     }
 
 </script>
@@ -73,7 +101,10 @@
                 on:click={invertSelection}>
             Inverser la sélection
         </button>
-        <button type="button" class="cursor-pointer py-2 px-4 bg-red-400 text-white rounded mb-4">
+        <button type="button" class="cursor-pointer py-2 px-4 bg-red-400 text-white rounded mb-4"
+                class:cursor-not-allowed={deletingLogs}
+                class:opacity-75={deletingLogs}
+                on:click={deleteSelectedLogs}>
             Supprimer la sélection
         </button>
     </div>
