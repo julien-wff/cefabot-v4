@@ -1,6 +1,5 @@
 <script>
     import Swal from 'sweetalert2/dist/sweetalert2';
-    import { DateTime } from 'luxon';
 
     let webAccesses = [];
 
@@ -23,6 +22,16 @@
 
     getWebAccesses();
 
+    const intlOptions = {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric',
+        hour12: false
+    };
+
 </script>
 
 <div class="md:mx-10 md:mt-10 sm:mx-4 sm:mt-4 m-2 p-4 bg-gray-700 rounded">
@@ -37,7 +46,7 @@
     {#each webAccesses as access}
         <div class="flex flex-col cursor-pointer hover:bg-gray-600 rounded p-2">
             <div title={access.userID}>{access.username}</div>
-            <div>{DateTime.fromMillis(access.created).setLocale('fr').toLocaleString(DateTime.DATETIME_MED)}</div>
+            <div>{new Intl.DateTimeFormat('FR', intlOptions).format(new Date(access.created))}</div>
             <div>Utilisé : {access.connected ? 'oui' : 'non'}</div>
             <div>Déconnecté : {!access.active ? 'oui' : 'non'}</div>
             <div>IP :
