@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import WebPanelAccess from '../models/WebPanelAccess';
 import { connectionRouter, apiRouter } from './router';
+import compression from 'compression';
 
 const TOKEN_EXPIRE_DURATION = ms('1h');
 const WEB_DIR = path.resolve(__dirname, '../../web/public');
@@ -16,6 +17,7 @@ export default class WebServer {
     constructor() {
         this.app = express();
         // Middlewares
+        this.app.use(compression());
         this.checkAuth = this.checkAuth.bind(this);
         this.app.use(express.static(WEB_DIR));
         this.app.use(cookieParser());
