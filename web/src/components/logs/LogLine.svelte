@@ -41,7 +41,10 @@
     $: formattedDate = new Intl.DateTimeFormat('FR', intlOptions).format(new Date(date));
 
     function setDetailed({ explicitOriginalTarget: target }) {
-        if (target?.tagName?.toLowerCase() === 'input' && target?.attributes?.type?.value === 'checkbox')
+        if (target && typeof target.tagName === 'string'
+                && target.attributes && target.attributes.type && typeof target.attributes.type.value === 'string'
+                && target.tagName.toLowerCase() === 'input'
+                && target.attributes.type.value === 'checkbox')
             return;
         if ($detailedID === _id)
             $detailedID = null;
