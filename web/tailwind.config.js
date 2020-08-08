@@ -1,7 +1,22 @@
 module.exports = {
-    purge: [
-        './src/**/*.svelte'
-    ],
+    purge: {
+        content: [
+            './src/**/*.svelte',
+            './public/index.html'
+        ],
+        options: {
+            whitelist: [
+                'grid',
+                'text-gray-300',
+                'text-orange-400',
+                'text-red-400',
+                'bg-gray-600',
+                'py-1',
+                'cursor-not-allowed',
+                'opacity-75'
+            ],
+        }
+    },
     target: 'relaxed',
     prefix: '',
     important: false,
