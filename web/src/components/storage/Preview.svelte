@@ -54,9 +54,13 @@
     {#if fileType === 'image'}
         <img src={fileURL} alt="Erreur lors de la preview"/>
     {:else if  fileType === 'video'}
-        <video src={fileURL} controls/>
+        <video src={fileURL} controls>
+            <track src={fileURL} kind="captions" default label="Preview de la video {$filePath.join('/')}">
+        </video>
     {:else if  fileType === 'audio'}
-        <audio src={fileURL} controls/>
+        <audio src={fileURL} controls>
+            <track src={fileURL} kind="captions" default label="Preview du fichier audio {$filePath.join('/')}">
+        </audio>
     {/if}
 </div>
 
