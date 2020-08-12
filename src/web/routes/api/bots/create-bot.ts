@@ -3,6 +3,8 @@ import { Bot } from '../../../../bot/botTypes';
 import { isBotName, isClientID, isClientToken } from '../helper/isID';
 import BotModel from '../../../../models/BotModel';
 import getAvailableCommands from '../../../../commands/command/get-available-commands';
+import fs from 'fs';
+import path from 'path';
 
 export default async function createBot(req: Request, res: Response) {
 
@@ -60,6 +62,8 @@ export default async function createBot(req: Request, res: Response) {
 
     const createdBot = new BotModel(botData);
     await createdBot.save();
+
+    fs.mkdirSync(path.resolve(process.env.STORAGE_PATH!, String(createdBot._id)));
 
     res.json({ id: createdBot._id });
 
