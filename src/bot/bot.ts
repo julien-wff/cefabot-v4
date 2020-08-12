@@ -43,7 +43,7 @@ async function startBot(botId: string) {
     const localeService = new LocaleService(i18nProvider);
     localeService.setLocale(config.lang);
 
-    await setupStorage(botId);
+    setupStorage(botId);
 
     await logger('bot', 'debug', `Bot ${config.name} started!`, { botID: botId });
     const commands = await loadAllCommands(config.commands, config._id);
