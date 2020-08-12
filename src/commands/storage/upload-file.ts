@@ -10,8 +10,8 @@ const uploadFile: PathRun<{ path: string }> = async (message, params) => {
         await message.channel.send('Erreur : chemin spécifié invalide.');
         return;
     }
-    const filePath = path.resolve(process.env.STORATE_PATH!, params.path);
-    if (!filePath.startsWith(process.env.STORATE_PATH!)) {
+    const filePath = path.resolve(process.env.STORAGE_PATH!, params.path);
+    if (!filePath.startsWith(process.env.STORAGE_PATH!)) {
         await message.channel.send('Erreur : chemin obtenu invalide.');
         return;
     }

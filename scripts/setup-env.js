@@ -81,7 +81,7 @@ BOT_KEY=${res.key}
 DB_URI=${res.dbURI}
 
 # Storage path, absolute or relative to the project root
-STORATE_PATH=${res.storagePath}
+STORAGE_PATH=${res.storagePath}
 
 # The root URL of the web server (ex: http://host.ext, or https://192.168.1.2:8000)
 WEB_BASE_URL=${res.webBaseUrl}

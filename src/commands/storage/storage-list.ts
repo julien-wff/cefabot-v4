@@ -5,7 +5,7 @@ import getStorageList from './get-storage-list';
 const storageList: PathRun = async (message) => {
 
     const storageList = getStorageList(
-        getFolderStructure(process.env.STORATE_PATH!),
+        getFolderStructure(process.env.STORAGE_PATH!),
     );
 
     if (!storageList.trim()) {

@@ -21,7 +21,7 @@ const playSound: PathRun<{ sound: string }> = async (message, params, bot) => {
     }
 
     const sound = fs
-        .readdirSync(path.resolve(process.env.STORATE_PATH!, 'soundbox'))
+        .readdirSync(path.resolve(process.env.STORAGE_PATH!, 'soundbox'))
         .find(file => file === params.sound || file.slice(0, file.lastIndexOf('.')) === params.sound);
 
     if (!sound) {
@@ -29,7 +29,7 @@ const playSound: PathRun<{ sound: string }> = async (message, params, bot) => {
         return;
     }
 
-    const soundPath = path.resolve(process.env.STORATE_PATH!, 'soundbox', sound);
+    const soundPath = path.resolve(process.env.STORAGE_PATH!, 'soundbox', sound);
 
     let disconnect = true;
     if (message.guild?.member(bot.client.user!)?.voice.channel)

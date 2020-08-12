@@ -16,9 +16,9 @@ export default function setEnvVars() {
     process.env.FILES_FOLDER = folder;
 
     // Setting the storage path
-    const storagePath = path.resolve(process.env.STORATE_PATH || './storage');
+    const storagePath = path.resolve(process.env.STORAGE_PATH || './storage');
     if (!fs.existsSync(storagePath))
         fs.mkdirSync(storagePath, { recursive: true });
-    process.env.STORATE_PATH = storagePath;
+    process.env.STORAGE_PATH = storagePath;
 
 }

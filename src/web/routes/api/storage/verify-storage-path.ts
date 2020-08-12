@@ -16,7 +16,7 @@ export default function verifyStoragePath(req: Request, res: Response): string |
         return null;
     }
 
-    const filesPath = path.resolve(process.env.STORATE_PATH!, botID);
+    const filesPath = path.resolve(process.env.STORAGE_PATH!, botID);
 
     if (!fs.existsSync(filesPath)) {
         res.status(400).json({ error: `Unable to find files for bot ${botID}` });
