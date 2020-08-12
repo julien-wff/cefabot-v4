@@ -15,16 +15,18 @@ services:
     environment:
       - NODE_ENV=prod
       - DB_URI=mongodb://mongo-cefabot-v4/cefabot-v4
-      - WEB_BASE_URL=http://192.168.1.29
+      - STORAGE_PATH=/data/cefabot-v4-storage
       - WEB_PORT=8000
     links:
       - mongodb
+    volumes:
+    - /data/cefabot-v4/storage:/data/cefabot-v4-storage
     depends_on:
       - mongodb
   mongodb:
     container_name: mongo-cefabot-v4
     image: mongo
     volumes:
-      - /data/cefabot-v4-db:/data/db
+      - /data/cefabot-v4/db:/data/db
     ports:
       - 8001:27017

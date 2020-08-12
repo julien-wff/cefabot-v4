@@ -25,10 +25,12 @@ WORKDIR web
 
 RUN npm install --silent
 
+COPY ./web/rollup-plugin-svelte/index.js /cefabot-v4/web/node_modules/rollup-plugin-svelte/index.js
+
 RUN npm run build --slient
 
 
 # Starting
-WORKDIR /cefabot
+WORKDIR /cefabot-v4
 
 CMD node lib/app.js
