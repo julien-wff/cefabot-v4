@@ -18,6 +18,10 @@ import getFile from './routes/api/storage/get-file';
 import deleteFile from './routes/api/storage/delete-file';
 import getLogs from './routes/api/logs/get-logs';
 import deleteLogs from './routes/api/logs/delete-logs';
+import channelsList from './routes/api/channels/channels-list';
+import addChannel from './routes/api/channels/add-channel';
+import updateChannel from './routes/api/channels/update-channel';
+import deleteChannel from './routes/api/channels/delete-channel';
 
 const connectionRouter = Router();
 
@@ -57,5 +61,10 @@ apiRouter.delete('/storage/:botID/file', deleteFile);
 // Logs
 apiRouter.get('/logs', getLogs);
 apiRouter.delete('/logs', deleteLogs);
+// Channels
+apiRouter.get('/channels', channelsList);
+apiRouter.post('/channels', addChannel);
+apiRouter.patch('/channels', updateChannel);
+apiRouter.delete('/channels', deleteChannel);
 
 export { connectionRouter, apiRouter };

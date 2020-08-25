@@ -28,6 +28,8 @@
     setContext('guilds', guilds);
     let files = writable([]);
     setContext('files', files);
+    let channels = writable([]);
+    setContext('channels', channels);
 
     async function getBotData() {
         try {
@@ -37,14 +39,22 @@
                 position: 'top-end',
                 showConfirmButton: false,
             });
-            let [bt, cmd, evt, dataStg, fls] = await Promise.all([
+            let [bt, cmd, evt, dataStg, fls, ch] = await Promise.all([
                 fetch(`/api/bots/${id}`),
                 fetch('/api/commands'),
                 fetch('/api/events'),
                 fetch(`/api/data?botID=${id}`),
                 fetch(`/api/storage/${id}`),
+                fetch(`/api/channels?bot=${id}`),
             ]);
-            [bt, cmd, evt, dataStg, fls] = await Promise.all([bt.json(), cmd.json(), evt.json(), dataStg.json(), fls.json()]);
+            [bt, cmd, evt, dataStg, fls, ch] = await Promise.all([
+                bt.json(),
+                cmd.json(),
+                evt.json(),
+                dataStg.json(),
+                fls.json(),
+                ch.json(),
+            ]);
             if (bt && bt.error) throw new Error(bot.error);
             $bot = bt;
             $initialData = bt;
@@ -52,6 +62,7 @@
             $events = evt;
             $dataStorage = dataStg;
             $files = fls;
+            $channels = ch;
             if (bt.enabled)
                 $guilds = await Promise.all($bot.guildsID.map(g => fetch(`/api/bots/${id}/guild/${g}?iconsSize=64`).then(d => d.json())));
         } catch (e) {
@@ -85,23 +96,23 @@
                     'Content-Type': 'application/json'
                 },
             })
-                    .then(async res => {
-                        const resData = await res.json();
-                        if (res.status !== 200) {
-                            throw new Error(resData.error);
-                        }
-                        $bot = resData;
-                        $initialData = resData;
-                        return true;
-                    })
-                    .catch(error => {
-                        Swal.showValidationMessage(`Erreur lors de la requête : ${error.message}`);
-                    })
-                    .then(res => res && res.value && Swal.fire({
-                        title: 'Données modifiées !',
-                        text: 'Note : certaines données ne seront effectives qu\'après un redémarrage.',
-                        icon: 'success',
-                    }))
+                .then(async res => {
+                    const resData = await res.json();
+                    if (res.status !== 200) {
+                        throw new Error(resData.error);
+                    }
+                    $bot = resData;
+                    $initialData = resData;
+                    return true;
+                })
+                .catch(error => {
+                    Swal.showValidationMessage(`Erreur lors de la requête : ${error.message}`);
+                })
+                .then(res => res && res.value && Swal.fire({
+                    title: 'Données modifiées !',
+                    text: 'Note : certaines données ne seront effectives qu\'après un redémarrage.',
+                    icon: 'success',
+                }))
         });
     }
 </script>
