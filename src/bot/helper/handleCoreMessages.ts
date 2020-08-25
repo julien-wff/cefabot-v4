@@ -78,6 +78,7 @@ export default async function handleCoreMessages(msg: CorePacket<any>, bot: BotI
                 id: channel.id,
                 name: channel.name,
                 deleted: channel.deleted,
+                type: channel.type,
                 members: channel.members,
             },
         } as BotPacket<Partial<GuildChannel>>);
