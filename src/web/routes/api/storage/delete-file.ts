@@ -26,10 +26,8 @@ export default function deleteFile(req: Request, res: Response) {
     }
 
     if (fs.statSync(filePath).isDirectory()) {
-        console.log('dir', filePath);
         fs.rmdirSync(filePath, { recursive: true });
     } else {
-        console.log('file', filePath);
         fs.unlinkSync(filePath);
     }
 
