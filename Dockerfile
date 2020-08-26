@@ -53,6 +53,7 @@ LABEL description="The 4th version of my discord bot, with multiple bot clients 
 WORKDIR /cefabot
 COPY --from=dependencies /cefabot/prod_node_modules ./node_modules
 COPY --from=build /cefabot/lib ./lib
+COPY scripts scripts
 
 # Install web
 WORKDIR web
