@@ -11,6 +11,7 @@
     import DataStorage from '../components/bot/DataStorage.svelte';
     import Guilds from '../components/bot/Guilds.svelte';
     import Storage from '../components/bot/Storage.svelte';
+    import Logs from '../components/bot/Logs.svelte';
 
     export let id;
 
@@ -30,6 +31,8 @@
     setContext('files', files);
     let channels = writable([]);
     setContext('channels', channels);
+    let logs = writable([]);
+    setContext('logs', logs);
 
     async function getBotData() {
         try {
@@ -39,21 +42,23 @@
                 position: 'top-end',
                 showConfirmButton: false,
             });
-            let [bt, cmd, evt, dataStg, fls, ch] = await Promise.all([
+            let [bt, cmd, evt, dataStg, fls, ch, lg] = await Promise.all([
                 fetch(`/api/bots/${id}`),
                 fetch('/api/commands'),
                 fetch('/api/events'),
                 fetch(`/api/data?botID=${id}`),
                 fetch(`/api/storage/${id}`),
                 fetch(`/api/channels?bot=${id}`),
+                fetch(`/api/logs?bots=${id}&app=false&limit=10`),
             ]);
-            [bt, cmd, evt, dataStg, fls, ch] = await Promise.all([
+            [bt, cmd, evt, dataStg, fls, ch, lg] = await Promise.all([
                 bt.json(),
                 cmd.json(),
                 evt.json(),
                 dataStg.json(),
                 fls.json(),
                 ch.json(),
+                lg.json(),
             ]);
             if (bt && bt.error) throw new Error(bot.error);
             $bot = bt;
@@ -63,6 +68,7 @@
             $dataStorage = dataStg;
             $files = fls;
             $channels = ch;
+            $logs = lg;
             if (bt.enabled)
                 $guilds = await Promise.all($bot.guildsID.map(g => fetch(`/api/bots/${id}/guild/${g}?iconsSize=64`).then(d => d.json())));
         } catch (e) {
@@ -128,5 +134,6 @@
         <DataStorage/>
         <Guilds/>
         <Storage/>
+        <Logs/>
     </div>
 {/if}
