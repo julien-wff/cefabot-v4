@@ -1,8 +1,19 @@
 <script>
     import Options from '../components/logs/Options.svelte';
-    import { setContext } from 'svelte';
+    import { setContext, onDestroy } from 'svelte';
     import LogLine from '../components/logs/LogLine.svelte';
     import { writable } from 'svelte/store';
+
+    const socket = new WebSocket(`ws://${window.location.host}/ws/`);
+
+    onDestroy(() => {
+        socket.close();
+    });
+
+    socket.addEventListener('message', msg => {
+        if (msg.data === 'new-log')
+            refresh();
+    });
 
     let logs = writable([]);
     let bots = writable([]);

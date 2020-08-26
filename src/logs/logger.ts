@@ -1,6 +1,20 @@
 import { LogLevel, LogType } from './logTypes';
 import LogModel, { Log } from '../models/LogModel';
 import mongoose from 'mongoose';
+import { BotPacket } from '../bot/botTypes';
+
+
+/**
+ * Dispatches the new log event depending on the status of the logger (in main or in a fork)
+ */
+export function alertLog() {
+    if (!process.env.FORK) {
+        // @ts-ignore
+        process.emit('log');
+    } else {
+        process.send!({ type: 'log' } as BotPacket);
+    }
+}
 
 /**
  * Function to emit a log.
@@ -22,7 +36,8 @@ export default function logger(level: LogLevel, type: LogType, message: string, 
             ...data,
         } as Log)
             .save()
-            .catch(err => console.error(`Error when attempting to save a log. \nError:`, err, '\nLog message:', message));
+            .catch(err => console.error(`Error when attempting to save a log. \nError:`, err, '\nLog message:', message))
+            .finally(() => alertLog());
 
     } else {
 
@@ -30,6 +45,7 @@ export default function logger(level: LogLevel, type: LogType, message: string, 
             console.error(message);
         else
             console.log(message);
+        alertLog();
 
     }
 }

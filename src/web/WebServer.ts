@@ -6,6 +6,8 @@ import bodyParser from 'body-parser';
 import WebPanelAccess from '../models/WebPanelAccess';
 import { connectionRouter, apiRouter } from './router';
 import compression from 'compression';
+import http from 'http';
+import ws from 'ws';
 
 const TOKEN_EXPIRE_DURATION = ms('1h');
 const WEB_DIR = path.resolve(__dirname, '../../web/public');
@@ -13,9 +15,15 @@ const WEB_DIR = path.resolve(__dirname, '../../web/public');
 export default class WebServer {
 
     private readonly app: Express;
+    private readonly ws: ws.Server;
 
     constructor() {
+        // Setup server
         this.app = express();
+        const server = http.createServer(this.app);
+        // Setup socket
+        this.ws = new ws.Server({ server, path: '/ws/' });
+        this.ws.on('connection', this.handleWSConnection);
         // Middlewares
         this.app.use(compression());
         this.checkAuth = this.checkAuth.bind(this);
@@ -28,8 +36,8 @@ export default class WebServer {
         this.app.use('/api', apiRouter);
         this.app.get([ '/app', '/app/*' ], (_, res) => res.sendFile(path.join(WEB_DIR, 'index.html')));
 
-        const server = this.app.listen(process.env.WEB_PORT);
-        server.setTimeout(15000);
+        const listener = server.listen(process.env.WEB_PORT);
+        listener.setTimeout(15000);
     }
 
     async checkAuth(req: Request, res: Response, next: NextFunction) {
@@ -56,6 +64,21 @@ export default class WebServer {
         }
 
         next();
+    }
+
+
+    handleWSConnection(socket: ws) {
+
+        function onLog() {
+            socket.send('new-log');
+        }
+
+        // @ts-ignore
+        process.on('log', onLog);
+
+        socket.once('close', () => {
+            process.off('log', onLog);
+        });
     }
 
 }

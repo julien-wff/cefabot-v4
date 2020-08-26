@@ -8,7 +8,7 @@ import { ChildProcess, fork } from 'child_process';
 import setEnvVars from './utils/set-env-vars';
 import verifyEnvVars from './utils/verify-env-vars';
 import { existsSync } from 'fs';
-import logger from './logs/logger';
+import logger, { alertLog } from './logs/logger';
 
 setEnvVars();
 verifyEnvVars();
@@ -83,7 +83,13 @@ export async function startBot(bot: Bot) {
     const botProcess = fork(
         BOT_PATH,
         [],
-        { silent: true },
+        {
+            silent: true,
+            env: {
+                ...process.env,
+                FORK: '1',
+            },
+        },
     );
 
     botsProcess[bot._id] = botProcess;
@@ -130,6 +136,9 @@ export async function startBot(bot: Bot) {
         switch (msg.type) {
             case 'reboot':
                 rebootBot();
+                break;
+            case 'log':
+                alertLog();
                 break;
         }
 

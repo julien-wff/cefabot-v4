@@ -24,7 +24,7 @@ export interface BotInstance {
 }
 
 export interface BotPacket<T = undefined> {
-    type: 'reboot' | 'resolved-role' | 'resolved-guild' | 'resolved-channel' | 'resolved-member';
+    type: 'reboot' | 'log' | 'resolved-role' | 'resolved-guild' | 'resolved-channel' | 'resolved-member';
     data: T;
 }
 
