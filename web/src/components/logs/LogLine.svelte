@@ -10,6 +10,7 @@
 <script>
     import { getContext } from 'svelte';
     import { shortpress } from '../../functions/shortpress';
+    import { dateFormat } from '../../functions/date-format';
 
     export let _id;
     export let level;
@@ -27,18 +28,8 @@
     let options = getContext('options');
     let selectedLogs = getContext('selected-logs');
 
-    const intlOptions = {
-        year: 'numeric',
-        month: 'numeric',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric',
-        second: 'numeric',
-        hour12: false
-    };
-
     let formattedDate;
-    $: formattedDate = new Intl.DateTimeFormat('FR', intlOptions).format(new Date(date));
+    $: formattedDate = dateFormat.format(new Date(date));
 
     function setDetailed({ explicitOriginalTarget: target }) {
         if (target && typeof target.tagName === 'string'
