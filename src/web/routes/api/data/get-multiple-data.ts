@@ -27,7 +27,8 @@ export default async function getMultipleData(req: Request, res: Response) {
     const responsesPromises = await data.map(async d => {
         let dataStg: any = {
             key: d.key,
-            value: d.value,
+            value: d.secret ? '<secret>' : d.value,
+            secret: d.secret,
             type: d.type as DataType,
             botID: d.botID,
             guildID: d.guildID,

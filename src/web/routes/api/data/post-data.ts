@@ -50,6 +50,9 @@ export default async function postData(req: Request, res: Response) {
     }
     saveData.botID = data.botID;
 
+    if (typeof data.secret === 'boolean' && data.secret)
+        saveData.secret = true;
+
     const dbSave = new DataModel(saveData);
     const dbResult = await dbSave.save();
 
