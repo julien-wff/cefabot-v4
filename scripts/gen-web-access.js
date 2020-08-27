@@ -2,6 +2,7 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const { v4: uuid } = require('uuid');
 const { userInfo } = require('os');
+const kleur = require('kleur');
 
 const WebPanelAccessSchema = new mongoose.Schema({
     userId: {
@@ -37,14 +38,14 @@ const WebPanelAccess = mongoose.model('WebPanelAccess', WebPanelAccessSchema);
 
 (async () => {
 
-    console.log('Connecting to the DB...');
+    console.log(kleur.italic('Connecting to the DB...'));
 
     await mongoose.connect(process.env.DB_URI, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     });
 
-    console.log('Connection successful. Creating access...');
+    console.log(kleur.green(kleur.green('Connection successful. Creating access...')));
 
     const token = uuid();
 
@@ -56,9 +57,11 @@ const WebPanelAccess = mongoose.model('WebPanelAccess', WebPanelAccessSchema);
 
     await access.save();
 
-    console.log(`Access created. You can access to the panel through the following link once the bot started.
-${process.env.WEB_BASE_URL}/connect?token=${token}`);
+    console.log(
+        kleur.green('Access created. You can access to the panel through the following link once the bot is started:\n') +
+        kleur.cyan(kleur.underline(`${process.env.WEB_BASE_URL}/connect?token=${token}`))
+    );
 
 })()
-    .catch(console.error)
+    .catch(err => console.error(kleur.red(err)))
     .finally(() => process.exit(0));
