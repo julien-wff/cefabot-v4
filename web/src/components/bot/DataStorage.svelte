@@ -1,5 +1,6 @@
 <script>
     import { getContext } from 'svelte';
+    import { sanitize } from '../../functions/sanitize';
     import Swal from 'sweetalert2/dist/sweetalert2';
     import DataValue from './data/DataValue.svelte';
     import AddData from './data/AddData.svelte';
@@ -13,7 +14,7 @@
             title: data.key,
             html: `
                 Type : ${data.type}<br>
-                Valeur : ${data.value}<br>
+                Valeur : ${sanitize(data.value)}<br>
                 ID : ${data.id}<br>
                 GuildID : ${data.guildID}
             `,
@@ -34,21 +35,24 @@
                 method: 'DELETE'
             })
         })
-                .then(async res => {
-                    const resData = await res.value.json();
-                    if (res.value.status !== 200) {
-                        throw new Error(resData.error);
-                    }
-                    $dataStorage = $dataStorage.filter(d => d.id !== id);
-                    return true;
-                })
-                .catch(error => {
-                    Swal.fire({ title: `Erreur lors de la requête : ${error.message || error}`, icon: 'error' });
-                })
-                .then(res => res && Swal.fire({
-                    title: 'Donnée supprimée !',
-                    icon: 'success',
-                }));
+            .then(async res => {
+                if (!res || !res.value)
+                    return false;
+
+                const resData = await res.value.json();
+                if (res.value.status !== 200) {
+                    throw new Error(resData.error);
+                }
+                $dataStorage = $dataStorage.filter(d => d.id !== id);
+                return true;
+            })
+            .catch(error => {
+                Swal.fire({ title: `Erreur lors de la requête : ${error.message || error}`, icon: 'error' });
+            })
+            .then(res => res && Swal.fire({
+                title: 'Donnée supprimée !',
+                icon: 'success',
+            }));
         getBotData();
     }
 
@@ -59,10 +63,11 @@
     Données ({$dataStorage.length} clés)
 </h3>
 
-{#each $dataStorage as {key, value, guildID, type, id}, ind}
+{#each $dataStorage as { key, value, guildID, type, id }, ind}
     <div class="hover:bg-gray-600 rounded flex flex-row justify-between">
         <div class="px-4 py-2 cursor-pointer flex-1" on:click={() => showKey(ind)}>
-            <pre class="font-semibold inline">{key}</pre> :
+            <pre class="font-semibold inline">{key}</pre>
+            :
             <DataValue data={$dataStorage[ind]}/>
         </div>
         <button
