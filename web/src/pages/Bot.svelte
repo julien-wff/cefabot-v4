@@ -2,6 +2,7 @@
 <script>
     import { setContext } from 'svelte';
     import { writable } from 'svelte/store';
+    import Nanobar from 'nanobar';
     import Loading from '../components/Loading.svelte';
     import Swal from 'sweetalert2/dist/sweetalert2';
     import Header from '../components/bot/Header.svelte';
@@ -14,6 +15,16 @@
     import Logs from '../components/bot/Logs.svelte';
 
     export let id;
+
+    const progressBar = new Nanobar();
+    let currentProgress = 0;
+    const totalProgress = 8;
+
+    function setProgressBar() {
+        let progress = currentProgress / totalProgress * 100;
+        if (progress > 100) progress = 100;
+        progressBar.go(progress);
+    }
 
     let bot = writable(null);
     setContext('bot', bot);
@@ -34,43 +45,32 @@
     let logs = writable([]);
     setContext('logs', logs);
 
+    async function fetchData(url) {
+        const res = await fetch(url);
+        const data = res.json();
+        if (data.error) {
+            throw new Error(error);
+        }
+        currentProgress++;
+        setProgressBar();
+        return data;
+    }
+
     async function getBotData() {
+        currentProgress = 0;
         try {
-            Swal.fire({
-                text: 'Chargement en cours...',
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-            });
-            let [bt, cmd, evt, dataStg, fls, ch, lg] = await Promise.all([
-                fetch(`/api/bots/${id}`),
-                fetch('/api/commands'),
-                fetch('/api/events'),
-                fetch(`/api/data?botID=${id}`),
-                fetch(`/api/storage/${id}`),
-                fetch(`/api/channels?bot=${id}`),
-                fetch(`/api/logs?bots=${id}&app=false&limit=10`),
-            ]);
-            [bt, cmd, evt, dataStg, fls, ch, lg] = await Promise.all([
-                bt.json(),
-                cmd.json(),
-                evt.json(),
-                dataStg.json(),
-                fls.json(),
-                ch.json(),
-                lg.json(),
-            ]);
-            if (bt && bt.error) throw new Error(bot.error);
-            $bot = bt;
-            $initialData = bt;
-            $commands = cmd;
-            $events = evt;
-            $dataStorage = dataStg;
-            $files = fls;
-            $channels = ch;
-            $logs = lg;
-            if (bt.enabled)
-                $guilds = await Promise.all($bot.guildsID.map(g => fetch(`/api/bots/${id}/guild/${g}?iconsSize=64`).then(d => d.json())));
+            $bot = await fetchData(`/api/bots/${id}`);
+            $initialData = $bot;
+            fetchData('/api/commands').then(data => $commands = data);
+            fetchData('/api/events').then(data => $events = data);
+            fetchData(`/api/data?botID=${id}`).then(data => $dataStorage = data);
+            fetchData(`/api/storage/${id}`).then(data => $files = data);
+            fetchData(`/api/channels?bot=${id}`).then(data => $channels = data);
+            fetchData(`/api/logs?bots=${id}&app=false&limit=10`).then(data => $logs = data);
+            if ($bot.enabled)
+                $guilds = await Promise.all(
+                    $bot.guildsID.map(g => fetchData(`/api/bots/${id}/guild/${g}?iconsSize=64`))
+                );
         } catch (e) {
             await Swal.fire({
                 title: 'Erreur',
@@ -78,7 +78,6 @@
                 text: `Impossible d'obtenir les données : ${e.message}`
             });
         }
-        Swal.close();
     }
 
     setContext('get-bot-data', getBotData);

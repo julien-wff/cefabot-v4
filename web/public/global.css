@@ -1,5 +1,12 @@
 @import "../node_modules/@sweetalert2/theme-dark/dark.css";
 
+/*noinspection CssInvalidAtRule*/
 @tailwind base;
+/*noinspection CssInvalidAtRule*/
 @tailwind components;
+/*noinspection CssInvalidAtRule*/
 @tailwind utilities;
+
+.nanobar .bar {
+    @apply bg-blue-400;
+}
