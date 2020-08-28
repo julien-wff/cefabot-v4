@@ -3,6 +3,7 @@
     import StatusIndicator from './StatusIndicator.svelte';
     import Swal from 'sweetalert2/dist/sweetalert2';
     import { humanizeDataType } from '../../functions/convert-data-type';
+    import MissingKeys from './events/MissingKeys.svelte';
 
     let bot = getContext('bot');
     let events = getContext('events');
@@ -27,14 +28,12 @@
                     const s = missingKeys.length > 1 ? 's' : '';
                     Swal.fire({
                         title: `Clé${s} manquante${s}`,
-                        html: `
-                            Pour activer cet event, vous devez ajouter
-                            l${missingKeys.length > 1 ? 'es' : 'a'} clé${s} suivante${s} :
-                            ${missingKeys.map(k =>
-                                `<pre class="inline">${k.key}</pre> : ${humanizeDataType(k.type)}`
-                        )}
-                        `,
+                        html: '<div id="swal-svelte-missing-event"></div>',
                         icon: 'error'
+                    });
+                    new MissingKeys({
+                        target: document.getElementById('swal-svelte-missing-event'),
+                        props: { missingKeys },
                     });
                     return;
                 }
@@ -51,7 +50,7 @@
     Évènement{$bot.events.length > 1 ? 's' : ''} ({$bot.events.length} / {$events.length} activés)
 </h3>
 <ul class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
-    {#each $events as {name}}
+    {#each $events as { name }}
         <li class="cursor-pointer hover:bg-gray-600 rounded px-4 py-2 mx-2 whitespace-no-wrap"
             on:click={() => toggleEvent(name)}>
             <StatusIndicator enabled={$bot.events.includes(name)}/> {name}
