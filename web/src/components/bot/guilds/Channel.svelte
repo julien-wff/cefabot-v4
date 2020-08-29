@@ -45,7 +45,6 @@
             })
         })
             .then(res => {
-                console.log(res);
                 return res && res.value && Swal.fire({
                     title: `Salon ajouté !`,
                     icon: 'success',
