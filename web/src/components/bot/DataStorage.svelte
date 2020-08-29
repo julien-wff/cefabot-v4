@@ -1,9 +1,9 @@
 <script>
     import { getContext } from 'svelte';
-    import { sanitize } from '../../functions/sanitize';
     import Swal from 'sweetalert2/dist/sweetalert2';
     import DataValue from './data/DataValue.svelte';
     import AddData from './data/AddData.svelte';
+    import DataDetails from './data/DataDetails.svelte';
 
     let dataStorage = getContext('data-storage');
     const getBotData = getContext('get-bot-data');
@@ -12,12 +12,11 @@
         const data = $dataStorage[index];
         Swal.fire({
             title: data.key,
-            html: `
-                Type : ${data.type}<br>
-                Valeur : ${sanitize(data.value)}<br>
-                ID : ${data.id}<br>
-                GuildID : ${data.guildID}
-            `,
+            html: '<div id="swal-svelte-data-details"></div>'
+        });
+        new DataDetails({
+            target: document.getElementById('swal-svelte-data-details'),
+            props: { data }
         });
     }
 
