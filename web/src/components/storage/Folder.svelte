@@ -1,6 +1,7 @@
 <!--suppress UnnecessaryLabelJS -->
 <script>
     import File from './File.svelte';
+    import FolderContextMenu from './context-menu/FolderContextMenu.svelte';
 
     export let expanded = false;
     export let name;
@@ -11,6 +12,16 @@
 
     function toggle() {
         expanded = !expanded;
+    }
+
+    let menu = false;
+
+    function contextMenu(ev) {
+        menu = {
+            x: ev.pageX,
+            y: ev.pageY,
+            path,
+        };
     }
 </script>
 
@@ -37,7 +48,20 @@
     }
 </style>
 
-<span class="cursor-pointer font-bold" class:expanded on:click={toggle}>{name}</span>
+<svelte:body on:click={() => menu = false}/>
+
+
+<span
+        class="cursor-pointer font-bold"
+        class:expanded
+        on:click={toggle}
+        on:contextmenu|preventDefault={contextMenu}>
+    {name}
+</span>
+
+{#if menu}
+    <FolderContextMenu {...menu}/>
+{/if}
 
 {#if expanded}
     <ul>

@@ -22,6 +22,7 @@ import channelsList from './routes/api/channels/channels-list';
 import addChannel from './routes/api/channels/add-channel';
 import updateChannel from './routes/api/channels/update-channel';
 import deleteChannel from './routes/api/channels/delete-channel';
+import uploadFile from './routes/api/storage/upload-file';
 
 const connectionRouter = Router();
 
@@ -58,6 +59,7 @@ apiRouter.get('/web-accesses', getWebAccesses);
 apiRouter.get('/storage/:botID', getFilesList);
 apiRouter.get('/storage/:botID/file', getFile);
 apiRouter.delete('/storage/:botID/file', deleteFile);
+apiRouter.post('/storage/:botID', uploadFile);
 // Logs
 apiRouter.get('/logs', getLogs);
 apiRouter.delete('/logs', deleteLogs);

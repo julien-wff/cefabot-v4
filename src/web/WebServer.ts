@@ -8,6 +8,7 @@ import { connectionRouter, apiRouter } from './router';
 import compression from 'compression';
 import http from 'http';
 import ws from 'ws';
+import fileUpload from 'express-fileupload';
 
 const TOKEN_EXPIRE_DURATION = ms('1h');
 const WEB_DIR = path.resolve(__dirname, '../../web/public');
@@ -25,11 +26,13 @@ export default class WebServer {
         this.ws = new ws.Server({ server, path: '/ws/' });
         this.ws.on('connection', this.handleWSConnection);
         // Middlewares
+        this.app.use(fileUpload({ createParentPath: true }));
         this.app.use(compression());
         this.checkAuth = this.checkAuth.bind(this);
         this.app.use(express.static(WEB_DIR));
         this.app.use(cookieParser());
         this.app.use(bodyParser.json());
+        this.app.use(bodyParser.urlencoded({ extended: true }));
         // Routes
         this.app.use('/', connectionRouter);
         this.app.use(this.checkAuth);
