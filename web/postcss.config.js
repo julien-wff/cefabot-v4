@@ -4,7 +4,7 @@ module.exports = {
     plugins: [
         tailwindcss('./tailwind.config.js'),
         require('postcss-easy-import'),
-        require('autoprefixer'),
+        // require('autoprefixer'),
         ...(process.env.NODE_ENV === 'production' ? [require('cssnano')] : [])
     ],
 };
