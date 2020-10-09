@@ -2,7 +2,7 @@ import Swal from 'sweetalert2/dist/sweetalert2';
 
 export const uploadFile = async (path, botID) => Swal.fire({
     title: 'Ajouter un fichier',
-    html: `Le fichier sera stocké dans l'emplacement suivant : ${path}`,
+    html: `Le fichier sera stocké dans l'emplacement suivant : <pre><code>/${path}</code></pre>`,
     input: 'file',
     showCancelButton: true,
     showLoaderOnConfirm: true,

@@ -3,6 +3,7 @@
     import Swal from 'sweetalert2/dist/sweetalert2';
     import { getContext } from 'svelte';
     import { mediaType } from '../../functions/file-type';
+    import { sanitize } from '../../functions/sanitize';
 
     let filePath = getContext('file-preview');
     let bot = getContext('bot');
@@ -15,7 +16,7 @@
 
     const deleteFile = () => Swal.fire({
         title: 'Supprimer un fichier',
-        text: `Êtes-vous sur de vouloir supprimer ${$filePath.join('/')} ?`,
+        html: `Êtes-vous sur de vouloir supprimer <pre><code>/${sanitize($filePath.join('/'))}</code></pre>`,
         confirmButtonText: 'Supprimer',
         showCancelButton: true,
         cancelButtonText: 'Retour',
