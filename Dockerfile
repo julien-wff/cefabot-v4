@@ -1,11 +1,14 @@
 # ----- Base node -----
 FROM node:12.18.2-stretch-slim AS base
 WORKDIR /cefabot
-RUN apt update && apt install -y python3 make ffmpeg opus-tools build-essential && rm -rf /var/lib/apt/lists/*
+RUN apt update && apt install -y libcairo2-dev libpango1.0-dev libjpeg-dev && rm -rf /var/lib/apt/lists/*
 
 
 # ----- Dependencies -----
 FROM base AS dependencies
+
+# Packages
+RUN apt update && apt install -y make pkg-config build-essential && rm -rf /var/lib/apt/lists/*
 
 # Bot dependencies
 COPY package.json ./
@@ -28,7 +31,7 @@ RUN npm install
 
 # ----- Build -----
 FROM base AS build
-RUN npm install typescript@3.9.7 node-gyp postcss-cli -g --silent
+RUN npm install typescript postcss-cli postcss -g --silent
 WORKDIR /cefabot
 COPY . ./
 
@@ -39,7 +42,6 @@ RUN npm run build
 # Build web
 WORKDIR web
 COPY --from=dependencies /cefabot/web/node_modules ./node_modules
-COPY ./web/rollup-plugin-svelte/index.js ./node_modules/rollup-plugin-svelte/index.js
 RUN npm run build
 
 
