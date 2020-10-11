@@ -6,14 +6,24 @@
     import disconnect from '../../actions/disconnect';
 
     let isOpen = false;
+
+    let headerElement;
+
+    function handleClick(e) {
+        if (isOpen && !headerElement.contains(e.target))
+            isOpen = false;
+    }
 </script>
 
-<header class="fixed top-0 left-0 w-full bg-gray-900 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3 z-10">
+<svelte:window on:mousedown={handleClick}/>
+
+<header class="fixed top-0 left-0 w-full bg-gray-900 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3 z-10"
+        bind:this={headerElement}>
 
     <div class="flex items-center justify-between px-4 py-3 sm:p-0">
 
         <Link to="/">
-            <h1 class="font-bold">cefabot v4 panel</h1>
+            <h1 class="font-bold" on:click={() => isOpen = false}>cefabot v4 panel</h1>
         </Link>
 
         <div class="sm:hidden">
@@ -25,7 +35,7 @@
 
     </div>
 
-    <nav class="px-2 pt-2 pb-4 sm:flex sm:p-0 {isOpen ? 'block' : 'hidden'}">
+    <nav class="px-2 pt-2 pb-4 sm:flex sm:p-0 {isOpen ? 'block' : 'hidden'}" on:click={() => isOpen = false}>
         <NavLink to="/">Accueil</NavLink>
         <NavLink to="logs">Logs</NavLink>
         <NavLink to="web-access">Accès web</NavLink>
