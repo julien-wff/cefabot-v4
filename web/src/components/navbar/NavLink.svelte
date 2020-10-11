@@ -5,8 +5,8 @@
     export let to;
 </script>
 
-<div class="block cursor-pointer px-2 py-1 font-semibold rounded hover:bg-gray-800">
-    <Link {to}>
+<Link {to}>
+    <div class="block cursor-pointer px-2 py-1 font-semibold rounded hover:bg-gray-800">
         <slot/>
-    </Link>
-</div>
+    </div>
+</Link>
