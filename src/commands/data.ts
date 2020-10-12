@@ -10,7 +10,6 @@ const properties: Command = {
     description: 'Gérer certaines données stockées dans la base de données',
     triggers: [
         'data',
-        'storage',
     ],
     removable: false,
     permission: 'ADMINISTRATOR',
