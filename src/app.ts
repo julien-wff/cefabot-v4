@@ -1,4 +1,5 @@
 import 'dotenv/config';
+import checkGlobalSettings from './utils/check-global-settings';
 import WebServer from './web/WebServer';
 import path from 'path';
 import initDB from './database/init';
@@ -33,6 +34,8 @@ let webServer: WebServer;
     webServer = new WebServer();
 
     logger('app', 'debug', 'Starting cefabot...');
+
+    await checkGlobalSettings();
 
     const bots: Bot[] = await BotModel.find({ enabled: true });
 
