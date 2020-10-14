@@ -3,7 +3,9 @@ import WebPanelAccess from '../../../../models/WebPanelAccess';
 
 export async function getWebAccesses(req: Request, res: Response) {
 
-    const webAccesses = await WebPanelAccess.find();
+    const webAccesses = await WebPanelAccess
+        .find()
+        .sort('created');
 
     res.json(webAccesses.map(a => ({
         userID: a.userId,
