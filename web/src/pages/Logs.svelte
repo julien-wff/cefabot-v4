@@ -18,7 +18,7 @@
     let logs = writable([]);
     let bots = writable([]);
     let filters = writable({
-        limit: 20,
+        limit: 100,
         offset: 0,
         bots: null,
         app: true,

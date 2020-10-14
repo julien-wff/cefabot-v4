@@ -25,7 +25,7 @@ export default async function getLogs(req: Request, res: Response) {
         let limit: any = req.query.limit;
         if (typeof limit === 'string') {
             limit = parseInt(limit);
-            if (!isNaN(limit) && limit < 50 && limit > 0) {
+            if (!isNaN(limit) && limit <= 100 && limit > 0) {
                 requestParams.limit = limit;
             }
         }
