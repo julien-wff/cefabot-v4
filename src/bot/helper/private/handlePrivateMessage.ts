@@ -8,11 +8,6 @@ import logger from '../../../logs/logger';
 
 export default async function handlePrivateMessage(message: Message, bot: BotInstance) {
 
-    if (message.content === 'create') { // For test purposes
-        const settings = new GlobalSettings({ accessPassword: 'test' });
-        await settings.save();
-    }
-
     if (message.content === 'clear') {
         const deleteMsg = await (message.channel as DMChannel).messages.fetch();
         deleteMsg.forEach(m => m.author.id === bot.client.user?.id && m.delete());
