@@ -2,8 +2,8 @@ import { Schema, model, Document } from 'mongoose';
 
 const GlobalSettingsSchema = new Schema({
     trustedAccounts: {
-        type: [ String ],
-        default: [],
+        type: Schema.Types.Map,
+        default: {},
     },
     accessPassword: {
         type: String,
@@ -15,6 +15,6 @@ const GlobalSettingsSchema = new Schema({
 export default model<Document & GlobalSettings>('GlobalSetting', GlobalSettingsSchema);
 
 export interface GlobalSettings {
-    trustedAccounts: string[],
+    trustedAccounts: Map<string, string>,
     accessPassword: string,
 }

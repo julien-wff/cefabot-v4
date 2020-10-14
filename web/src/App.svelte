@@ -7,6 +7,7 @@
     import Logs from './pages/Logs.svelte';
     import Nav from './components/navbar/Nav.svelte';
     import WebAccesses from './pages/WebAccesses.svelte';
+    import Settings from './pages/Settings.svelte';
 
     export let url = '';
 </script>
@@ -20,5 +21,6 @@
         <Route path="bots/:id" component={Bot}/>
         <Route path="web-access" component={WebAccesses}/>
         <Route path="logs" component={Logs}/>
+        <Route path="settings" component={Settings}/>
     </div>
 </Router>

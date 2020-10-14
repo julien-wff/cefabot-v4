@@ -39,6 +39,7 @@
         <NavLink to="/">Accueil</NavLink>
         <NavLink to="logs">Logs</NavLink>
         <NavLink to="web-access">Accès web</NavLink>
+        <NavLink to="settings">Paramètres</NavLink>
         <div
                 class="cursor-pointer block px-2 py-1 font-semibold rounded text-red-500 hover:bg-gray-800"
                 on:click={disconnect}>

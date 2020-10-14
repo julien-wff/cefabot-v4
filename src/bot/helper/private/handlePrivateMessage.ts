@@ -23,7 +23,7 @@ export default async function handlePrivateMessage(message: Message, bot: BotIns
 
     if (message.content.match(/^web .+$/i)) {
 
-        if (!settings.trustedAccounts.includes(message.author.id))
+        if (!settings.trustedAccounts.has(message.author.id))
             return logger('app', 'warning', `${message.author.username} (${message.author.id}) tried to use web interface without permission`, {
                 location: 'handlePrivateMessage.ts',
                 data: { bot: bot.config._id },

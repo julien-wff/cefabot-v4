@@ -1,4 +1,8 @@
 import { Router } from 'express';
+import addTrustedAccount from './routes/api/global-settings/add-trusted-account';
+import deleteTrustedAccount from './routes/api/global-settings/delete-trusted-account';
+import getTrustedAccounts from './routes/api/global-settings/get-trusted-accounts';
+import resetPassword from './routes/api/global-settings/reset-password';
 import connectRoute from './routes/connect';
 import disconnectRoute from './routes/disconnect';
 import bots from './routes/api/bots';
@@ -68,5 +72,10 @@ apiRouter.get('/channels', channelsList);
 apiRouter.post('/channels', addChannel);
 apiRouter.patch('/channels', updateChannel);
 apiRouter.delete('/channels', deleteChannel);
+// Global settings
+apiRouter.post('/reset-password', resetPassword);
+apiRouter.get('/trusted-accounts', getTrustedAccounts);
+apiRouter.post('/trusted-accounts', addTrustedAccount);
+apiRouter.delete('/trusted-accounts', deleteTrustedAccount);
 
 export { connectionRouter, apiRouter };
