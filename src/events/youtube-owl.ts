@@ -121,7 +121,7 @@ async function youtubeOWL() {
 const run: EventRun = async bot => {
     const dataKeys = await getData(bot, properties);
     if (dataKeys.error) {
-        await logger.bot.error(dataKeys.error, { location: 'youtube-owl.ts', botID: bot.config._id });
+        logger.bot.error(dataKeys.error, { location: 'youtube-owl.ts', botID: bot.config._id });
         return dataKeys.error;
     }
     data = dataKeys.data;

@@ -110,13 +110,13 @@ export async function startBot(bot: Bot) {
     botProcess.stdout?.on('data', (data: Buffer) => handleBotLog(data.toString().trimRight()));
 
 
-    async function handleBotExit(code: number) {
+    function handleBotExit(code: number) {
 
         const log = code === 0
             ? logger.bot.log
             : logger.bot.error;
 
-        await log(`Bot exited with code ${code}.${code !== 0 ? ' Restarting...' : ''}`, {
+        log(`Bot exited with code ${code}.${code !== 0 ? ' Restarting...' : ''}`, {
             data: code,
             location: 'app.ts',
             botID: bot._id,
@@ -127,11 +127,11 @@ export async function startBot(bot: Bot) {
     }
 
 
-    async function handleBotError(error: Error | string) {
+    function handleBotError(error: Error | string) {
         if (typeof error === 'string')
-            await logger.bot.error(error, { botID: bot._id, location: 'app.ts' });
+            logger.bot.error(error, { botID: bot._id, location: 'app.ts' });
         else
-            await logger.bot.error(error.message, {
+            logger.bot.error(error.message, {
                 data: error.stack,
                 location: 'app.ts',
                 botID: bot._id,
@@ -139,8 +139,8 @@ export async function startBot(bot: Bot) {
     }
 
 
-    async function handleBotLog(message: string) {
-        await logger.bot.log(message, { botID: bot._id, location: 'app.ts' });
+    function handleBotLog(message: string) {
+        logger.bot.log(message, { botID: bot._id, location: 'app.ts' });
     }
 
 
@@ -158,9 +158,9 @@ export async function startBot(bot: Bot) {
     }
 
 
-    async function rebootBot() {
+    function rebootBot() {
 
-        await logger.bot.log('Bot restart requested', { location: 'core.js', botID: bot._id });
+        logger.bot.log('Bot restart requested', { location: 'core.js', botID: bot._id });
 
 
         botProcess.send('reboot');

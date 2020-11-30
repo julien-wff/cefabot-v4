@@ -42,7 +42,7 @@ async function userJoin(member: GuildMember | PartialGuildMember) {
 const run: EventRun = async bot => {
     const gotData = await getData(bot, properties);
     if (gotData.error) {
-        await logger.bot.error(gotData.error, { location: 'user-join-role.ts', botID: bot.config._id });
+        logger.bot.error(gotData.error, { location: 'user-join-role.ts', botID: bot.config._id });
         return gotData.error;
     }
     data = gotData.data;

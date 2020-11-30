@@ -45,7 +45,7 @@ async function startBot(botId: string) {
 
     setupStorage(botId);
 
-    await logger.bot.debug(`Bot ${config.name} started!`, { botID: botId });
+    logger.bot.debug(`Bot ${config.name} started!`, { botID: botId });
     const commands = await loadAllCommands(config.commands, config._id);
 
     const bot: BotInstance = {
@@ -61,7 +61,7 @@ async function startBot(botId: string) {
 
     client.on('ready', async () => {
 
-        await logger.bot.debug(`Bot ${config.name} connected!`, { botID: botId });
+        logger.bot.debug(`Bot ${config.name} connected!`, { botID: botId });
 
         await execTasks(bot);
 
