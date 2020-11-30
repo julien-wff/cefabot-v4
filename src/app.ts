@@ -111,11 +111,17 @@ export async function startBot(bot: Bot) {
 
 
     async function handleBotExit(code: number) {
-        await logger.bot.error(`Bot exited with code ${code}${code !== 0 ? '. Restarting...' : '.'}`, {
+
+        const log = code === 0
+            ? logger.bot.log
+            : logger.bot.error;
+
+        await log(`Bot exited with code ${code}.${code !== 0 ? ' Restarting...' : ''}`, {
             data: code,
             location: 'app.ts',
             botID: bot._id,
         });
+
         if (code !== 0) startBot(bot)
             .catch(err => handleBotManagerCrash(bot, err));
     }
