@@ -17,7 +17,7 @@ export default function loadEvent(name: string, addExt = false, botID?: any): Bo
             if (event && event.properties)
                 return event.properties;
         } catch (e) {
-            if (botID) logger('bot', 'error', `Unable to load the event ${name} : ${e.message}`, {
+            if (botID) logger.bot.error(`Unable to load the event ${name} : ${e.message}`, {
                 location: 'load-event.ts',
                 data: e,
                 botID,

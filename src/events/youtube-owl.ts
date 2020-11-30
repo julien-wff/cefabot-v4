@@ -57,7 +57,7 @@ async function youtubeOWL() {
         ?.channels
         .resolve(announcementChannelKey.value) as TextChannel | null;
     if (!announcementChannel) {
-        return logger('bot', 'error', 'Unable to find the announcement channel for the OWL', {
+        return logger.bot.error('Unable to find the announcement channel for the OWL', {
             data: announcementChannelKey,
             location: 'youtube-owl.ts',
             botID: botInstance.config._id,
@@ -121,7 +121,7 @@ async function youtubeOWL() {
 const run: EventRun = async bot => {
     const dataKeys = await getData(bot, properties);
     if (dataKeys.error) {
-        await logger('bot', 'error', dataKeys.error, { location: 'youtube-owl.ts', botID: bot.config._id });
+        await logger.bot.error(dataKeys.error, { location: 'youtube-owl.ts', botID: bot.config._id });
         return dataKeys.error;
     }
     data = dataKeys.data;

@@ -19,7 +19,7 @@ export default async function handlePrivateMessage(message: Message, bot: BotIns
     if (message.content.match(/^web .+$/i)) {
 
         if (!settings.trustedAccounts.has(message.author.id))
-            return logger('app', 'warning', `${message.author.username} (${message.author.id}) tried to use web interface without permission`, {
+            return logger.app.warning(`${message.author.username} (${message.author.id}) tried to use web interface without permission`, {
                 location: 'handlePrivateMessage.ts',
                 data: { bot: bot.config._id },
                 botID: bot.config._id,
@@ -27,7 +27,7 @@ export default async function handlePrivateMessage(message: Message, bot: BotIns
 
         const pwd = message.content.split(/^web +/)[1].trim();
         if (pwd !== settings.accessPassword)
-            return logger('app', 'warning', `${message.author.username} (${message.author.id}) tried to use web interface but put the wrong password (${pwd})`, {
+            return logger.app.warning(`${message.author.username} (${message.author.id}) tried to use web interface but put the wrong password (${pwd})`, {
                 location: 'handlePrivateMessage.ts',
                 data: { bot: bot.config._id },
                 botID: bot.config._id,

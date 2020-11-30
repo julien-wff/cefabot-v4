@@ -16,6 +16,27 @@ export function alertLog() {
     }
 }
 
+// Used to transmit the log type (2nd param) and all the params
+const logType = (level: LogLevel, type: LogType) =>
+    (message: string, data?: AdditionalData) =>
+        log(level, type, message, data);
+
+// Used to transmit the log level (1st param) and set the type
+const logLevel = (level: LogLevel) => ({
+    debug: logType(level, 'debug'),
+    error: logType(level, 'error'),
+    log: logType(level, 'log'),
+    warning: logType(level, 'warning'),
+});
+
+// Set the log level (1st param)
+const logger = {
+    bot: logLevel('bot'),
+    app: logLevel('app'),
+};
+
+export default logger;
+
 /**
  * Function to emit a log.
  * If the DB is available, and the bot is in production mode,
@@ -25,7 +46,7 @@ export function alertLog() {
  * @param message The message of the log.
  * @param data Some additional data to save.
  */
-export default function logger(level: LogLevel, type: LogType, message: string, data?: AdditionalData) {
+function log(level: LogLevel, type: LogType, message: string, data?: AdditionalData) {
 
     if (mongoose.connection.readyState === 1 && process.env.NODE_ENV === 'prod') {
 

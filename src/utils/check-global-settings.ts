@@ -11,9 +11,7 @@ export default async function checkGlobalSettings() {
 
     const accessPassword = uuid();
     const newSettings = new GlobalSettings({ accessPassword });
-    logger(
-        'app',
-        'warning',
+    logger.app.warning(
         `Global settings initialized for the first time. Default web access password is "${accessPassword}".`,
         {
             location: 'check-global-settings.ts',

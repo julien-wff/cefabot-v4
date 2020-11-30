@@ -84,7 +84,7 @@ export default async function execCommand(message: Message, bot: BotInstance) {
 
     // Handle the error from the command execution
     async function handleExecError(err: any) {
-        await logger('bot', 'error', err, { location: 'exec-command.ts', botID: bot.config._id, data: err });
+        await logger.bot.error(err, { location: 'exec-command.ts', botID: bot.config._id, data: err });
     }
 
 }

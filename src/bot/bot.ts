@@ -26,7 +26,7 @@ process.on('message', async (msg: CorePacket<string>) => {
 
         startBot(msg.data)
             .catch(err => {
-                logger('bot', 'error', err.message, { botID: msg.data, location: 'bot.ts', data: err });
+                logger.bot.error(err.message, { botID: msg.data, location: 'bot.ts', data: err });
                 process.exit(-1);
             });
 
@@ -45,7 +45,7 @@ async function startBot(botId: string) {
 
     setupStorage(botId);
 
-    await logger('bot', 'debug', `Bot ${config.name} started!`, { botID: botId });
+    await logger.bot.debug(`Bot ${config.name} started!`, { botID: botId });
     const commands = await loadAllCommands(config.commands, config._id);
 
     const bot: BotInstance = {
@@ -61,7 +61,7 @@ async function startBot(botId: string) {
 
     client.on('ready', async () => {
 
-        await logger('bot', 'debug', `Bot ${config.name} connected!`, { botID: botId });
+        await logger.bot.debug(`Bot ${config.name} connected!`, { botID: botId });
 
         await execTasks(bot);
 
@@ -89,7 +89,7 @@ async function startBot(botId: string) {
 
     client.login(config.token)
         .catch(reason => {
-            logger('bot', 'error', `Unable to connect bot ${config.name}. Reason: ${reason}`, {
+            logger.bot.error(`Unable to connect bot ${config.name}. Reason: ${reason}`, {
                 data: reason,
                 location: 'bot.ts',
                 botID: botId,

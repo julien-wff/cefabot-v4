@@ -28,9 +28,7 @@ async function userJoin(member: GuildMember | PartialGuildMember) {
         .resolve(roleID);
 
     if (!role) {
-        return logger(
-            'bot',
-            'error',
+        return logger.bot.error(
             `Impossible de trouver le role ${roleID} et de l'ajouter à ${member.displayName}`,
             { location: 'user-join-role.ts', botID: botInstance!.config._id },
         );
@@ -44,7 +42,7 @@ async function userJoin(member: GuildMember | PartialGuildMember) {
 const run: EventRun = async bot => {
     const gotData = await getData(bot, properties);
     if (gotData.error) {
-        await logger('bot', 'error', gotData.error, { location: 'user-join-role.ts', botID: bot.config._id });
+        await logger.bot.error(gotData.error, { location: 'user-join-role.ts', botID: bot.config._id });
         return gotData.error;
     }
     data = gotData.data;

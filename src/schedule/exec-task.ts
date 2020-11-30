@@ -30,7 +30,7 @@ export default function execTask(task: ScheduleDoc, bot: BotInstance) {
             exec(deletePrivateMessageAction);
             break;
         default:
-            logger('bot', 'error', `Cannot find task with type ${task.type}`, {
+            logger.bot.error(`Cannot find task with type ${task.type}`, {
                 location: 'exec-task.ts',
                 botID: bot.config._id,
                 data: task,
@@ -40,7 +40,7 @@ export default function execTask(task: ScheduleDoc, bot: BotInstance) {
 
     function exec(fn: (action: ScheduleDoc, bot: BotInstance) => Promise<any>) {
         fn(task, bot)
-            .catch(err => logger('bot', 'error', err, { location: 'exec-task.ts', botID: bot.config._id, data: task }));
+            .catch(err => logger.bot.error(err, { location: 'exec-task.ts', botID: bot.config._id, data: task }));
     }
 
 }

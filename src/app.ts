@@ -33,7 +33,7 @@ let webServer: WebServer;
 
     webServer = new WebServer();
 
-    logger('app', 'debug', 'Starting cefabot...');
+    logger.app.debug('Starting cefabot...');
 
     await checkGlobalSettings();
 
@@ -53,7 +53,7 @@ export async function handleBotManagerCrash(bot: Bot, err: any) {
 
     const lastBotCrashes = lastCrashs[bot._id];
 
-    logger('bot', 'error', err, { data: err, location: 'app.ts', botID: bot._id });
+    logger.bot.error(err, { data: err, location: 'app.ts', botID: bot._id });
 
     if (!lastBotCrashes) {
 
@@ -73,9 +73,7 @@ export async function handleBotManagerCrash(bot: Bot, err: any) {
         lastCrashs[bot._id][1] = lastBotCrashes[0];
         lastCrashs[bot._id][0] = Date.now();
 
-        logger(
-            'bot',
-            'error',
+        logger.bot.error(
             `The bot ${bot.name} crashes too many times, please check the error and restart it manually`,
             { data: err, location: 'app.ts', botID: bot._id },
         );
@@ -113,7 +111,7 @@ export async function startBot(bot: Bot) {
 
 
     async function handleBotExit(code: number) {
-        await logger('bot', 'error', `Bot exited with code ${code}${code !== 0 ? '. Restarting...' : '.'}`, {
+        await logger.bot.error(`Bot exited with code ${code}${code !== 0 ? '. Restarting...' : '.'}`, {
             data: code,
             location: 'app.ts',
             botID: bot._id,
@@ -125,9 +123,9 @@ export async function startBot(bot: Bot) {
 
     async function handleBotError(error: Error | string) {
         if (typeof error === 'string')
-            await logger('bot', 'error', error, { botID: bot._id, location: 'app.ts' });
+            await logger.bot.error(error, { botID: bot._id, location: 'app.ts' });
         else
-            await logger('bot', 'error', error.message, {
+            await logger.bot.error(error.message, {
                 data: error.stack,
                 location: 'app.ts',
                 botID: bot._id,
@@ -136,7 +134,7 @@ export async function startBot(bot: Bot) {
 
 
     async function handleBotLog(message: string) {
-        await logger('bot', 'log', message, { botID: bot._id, location: 'app.ts' });
+        await logger.bot.log(message, { botID: bot._id, location: 'app.ts' });
     }
 
 
@@ -156,7 +154,7 @@ export async function startBot(bot: Bot) {
 
     async function rebootBot() {
 
-        await logger('bot', 'log', 'Bot restart requested', { location: 'core.js', botID: bot._id });
+        await logger.bot.log('Bot restart requested', { location: 'core.js', botID: bot._id });
 
 
         botProcess.send('reboot');
