@@ -3,10 +3,12 @@ import { BotEvent, EventCancel, EventRun } from './events';
 import { Message, VoiceChannel } from 'discord.js';
 import { BotInstance } from '../bot/botTypes';
 import getUser from './helper/get-user';
+import verifyUsers from './helper/verify-users';
 
 
 let botInstance: BotInstance;
 let intervalID: NodeJS.Timer;
+
 
 const MESSAGE_XP: [ number, number, number ][] = [
     [ 30 * 1000, 60 * 1000, 1 ],                            // 30s - 1min
@@ -23,39 +25,38 @@ const ONLINE_XP = 1;
 const VOICE_XP = 5;
 
 
-async function onMessage(message: Message) {
+async function countMessage(msg: Message) {
 
-    if (!message.guild) return;
+    if (!msg.guild) return;
 
-    const user = await getUser(botInstance.config._id, message.guild.id, message.author);
+    const user = await getUser(botInstance!.config._id, msg.guild.id, msg.author);
 
-    // If there is some attachements
-    if (message.attachments.size > 0) {
-        await UserStatsModel.updateOne(
-            { _id: user._id },
-            {
-                $inc: {
-                    'xp.count': ATTACHEMENT_XP * message.attachments.size,
-                },
-            },
-        );
-        return;
+    let messageType = 'messagesCount';
+    if (msg.content.startsWith(botInstance!.config.commandStart))
+        messageType = 'commandsCount';
+
+    let xpGain: number, gainViaAttachment = false;
+    if (msg.attachments.size > 0) {
+        xpGain = ATTACHEMENT_XP * msg.attachments.size;
+        gainViaAttachment = true;
+    } else {
+        const delaySinceLastMsg = Date.now() - user.xp.lastXPMessage.getTime();
+        xpGain = (MESSAGE_XP.find(d =>
+            delaySinceLastMsg > d[0] && delaySinceLastMsg <= d[1],
+        ) || [ 0, 0, 0 ])[2];
     }
-
-    // If there is no attachements
-    const delaySinceLastMsg = Date.now() - user.xp.lastXPMessage.getTime();
-    const xpGain = MESSAGE_XP.find(d => delaySinceLastMsg > d[0] && delaySinceLastMsg <= d[1]);
-
-    if (!xpGain)
-        return;
 
     await UserStatsModel.updateOne(
         { _id: user._id },
         {
-            'xp.lastXPMessage': new Date(),
             $inc: {
-                'xp.count': xpGain[2],
+                [messageType]: 1,
+                'xp.count': xpGain,
             },
+            ...(!gainViaAttachment && xpGain > 0
+                    ? { 'xp.lastXPMessage': new Date() }
+                    : {}
+            ),
         },
     );
 
@@ -68,6 +69,7 @@ async function onInterval() {
         // Give 1XP to all the connected members
         guild.members.cache.forEach(async member => {
             if (member.presence.status !== 'offline')
+                //TODO: bulk update
                 await UserStatsModel.updateOne(
                     {
                         botID: botInstance.config._id,
@@ -86,6 +88,7 @@ async function onInterval() {
         guild.channels.cache.forEach(channel => {
             if (channel.type === 'voice') {
                 (channel as VoiceChannel).members.forEach(async member => {
+                    //TODO: bulk update
                     await UserStatsModel.updateOne(
                         {
                             botID: botInstance.config._id,
@@ -107,21 +110,22 @@ async function onInterval() {
 
 const run: EventRun = async bot => {
     botInstance = bot;
-    bot.client.on('message', onMessage);
+    await verifyUsers(bot);
+    bot.client.on('message', countMessage);
     intervalID = bot.client.setInterval(onInterval, 5 * 60 * 1000);
 };
 
 
 const cancel: EventCancel = bot => {
     botInstance = bot;
-    bot.client.off('message', onMessage);
+    bot.client.off('message', countMessage);
     bot.client.clearInterval(intervalID);
 };
 
 
 // noinspection JSUnusedGlobalSymbols
 export const properties: BotEvent = {
-    name: 'xp',
+    name: 'user-stats',
     run,
     cancel,
 };

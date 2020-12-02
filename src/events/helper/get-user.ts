@@ -16,8 +16,8 @@ export default async function getUser(botID: any, guildID: string, user: User): 
         botID,
         guildID,
         userID: user.id,
-        isBot: user.bot ? true : undefined,
+        bot: user.bot || undefined,
     } as Partial<UserStats>);
-    return await newUser.save();
+    return newUser.save();
 
 }
