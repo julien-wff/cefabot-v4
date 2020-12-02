@@ -18,9 +18,10 @@
 
     const progressBar = new Nanobar();
     let currentProgress = 0;
-    const totalProgress = 8;
+    let totalProgress = 7;
 
-    function setProgressBar() {
+    function increaseProgressBar() {
+        currentProgress++;
         let progress = currentProgress / totalProgress * 100;
         if (progress > 100) progress = 100;
         progressBar.go(progress);
@@ -47,19 +48,21 @@
 
     async function fetchData(url) {
         const res = await fetch(url);
-        const data = res.json();
+        const data = await res.json();
         if (data.error) {
-            throw new Error(error);
+            throw new Error(data.error);
         }
-        currentProgress++;
-        setProgressBar();
+        increaseProgressBar();
         return data;
     }
 
     async function getBotData() {
         currentProgress = 0;
+        totalProgress = 7;
         try {
             $bot = await fetchData(`/api/bots/${id}`);
+            if ($bot.enabled)
+                totalProgress += $bot.guildsID.length;
             $initialData = $bot;
             fetchData('/api/commands').then(data => $commands = data);
             fetchData('/api/events').then(data => $events = data);
