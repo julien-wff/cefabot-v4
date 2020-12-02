@@ -51,13 +51,13 @@ export default async function getLogs(req: Request, res: Response) {
 
     if (req.query.app) {
         let app = req.query.app;
-        if (typeof app === 'string' && app === '0' || app === 'false')
+        if (typeof app === 'string' && (app === '0' || app === 'false'))
             requestParams.app = false;
     }
 
     if (req.query.sort) {
         let sort = req.query.sort;
-        if (typeof sort === 'string' && sort === 'asc' || sort === 'desc')
+        if (typeof sort === 'string' && (sort === 'asc' || sort === 'desc'))
             requestParams.sort = sort;
     }
 
