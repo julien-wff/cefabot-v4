@@ -9,7 +9,7 @@ const resolveMember = (memberID: string, guildID: string, botID: any): Promise<G
         const { botsProcess } = require('../../../../app');
         const botProcess = botsProcess[botID] as ChildProcess | undefined;
 
-        if (!botProcess) {
+        if (!botProcess || !botProcess.connected) {
             reject();
             return;
         }
