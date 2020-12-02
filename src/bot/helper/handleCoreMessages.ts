@@ -114,7 +114,7 @@ export default async function handleCoreMessages(msg: CorePacket<any>, bot: BotI
                     id: guild.id,
                     name: guild.name,
                     memberCount: guild.memberCount,
-                    ownerID: guild.owner!.id,
+                    ownerID: guild.owner?.id || null,
                     iconURL: guild.iconURL({ format: 'png', size: iconsSize }),
                 },
                 members: guild.members.cache.map(m => ({
