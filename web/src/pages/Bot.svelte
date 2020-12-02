@@ -64,16 +64,20 @@
             if ($bot.enabled)
                 totalProgress += $bot.guildsID.length;
             $initialData = $bot;
-            fetchData('/api/commands').then(data => $commands = data);
-            fetchData('/api/events').then(data => $events = data);
-            fetchData(`/api/data?botID=${id}`).then(data => $dataStorage = data);
-            fetchData(`/api/storage/${id}`).then(data => $files = data);
-            fetchData(`/api/channels?bot=${id}`).then(data => $channels = data);
-            fetchData(`/api/logs?bots=${id}&app=false&limit=10`).then(data => $logs = data);
-            if ($bot.enabled)
-                $guilds = await Promise.all(
-                    $bot.guildsID.map(g => fetchData(`/api/bots/${id}/guild/${g}?iconsSize=64`))
-                );
+            $guilds = [];
+            await Promise.all([
+                fetchData('/api/commands').then(data => $commands = data),
+                fetchData('/api/events').then(data => $events = data),
+                fetchData(`/api/data?botID=${id}`).then(data => $dataStorage = data),
+                fetchData(`/api/storage/${id}`).then(data => $files = data),
+                fetchData(`/api/channels?bot=${id}`).then(data => $channels = data),
+                fetchData(`/api/logs?bots=${id}&app=false&limit=10`).then(data => $logs = data),
+                ...($bot.enabled
+                        ? $bot.guildsID.map(g => fetchData(`/api/bots/${id}/guild/${g}?iconsSize=64`)
+                            .then(g => $guilds = [...$guilds, g]))
+                        : []
+                ),
+            ]);
         } catch (e) {
             await Swal.fire({
                 title: 'Erreur',
