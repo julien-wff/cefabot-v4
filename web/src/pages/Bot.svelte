@@ -71,7 +71,7 @@
                 fetchData(`/api/data?botID=${id}`).then(data => $dataStorage = data),
                 fetchData(`/api/storage/${id}`).then(data => $files = data),
                 fetchData(`/api/channels?bot=${id}`).then(data => $channels = data),
-                fetchData(`/api/logs?bots=${id}&app=false&limit=10`).then(data => $logs = data),
+                fetchData(`/api/logs?bots=${id}&app=false&limit=10&sort=desc`).then(data => $logs = data.reverse()),
                 ...($bot.enabled
                         ? $bot.guildsID.map(g => fetchData(`/api/bots/${id}/guild/${g}?iconsSize=64`)
                             .then(g => $guilds = [...$guilds, g]))

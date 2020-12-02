@@ -17,8 +17,9 @@
     });
 
     async function refreshLogs() {
-        const res = await fetch(`/api/logs?bots=${$bot.id}&app=false&limit=10`);
-        $logs = await res.json();
+        const res = await fetch(`/api/logs?bots=${$bot.id}&app=false&limit=10&sort=desc`);
+        const l = await res.json();
+        $logs = l.reverse();
     }
 
 </script>
