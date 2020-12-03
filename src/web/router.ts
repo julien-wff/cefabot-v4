@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import getsession from './routes/api/get-session';
 import addTrustedAccount from './routes/api/global-settings/add-trusted-account';
 import deleteTrustedAccount from './routes/api/global-settings/delete-trusted-account';
 import getTrustedAccounts from './routes/api/global-settings/get-trusted-accounts';
@@ -77,5 +78,6 @@ apiRouter.post('/reset-password', resetPassword);
 apiRouter.get('/trusted-accounts', getTrustedAccounts);
 apiRouter.post('/trusted-accounts', addTrustedAccount);
 apiRouter.delete('/trusted-accounts', deleteTrustedAccount);
+apiRouter.get('/session', getsession);
 
 export { connectionRouter, apiRouter };

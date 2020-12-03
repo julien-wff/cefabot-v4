@@ -1,5 +1,7 @@
 <!--suppress ES6UnusedImports -->
 <script>
+    import { onMount } from 'svelte';
+    import Swal from 'sweetalert2';
     import { Router, Route } from 'svelte-routing';
     import Index from './pages/Index.svelte';
     import Bot from './pages/Bot.svelte';
@@ -10,6 +12,29 @@
     import Settings from './pages/Settings.svelte';
 
     export let url = '';
+
+    onMount(async () => {
+        try {
+            const res = await fetch('/api/session');
+            const session = await res.json();
+            const TOKEN_VALIDITY = 3600 * 1000;
+            const remainingTime = (session.created + TOKEN_VALIDITY) - Date.now();
+            setTimeout(async () => {
+                await Swal.fire({
+                    title: 'La session a expiré !',
+                    text: 'Veuillez recréer un accès et vous reconnecter.'
+                });
+                window.location.reload();
+            }, remainingTime);
+        } catch (e) {
+            console.error(e);
+            return Swal.fire({
+                title: 'Impossible de récupérer la session',
+                text: e instanceof Error ? e.message : e,
+                icon: 'error',
+            });
+        }
+    });
 </script>
 
 
