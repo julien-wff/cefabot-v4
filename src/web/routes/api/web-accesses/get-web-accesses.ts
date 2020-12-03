@@ -13,6 +13,7 @@ export async function getWebAccesses(req: Request, res: Response) {
         created: a.created.getTime(),
         connected: a.connected,
         active: a.active,
+        current: a.token === req.cookies['token'],
         ip: a.ip,
     })));
 
