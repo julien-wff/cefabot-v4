@@ -1,5 +1,4 @@
 import { Command } from './commands';
-import sendMessage from './bot/send-message';
 import changeUsername from './bot/change-username';
 import changePresence from './bot/change-presence';
 import changeLang from './bot/change-lang';
@@ -14,15 +13,6 @@ const properties: Command = {
     permission: [ 'MANAGE_NICKNAMES', 'MANAGE_GUILD' ],
     channel: [ 'admin', 'commands' ],
     paths: [
-        {
-            help: 'send <message>',
-            description: 'Envoyer un message avec le compte du bot dans le salon',
-            args: [
-                { argType: 'static', triggers: [ 'send', 'msg', 'message' ] },
-                { argType: 'dynamic', valueType: 'listUntilEnd', valueName: 'message', displayName: 'message' },
-            ],
-            run: sendMessage,
-        },
         {
             help: 'username <nom>',
             description: 'Changer le nom du bot',
