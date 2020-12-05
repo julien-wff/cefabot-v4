@@ -38,7 +38,8 @@
     const isAnchor = el => el?.tagName?.toLowerCase() === 'a' || el?.parentElement?.tagName?.toLowerCase() === 'a';
 
     function setDetailed({ explicitOriginalTarget: target }) {
-        if (isCheckbox(target) || isAnchor(target))
+        if (isCheckbox(target) || isCheckbox(document.activeElement)
+            || isAnchor(target) || isAnchor(document.activeElement))
             return;
         if ($detailedID === _id)
             $detailedID = null;
