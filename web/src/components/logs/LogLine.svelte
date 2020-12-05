@@ -61,7 +61,7 @@
      class:text-red-400={type === 'error'}
      class:bg-gray-600={showDetails}
      class:py-1={showDetails}
-     use:shortpress={300}
+     use:shortpress={200}
      on:shortpress={setDetailed}>
     {#if $options.showCheckboxes}
         <input type="checkbox" checked={$selectedLogs.includes(_id)} on:change={updateLogSelection}>
