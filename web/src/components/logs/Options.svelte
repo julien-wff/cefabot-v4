@@ -19,7 +19,7 @@
         if (Array.isArray($filters.bots) && $filters.bots.includes(id))
             $filters = { ...$filters, bots: $filters.bots.filter(b => b !== id) };
         else
-            $filters = { ...$filters, bots: [...$filters.bots, id] };
+            $filters = { ...$filters, bots: [...($filters.bots || []), id] };
     }
 
     function refreshLogs() {
@@ -67,7 +67,8 @@
             let error = 'Erreur inconnue.';
             try {
                 error = (await res.json()).error;
-            } catch {}
+            } catch {
+            }
             await Swal.fire({
                 icon: 'error',
                 title: 'Erreur',

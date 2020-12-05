@@ -51,7 +51,10 @@
 
     async function getLogs() {
         const params = new URLSearchParams($filters);
-        params.set('bots', $filters.bots.join(','));
+        if (Array.isArray($filters.bots) && $filters.bots.length > 0)
+            params.set('bots', $filters.bots.join(','));
+        else
+            params.delete('bots');
         const res = await fetch(`/api/logs?${params.toString()}`);
         $logs = await res.json();
     }
