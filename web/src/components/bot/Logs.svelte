@@ -1,5 +1,6 @@
 <script>
     import { getContext, onDestroy, onMount } from 'svelte';
+    import { Link } from 'svelte-routing';
     import { dateFormat } from '../../functions/date-format';
 
     let logs = getContext('logs');
@@ -29,9 +30,16 @@
 
 {#if $logs.length > 0}
 
-    <h3 class="font-semibold text-xl pl-2 mt-2">
-        Logs du bot{$logs.length > 1 ? ` (${$logs.length} dernières lignes)` : ''}
-    </h3>
+    <div class="pl-2 mt-2 flex justify-between">
+        <h3 class="font-semibold text-xl">
+            Logs du bot{$logs.length > 1 ? ` (${$logs.length} dernières lignes)` : ''}
+        </h3>
+        <Link to="./logs?bots={$bot.id}">
+            <button class="bg-blue-500 px-4 py-2 rounded ml-2">
+                Détails
+            </button>
+        </Link>
+    </div>
 
     <div class="p-2 ml-2">
         {#each $logs as { type, message, date }}
