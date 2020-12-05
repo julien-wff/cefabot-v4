@@ -1,11 +1,19 @@
 <script>
-    import { getContext, onDestroy } from 'svelte';
+    import { getContext, onDestroy, onMount } from 'svelte';
     import { dateFormat } from '../../functions/date-format';
 
     let logs = getContext('logs');
     let bot = getContext('bot');
 
-    const socket = new WebSocket(`ws://${window.location.host}/ws/`);
+    let socket;
+
+    onMount(() => {
+        socket = new WebSocket(`ws://${window.location.host}/ws/`);
+        socket.addEventListener('message', msg => {
+            if (msg.data === 'new-log')
+                refreshLogs();
+        });
+    });
 
     onDestroy(() => {
         socket.close();
