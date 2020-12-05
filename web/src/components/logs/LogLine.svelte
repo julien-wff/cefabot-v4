@@ -40,7 +40,6 @@
     function setDetailed({ explicitOriginalTarget: target }) {
         if (isCheckbox(target) || isAnchor(target))
             return;
-        console.log(isAnchor(target));
         if ($detailedID === _id)
             $detailedID = null;
         else

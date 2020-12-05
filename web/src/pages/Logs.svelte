@@ -88,7 +88,6 @@
         if (typeof bots === 'string' && bots.match(/^[0-9a-fA-F]{24}(,[0-9a-fA-F]{24})*$/)) {
             let botsArray = bots.split(/,/g);
             botsArray = filterBotsArray(botsArray);
-            console.log(botsArray);
             $filters.bots = botsArray;
         }
 
