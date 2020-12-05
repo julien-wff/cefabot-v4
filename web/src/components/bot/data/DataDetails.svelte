@@ -1,15 +1,13 @@
 <script>
     import { humanizeDataType } from '../../../functions/convert-data-type';
     import { sanitizeJSON } from '../../../functions/sanitize';
-    import { getContext } from 'svelte';
     import DataValue from './DataValue.svelte';
 
     export let data;
-
-    let guilds = getContext('guilds');
+    export let guilds = [];
 
     let guild;
-    $: guild = $guilds.find(g => g.guild.id === data.guildID);
+    $: guild = guilds.find(g => g.guild.id === data.guildID);
 
     let showDetails = false;
 </script>

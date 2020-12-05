@@ -7,6 +7,7 @@
 
     let dataStorage = getContext('data-storage');
     const getBotData = getContext('get-bot-data');
+    const guilds = getContext('guilds');
 
     function showKey(index) {
         const data = $dataStorage[index];
@@ -16,7 +17,7 @@
         });
         new DataDetails({
             target: document.getElementById('swal-svelte-data-details'),
-            props: { data }
+            props: { data, guilds: $guilds }
         });
     }
 
