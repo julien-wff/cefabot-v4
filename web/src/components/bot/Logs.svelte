@@ -19,11 +19,6 @@
         socket.close();
     });
 
-    socket.addEventListener('message', msg => {
-        if (msg.data === 'new-log')
-            refreshLogs();
-    });
-
     async function refreshLogs() {
         const res = await fetch(`/api/logs?bots=${$bot.id}&app=false&limit=10&sort=desc`);
         const l = await res.json();
