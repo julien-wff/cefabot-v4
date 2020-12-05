@@ -1,7 +1,7 @@
 <!--suppress ES6UnusedImports -->
 <script>
     import { onMount } from 'svelte';
-    import Swal from 'sweetalert2';
+    import Swal from 'sweetalert2/dist/sweetalert2';
     import { Router, Route } from 'svelte-routing';
     import Index from './pages/Index.svelte';
     import Bot from './pages/Bot.svelte';
