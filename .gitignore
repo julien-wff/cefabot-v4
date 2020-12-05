@@ -1,7 +1,7 @@
 yarn.lock
 yarn-error.log
 package.lock
-/node_modules/
+node_modules/
 .env
 
 # Production files
