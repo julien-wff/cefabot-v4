@@ -11,6 +11,7 @@
     import { getContext } from 'svelte';
     import { shortpress } from '../../functions/shortpress';
     import { dateFormat } from '../../functions/date-format';
+    import { Link } from 'svelte-routing';
 
     export let _id;
     export let level;
@@ -27,16 +28,19 @@
 
     let options = getContext('options');
     let selectedLogs = getContext('selected-logs');
+    const bots = getContext('bots');
 
     let formattedDate;
     $: formattedDate = dateFormat.format(new Date(date));
 
+    const isCheckbox = el => el?.attributes?.type?.value === 'checkbox' && el?.tagName?.toLowerCase() === 'input';
+
+    const isAnchor = el => el?.tagName?.toLowerCase() === 'a' || el?.parentElement?.tagName?.toLowerCase() === 'a';
+
     function setDetailed({ explicitOriginalTarget: target }) {
-        if (target && typeof target.tagName === 'string'
-                && target.attributes && target.attributes.type && typeof target.attributes.type.value === 'string'
-                && target.tagName.toLowerCase() === 'input'
-                && target.attributes.type.value === 'checkbox')
+        if (isCheckbox(target) || isAnchor(target))
             return;
+        console.log(isAnchor(target));
         if ($detailedID === _id)
             $detailedID = null;
         else
@@ -62,12 +66,19 @@
     {#if $options.showCheckboxes}
         <input type="checkbox" checked={$selectedLogs.includes(_id)} on:change={updateLogSelection}>
     {/if}
-    {#if $options.showTime}[{formattedDate}] {/if}
+    {#if $options.showTime}[{formattedDate}]{/if}
     {message}
     {#if showDetails}
         <div class="block">
             Niveau : {level === 'app' ? 'application' : level}
-            {#if botID}<span class="block">BotID : {botID}</span>{/if}
+            {#if botID}
+                <span class="block">
+                    Bot :
+                    <span class="hover:bg-blue-400 rounded px-1">
+                        <Link to="./bots/{botID}">{$bots.find(b => b.id === botID)?.name || botID}</Link>
+                    </span>
+                </span>
+            {/if}
             {#if location}<span class="block">Location : {location}</span>{/if}
             {#if !$options.showTime}<span class="block">Heure : {formattedDate}</span>{/if}
             {#if data}<span class="block">Données : {@html sanitizeJSON(data)}</span>{/if}
