@@ -1,6 +1,6 @@
 import { Image, CanvasRenderingContext2D } from 'canvas';
 
-const placeSquareImage = (imgUrl: string, ctx: CanvasRenderingContext2D, dx: number, dy: number, size: number, roundBorder = false) =>
+const placeSquareImage = (imgUrl: string, ctx: CanvasRenderingContext2D, dx: number, dy: number, size: number, roundBorder = false): Promise<void> =>
     new Promise((resolve, reject) => {
 
         const img = new Image();
