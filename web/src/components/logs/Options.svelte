@@ -80,35 +80,39 @@
 
 </script>
 
+
 <div class="p-1">
-    <div class="flex flex-wrap">
-        <button on:click={() => showOptions = !showOptions}
-                class="cursor-pointer py-2 px-4 bg-blue-400 text-white rounded mr-4 mb-4"
-                type="button">
-            {showOptions ? 'Masquer' : 'Afficher'} les paramètres
-        </button>
-        <button type="button"
-                class="cursor-pointer py-2 px-4 bg-blue-400 text-white rounded mr-4 mb-4"
-                class:cursor-not-allowed={refreshingLogs}
-                class:opacity-75={refreshingLogs}
-                on:click={refreshLogs}>
-            Rafraichir
-        </button>
-        <button type="button" class="cursor-pointer py-2 px-4 bg-blue-400 text-white rounded mr-4 mb-4"
-                on:click={selectAllLogs}>
-            Tout {$selectedLogs.length === $logs.length ? 'dé' : ''}sélectionner
-        </button>
-        <button type="button" class="cursor-pointer py-2 px-4 bg-blue-400 text-white rounded mr-4 mb-4"
-                on:click={invertSelection}>
-            Inverser la sélection
-        </button>
-        <button type="button" class="cursor-pointer py-2 px-4 bg-red-400 text-white rounded mb-4"
-                class:cursor-not-allowed={deletingLogs}
-                class:opacity-75={deletingLogs}
-                on:click={deleteSelectedLogs}>
-            Supprimer la sélection
-        </button>
+
+    <div class="flex mb-2">
+        <div class="bg-blue-500 cursor-pointer rounded-l border-r border-gray-700 h-10 flex items-center justify-center flex-1"
+             on:click={() => showOptions = !showOptions}>
+            <img src="/icons/settings.svg" alt="Paramètres" class="h-6"/>
+            <span class="hidden xl:block pl-1">{showOptions ? 'Masquer' : 'Afficher'} les paramètres</span>
+        </div>
+        <div class="bg-blue-500 cursor-pointer border-r border-gray-700 h-10 flex items-center justify-center flex-1 {refreshingLogs ? 'cursor-not-allowed opacity-75' : ''}"
+             on:click={refreshLogs}>
+            <img src="/icons/refresh.svg" alt="Rafraichir" class="h-6"/>
+            <span class="hidden xl:block pl-1">Rafraichir</span>
+        </div>
+        <div class="bg-blue-500 cursor-pointer border-r border-gray-700 h-10 flex items-center justify-center flex-1"
+             on:click={selectAllLogs}>
+            <img src="/icons/select_all.svg" alt="Tout sélectionner" class="h-6"/>
+            <span class="hidden xl:block pl-1">
+                Tout {$selectedLogs.length === $logs.length ? 'dé' : ''}sélectionner
+            </span>
+        </div>
+        <div class="bg-blue-500 cursor-pointer border-r border-gray-700 h-10 flex items-center justify-center flex-1"
+             on:click={invertSelection}>
+            <img src="/icons/find_replace.svg" alt="Inverser la sélection" class="h-6"/>
+            <span class="hidden xl:block pl-1">Inverser la sélection</span>
+        </div>
+        <div class="bg-red-500 cursor-pointer rounded-r h-10 flex items-center justify-center flex-1 {deletingLogs ? 'cursor-not-allowed opacity-75' : ''}"
+             on:click={deleteSelectedLogs}>
+            <img src="/icons/delete.svg" alt="Supprimer" class="h-6"/>
+            <span class="hidden xl:block pl-1">Supprimer la sélection</span>
+        </div>
     </div>
+
     {#if showOptions}
         <div class="py-2 grid md:grid-cols-2">
             <div>
@@ -139,4 +143,5 @@
             </div>
         </div>
     {/if}
+
 </div>
