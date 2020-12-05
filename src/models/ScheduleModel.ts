@@ -2,7 +2,7 @@ import { Schema, model, Document } from 'mongoose';
 import { MessageType, PlanName } from '../schedule/schedule';
 
 
-const Schedule = new Schema<Schedule>({
+const Schedule = new Schema({
     type: {
         type: String,
         required: true,

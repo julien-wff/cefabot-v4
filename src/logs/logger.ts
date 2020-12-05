@@ -48,6 +48,9 @@ export default logger;
  */
 function log(level: LogLevel, type: LogType, message: string, data?: AdditionalData) {
 
+    // If the message is empty, mongoose will throw an error
+    if (!message) return;
+
     if (mongoose.connection.readyState === 1 && process.env.NODE_ENV === 'prod') {
 
         new LogModel({

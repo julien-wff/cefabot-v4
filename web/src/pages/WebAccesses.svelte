@@ -104,10 +104,10 @@
                 créé le {new Intl.DateTimeFormat('FR', intlOptions).format(new Date(access.created))}
             </h3>
             <div>
-                <span class="{access.connected ? 'text-orange-500' : 'text-green-500'}">
+                <span class="{access.connected ? 'text-yellow-500' : 'text-green-500'}">
                     {access.connected ? 'Utilisé' : 'Non utilisé'},
                 </span>
-                <span class="{access.active ? 'text-orange-500' : 'text-red-500'}">
+                <span class="{access.active ? 'text-yellow-500' : 'text-red-500'}">
                     {access.active ? 'actif' : 'inactif'}
                 </span>
             </div>

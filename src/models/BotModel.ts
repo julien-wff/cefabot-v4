@@ -48,7 +48,7 @@ const BotSchema = new Schema({
 
 BotSchema.pre<Document & Bot>('save', function (next) {
     this.token = encrypt(this.token);
-    next();
+    next(null);
 });
 
 BotSchema.post<Document & Bot>('init', function (doc) {

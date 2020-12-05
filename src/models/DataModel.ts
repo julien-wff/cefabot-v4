@@ -31,7 +31,7 @@ const DataSchema = new Schema({
 DataSchema.pre<Document & DataStorage>('save', function (next) {
     if (this.secret)
         this.value = encrypt(this.value);
-    next();
+    next(null);
 });
 
 DataSchema.post<Document & DataStorage>('init', function (doc) {
