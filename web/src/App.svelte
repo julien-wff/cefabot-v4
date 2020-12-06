@@ -16,9 +16,14 @@
     onMount(async () => {
         try {
             const res = await fetch('/api/session');
+
+            if (res.headers['Content-Type'] !== 'application/json')
+                throw new Error(await res.text());
+
             const session = await res.json();
             const TOKEN_VALIDITY = 3600 * 1000;
             const remainingTime = (session.created + TOKEN_VALIDITY) - Date.now();
+
             setTimeout(async () => {
                 await Swal.fire({
                     title: 'La session a expiré !',
