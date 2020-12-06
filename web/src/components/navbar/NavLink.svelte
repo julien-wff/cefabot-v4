@@ -6,7 +6,7 @@
 </script>
 
 <Link {to}>
-    <div class="block cursor-pointer px-2 py-1 font-semibold rounded hover:bg-gray-800">
+    <div class="block cursor-pointer px-4 py-2 font-semibold rounded hover:bg-gray-800">
         <slot/>
     </div>
 </Link>
