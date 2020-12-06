@@ -17,7 +17,7 @@
         try {
             const res = await fetch('/api/session');
 
-            if (res.headers['Content-Type'] !== 'application/json')
+            if (!res.headers.get('Content-Type')?.match('application/json'))
                 throw new Error(await res.text());
 
             const session = await res.json();
