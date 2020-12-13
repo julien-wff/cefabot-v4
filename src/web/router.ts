@@ -4,6 +4,8 @@ import addTrustedAccount from './routes/api/global-settings/add-trusted-account'
 import deleteTrustedAccount from './routes/api/global-settings/delete-trusted-account';
 import getTrustedAccounts from './routes/api/global-settings/get-trusted-accounts';
 import resetPassword from './routes/api/global-settings/reset-password';
+import addStats from './routes/api/import-stats/add-stats';
+import convertSQL from './routes/api/import-stats/convert-sql';
 import connectRoute from './routes/connect';
 import disconnectRoute from './routes/disconnect';
 import bots from './routes/api/bots';
@@ -79,5 +81,8 @@ apiRouter.get('/trusted-accounts', getTrustedAccounts);
 apiRouter.post('/trusted-accounts', addTrustedAccount);
 apiRouter.delete('/trusted-accounts', deleteTrustedAccount);
 apiRouter.get('/session', getsession);
+// Stats import
+apiRouter.post('/import-stats/convert-sql', convertSQL);
+apiRouter.post('/import-stats/add-stats', addStats);
 
 export { connectionRouter, apiRouter };

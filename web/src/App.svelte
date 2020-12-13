@@ -1,5 +1,6 @@
 <!--suppress ES6UnusedImports -->
 <script>
+    import Import from './pages/Import.svelte';
     import { onMount } from 'svelte';
     import Swal from 'sweetalert2/dist/sweetalert2';
     import { Router, Route } from 'svelte-routing';
@@ -52,5 +53,6 @@
         <Route path="web-access" component={WebAccesses}/>
         <Route path="logs" component={Logs}/>
         <Route path="settings" component={Settings}/>
+        <Route path="import" component={Import}/>
     </div>
 </Router>
