@@ -8,7 +8,7 @@ RUN apt update && apt install -y libcairo2-dev libpango1.0-dev libjpeg-dev && rm
 FROM base AS dependencies
 
 # Packages
-RUN apt update && apt install -y make pkg-config build-essential && rm -rf /var/lib/apt/lists/*
+RUN apt update && apt install -y make pkg-config build-essential python libsqlite3-dev && rm -rf /var/lib/apt/lists/*
 
 # Bot dependencies
 COPY package.json ./
@@ -56,6 +56,7 @@ WORKDIR /cefabot
 COPY --from=dependencies /cefabot/prod_node_modules ./node_modules
 COPY --from=build /cefabot/lib ./lib
 COPY scripts scripts
+COPY res res
 
 # Install web
 WORKDIR web
