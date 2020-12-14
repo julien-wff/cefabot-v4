@@ -7,10 +7,10 @@ import placeSquareImage from './helper/place-square-image';
 export default async function createScoreboard(users: UserStats[], guild: Guild): Promise<string> {
 
     const formattedUsers = users.map((user, ind) => ({
-        name: guild.member(user.userID)!.displayName,
+        name: guild.member(user.userID)?.displayName || guild.member(user.userID)?.user?.username || user.userID,
         messagesCount: user.messagesCount,
         position: ind + 1,
-        avatarURL: guild.member(user.userID)!.user.displayAvatarURL({ size: 128, format: 'png' }),
+        avatarURL: guild.member(user.userID)?.user.displayAvatarURL({ size: 128, format: 'png' }),
         percentage: user.messagesCount / users[0].messagesCount * 100,
     }));
 
@@ -44,25 +44,6 @@ export default async function createScoreboard(users: UserStats[], guild: Guild)
         ctx.fill();
     });
 
-    // const addAvatars = formattedUsers.map((u, i) => new Promise((resolve, reject) => {
-    //     const img = new Image();
-    //     img.onload = () => {
-    //         // Save the context
-    //         ctx.save();
-    //         // Add clipping
-    //         ctx.beginPath();
-    //         ctx.arc(50, 100 * i + 50, 30, 0, 7.853981633974483);
-    //         ctx.clip();
-    //         // Draw image
-    //         ctx.drawImage(img, 20, 100 * i + 20, 60, 60);
-    //         // Restore the context
-    //         ctx.restore();
-    //         // Mark as done
-    //         resolve();
-    //     };
-    //     img.onerror = reject;
-    //     img.src = u.avatarURL;
-    // }));
 
     const addAvatars = formattedUsers.map((u, i) =>
         placeSquareImage(u.avatarURL, ctx, 20, 100 * i + 20, 60, true));
