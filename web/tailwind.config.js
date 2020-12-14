@@ -7,7 +7,7 @@ module.exports = {
             './public/index.html'
         ],
         options: {
-            whitelist: [
+            safelist: [
                 'grid',
                 'text-gray-300',
                 'text-orange-400',
