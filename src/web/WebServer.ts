@@ -25,17 +25,16 @@ export default class WebServer {
         // Setup socket
         this.ws = new ws.Server({ server, path: '/ws/' });
         this.ws.on('connection', this.handleWSConnection);
-        // Middlewares
-        this.app.use(fileUpload({ createParentPath: true }));
+        // Middlewares and routes
         this.app.use(compression());
-        this.checkAuth = this.checkAuth.bind(this);
-        this.app.use(express.static(WEB_DIR));
         this.app.use(cookieParser());
+        this.app.use('/', connectionRouter);
+        this.app.use(fileUpload({ createParentPath: true }));
+        this.checkAuth = this.checkAuth.bind(this);
+        this.app.use(this.checkAuth);
+        this.app.use(express.static(WEB_DIR));
         this.app.use(bodyParser.json());
         this.app.use(bodyParser.urlencoded({ extended: true }));
-        // Routes
-        this.app.use('/', connectionRouter);
-        this.app.use(this.checkAuth);
         this.app.use('/api', apiRouter);
         this.app.get([ '/app', '/app/*' ], (_, res) => res.sendFile(path.join(WEB_DIR, 'index.html')));
 
