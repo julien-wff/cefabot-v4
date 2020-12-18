@@ -10,6 +10,7 @@ import http from 'http';
 import ws from 'ws';
 import fileUpload from 'express-fileupload';
 
+
 const TOKEN_EXPIRE_DURATION = ms('1h');
 const WEB_DIR = path.resolve(__dirname, '../../web/public');
 
@@ -22,17 +23,19 @@ export default class WebServer {
         // Setup server
         this.app = express();
         const server = http.createServer(this.app);
+        this.app.set('etag', false);
         // Setup socket
         this.ws = new ws.Server({ server, path: '/ws/' });
         this.ws.on('connection', this.handleWSConnection);
         // Middlewares and routes
         this.app.use(compression());
         this.app.use(cookieParser());
+        this.app.use(this.hidePoweredBy);
         this.app.use('/', connectionRouter);
         this.app.use(fileUpload({ createParentPath: true }));
         this.checkAuth = this.checkAuth.bind(this);
         this.app.use(this.checkAuth);
-        this.app.use(express.static(WEB_DIR));
+        this.app.use(express.static(WEB_DIR, { etag: false }));
         this.app.use(bodyParser.json());
         this.app.use(bodyParser.urlencoded({ extended: true }));
         this.app.use('/api', apiRouter);
@@ -41,6 +44,13 @@ export default class WebServer {
         const listener = server.listen(process.env.WEB_PORT);
         listener.setTimeout(15000);
     }
+
+
+    hidePoweredBy(req: Request, res: Response, next: NextFunction) {
+        res.removeHeader('X-Powered-By');
+        next();
+    }
+
 
     async checkAuth(req: Request, res: Response, next: NextFunction) {
         const token = req.cookies?.token as string | undefined;
