@@ -1,3 +1,4 @@
+import logger from '../logs/logger';
 import UserStatsModel from '../models/UserStatsModel';
 import { BotEvent, EventCancel, EventRun } from './events';
 import { Message, VoiceChannel } from 'discord.js';
@@ -63,56 +64,52 @@ async function countMessage(msg: Message) {
 }
 
 
-async function onInterval() {
-    botInstance.client.guilds.cache.forEach(guild => {
+const passiveXP = () => botInstance.client.guilds.cache.forEach(async guild => {
+
+    const members = await guild.members.fetch({ withPresences: true, force: true })
+        .catch(err => logger.bot.error(err, {
+            botID: botInstance.config._id,
+            data: err,
+            location: 'user-stats.ts',
+        }));
+    if (!members || members.size === 0)
+        return;
+
+    await Promise.all(members.map(async member => {
+        let memberNewXP = 0;
 
         // Give 1XP to all the connected members
-        guild.members.cache.forEach(async member => {
-            if (member.presence.status !== 'offline')
-                //TODO: bulk update
-                await UserStatsModel.updateOne(
-                    {
-                        botID: botInstance.config._id,
-                        guildID: guild.id,
-                        userID: member.id,
-                    },
-                    {
-                        $inc: {
-                            'xp.count': ONLINE_XP,
-                        },
-                    },
-                );
-        });
+        if (member.presence.status !== 'offline')
+            memberNewXP += ONLINE_XP;
 
         // Give 5XP to all members in a vocal channel
-        guild.channels.cache.forEach(channel => {
-            if (channel.type === 'voice') {
-                (channel as VoiceChannel).members.forEach(async member => {
-                    //TODO: bulk update
-                    await UserStatsModel.updateOne(
-                        {
-                            botID: botInstance.config._id,
-                            guildID: guild.id,
-                            userID: member.id,
-                        },
-                        {
-                            $inc: {
-                                'xp.count': VOICE_XP,
-                            },
-                        },
-                    );
-                });
-            }
-        });
-    });
-}
+        if (member.voice.channelID)
+            memberNewXP += VOICE_XP;
+
+        if (memberNewXP > 0)
+            //TODO: bulk update
+            await UserStatsModel.updateOne(
+                {
+                    botID: botInstance.config._id,
+                    guildID: guild.id,
+                    userID: member.id,
+                },
+                {
+                    $inc: {
+                        'xp.count': memberNewXP,
+                    },
+                },
+            );
+    }));
+
+});
 
 
 const run: EventRun = async bot => {
     botInstance = bot;
     await verifyUsers(bot);
     bot.client.on('message', countMessage);
-    intervalID = bot.client.setInterval(onInterval, 5 * 60 * 1000);
+    intervalID = bot.client.setInterval(passiveXP, 10 * 60 * 1000);
 };
 
 
