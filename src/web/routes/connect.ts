@@ -6,6 +6,11 @@ const TOKEN_EXPIRE_DURATION = ms('1m');
 
 export default async function connectRoute(req: Request, res: Response) {
 
+    if (req.header('User-Agent')?.match(/discord|bot/i)) {
+        res.status(418).send('You seem to be a bot. Go away!');
+        return;
+    }
+
     const token = req.query.token as string | undefined;
     if (!token) {
         res.status(400).send('Please supply a token');
