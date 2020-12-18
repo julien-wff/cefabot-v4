@@ -1,3 +1,4 @@
+import logger from '../logs/logger';
 import { Command, PathRun } from './commands';
 import UserStatsModel from '../models/UserStatsModel';
 import createScoreboard from '../canvas/create-scoreboard';
@@ -6,28 +7,36 @@ import deleteFile from '../canvas/helper/delete-file';
 const run: PathRun<{ count?: number }> = async (message, params, bot) => {
 
     message.channel.startTyping();
-    const count = params.count && params.count > 1 ? params.count : 5;
 
-    const users = await UserStatsModel
-        .find({
-            botID: bot.config._id,
-            guildID: message.guild!.id,
-            onServer: true,
-        })
-        .sort({ messagesCount: 'desc' })
-        .limit(count);
+    try {
 
-    const imgURI = await createScoreboard(users, message.guild!);
+        const count = params.count && params.count > 1 ? params.count : 5;
 
-    await message.channel.send({
-        files: [ {
-            attachment: imgURI,
-        } ],
-    });
+        const users = await UserStatsModel
+            .find({
+                botID: bot.config._id,
+                guildID: message.guild!.id,
+                onServer: true,
+            })
+            .sort({ messagesCount: 'desc' })
+            .limit(count);
 
-    deleteFile(imgURI);
+        const imgURI = await createScoreboard(users, message.guild!);
 
-    await message.channel.stopTyping();
+        await message.channel.send({
+            files: [ {
+                attachment: imgURI,
+            } ],
+        });
+
+        deleteFile(imgURI);
+
+    } catch (e) {
+        logger.bot.error(e, { data: e, botID: bot.config._id, location: 'scoreboard.ts' });
+    } finally {
+        message.channel.stopTyping();
+    }
+
 
 };
 
