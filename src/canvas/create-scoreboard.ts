@@ -1,14 +1,26 @@
-import { UserStats } from '../models/UserStatsModel';
-import { Guild } from 'discord.js';
+import { UserStatsDoc } from '../models/UserStatsModel';
+import { DiscordAPIError, Guild } from 'discord.js';
 import { createCanvas } from 'canvas';
 import writePng from './helper/write-png';
 import placeSquareImage from './helper/place-square-image';
 
-export default async function createScoreboard(users: UserStats[], guild: Guild): Promise<string> {
+export default async function createScoreboard(users: UserStatsDoc[], guild: Guild): Promise<string> {
 
     // Get and organize stats about members
     const formattedUsers = await Promise.all(users.map(async (user, ind) => {
-        const member = await guild.members.fetch({ user: user.userID, force: true });
+        let member;
+
+        try {
+            member = await guild.members.fetch({ user: user.userID, force: true });
+        } catch (e) {
+            if (!(e instanceof DiscordAPIError) || !e.message.match(/^unknown (user|member)$/i))
+                throw e;
+            await user.updateOne({
+                onServer: false,
+            });
+            return null;
+        }
+
         return {
             name: member?.displayName || user.userID,
             messagesCount: user.messagesCount,
@@ -16,7 +28,8 @@ export default async function createScoreboard(users: UserStats[], guild: Guild)
             avatarURL: member?.user.displayAvatarURL({ size: 128, format: 'png' }),
             percentage: user.messagesCount / users[0].messagesCount * 100,
         };
-    }));
+    }))
+        .then(l => l.filter(u => u)) as FormattedUser[];
 
     const canvas = createCanvas(500, 100 * formattedUsers.length);
     const ctx = canvas.getContext('2d');
@@ -56,4 +69,13 @@ export default async function createScoreboard(users: UserStats[], guild: Guild)
 
     return writePng(canvas);
 
+}
+
+
+interface FormattedUser {
+    name: string,
+    messagesCount: number,
+    position: number,
+    avatarURL: string | undefined,
+    percentage: number,
 }
