@@ -6,12 +6,16 @@ import placeSquareImage from './helper/place-square-image';
 
 export default async function createScoreboard(users: UserStats[], guild: Guild): Promise<string> {
 
-    const formattedUsers = users.map((user, ind) => ({
-        name: guild.member(user.userID)?.displayName || guild.member(user.userID)?.user?.username || user.userID,
-        messagesCount: user.messagesCount,
-        position: ind + 1,
-        avatarURL: guild.member(user.userID)?.user.displayAvatarURL({ size: 128, format: 'png' }),
-        percentage: user.messagesCount / users[0].messagesCount * 100,
+    // Get and organize stats about members
+    const formattedUsers = await Promise.all(users.map(async (user, ind) => {
+        const member = await guild.members.fetch({ user: user.userID, force: true });
+        return {
+            name: member?.displayName || user.userID,
+            messagesCount: user.messagesCount,
+            position: ind + 1,
+            avatarURL: member?.user.displayAvatarURL({ size: 128, format: 'png' }),
+            percentage: user.messagesCount / users[0].messagesCount * 100,
+        };
     }));
 
     const canvas = createCanvas(500, 100 * formattedUsers.length);
@@ -50,6 +54,6 @@ export default async function createScoreboard(users: UserStats[], guild: Guild)
 
     await Promise.all(addAvatars);
 
-    return await writePng(canvas);
+    return writePng(canvas);
 
 }
