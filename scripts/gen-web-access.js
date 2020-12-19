@@ -25,7 +25,6 @@ const WebPanelAccessSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
-    tempToken: String,
     active: {
         type: Boolean,
         default: true,

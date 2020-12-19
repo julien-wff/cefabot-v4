@@ -21,7 +21,6 @@ const WebPanelAccessSchema = new Schema({
         type: Boolean,
         default: false,
     },
-    tempToken: String,
     active: {
         type: Boolean,
         default: true,
@@ -37,8 +36,6 @@ export interface WebPanelAccess {
     created: Date,
     token: string,
     connected: boolean,
-    /** the token saved in memory */
-    tempToken?: string,
     active: boolean,
     ip?: string,
 }
