@@ -2,13 +2,12 @@
     import { humanizeDataType } from '../../../functions/convert-data-type';
     import Swal from 'sweetalert2/dist/sweetalert2';
     import { getDataAndSend, getGuild, getSecret } from '../data/add-data';
-    import { getContext } from 'svelte';
 
-    let guilds = getContext('guilds');
-    let bot = getContext('bot');
-    let getBotData = getContext('get-bot-data');
 
     export let missingKeys = [];
+    export let guilds = [];
+    export let bot;
+    export let getBotData = () => void 0;
 
     /** @param key {{key: String, type: String}} */
     async function addMissingKey(key) {
@@ -20,7 +19,7 @@
 
         const secret = await getSecret(alertBox, 0);
 
-        const guild = await getGuild(alertBox, 1, $guilds);
+        const guild = await getGuild(alertBox, 1, guilds);
         if (!guild) return;
 
         await getDataAndSend(alertBox, 2, { type: key.type, key: key.key, botID: $bot.id, guild, secret });

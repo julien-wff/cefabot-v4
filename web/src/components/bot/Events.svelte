@@ -2,12 +2,13 @@
     import { getContext } from 'svelte';
     import StatusIndicator from './StatusIndicator.svelte';
     import Swal from 'sweetalert2/dist/sweetalert2';
-    import { humanizeDataType } from '../../functions/convert-data-type';
     import MissingKeys from './events/MissingKeys.svelte';
 
     let bot = getContext('bot');
     let events = getContext('events');
     let dataStorage = getContext('data-storage');
+    const guilds = getContext('guilds');
+    const getBotData = getContext('get-bot-data');
 
     function toggleEvent(name) {
         if ($bot.events.includes(name)) {  // Remove the data
@@ -33,7 +34,7 @@
                     });
                     new MissingKeys({
                         target: document.getElementById('swal-svelte-missing-event'),
-                        props: { missingKeys },
+                        props: { missingKeys, guilds: $guilds, bot, getBotData },
                     });
                     return;
                 }
