@@ -33,6 +33,7 @@ export default class WebServer {
         this.app.use(this.hidePoweredBy);
         this.app.use('/', connectionRouter);
         this.app.use(fileUpload({ createParentPath: true }));
+        this.app.get('/favicons/site.webmanifest', (_, res) => res.sendFile(path.resolve(WEB_DIR, 'favicons/site.webmanifest')))
         this.checkAuth = this.checkAuth.bind(this);
         this.app.use(this.checkAuth);
         this.app.use(express.static(WEB_DIR, { etag: false }));
