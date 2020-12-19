@@ -14,6 +14,8 @@ export async function getWebAccesses(req: Request, res: Response) {
         connected: a.connected,
         active: a.active,
         current: a.token === req.cookies['token'],
+        permanent: a.permanent,
+        sessionName: a.sessionName,
         ip: a.ip,
     })));
 

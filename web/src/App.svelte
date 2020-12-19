@@ -22,16 +22,19 @@
                 throw new Error(await res.text());
 
             const session = await res.json();
-            const TOKEN_VALIDITY = 3600 * 1000;
-            const remainingTime = (session.created + TOKEN_VALIDITY) - Date.now();
 
-            setTimeout(async () => {
-                await Swal.fire({
-                    title: 'La session a expiré !',
-                    text: 'Veuillez recréer un accès et vous reconnecter.'
-                });
-                window.location.reload();
-            }, remainingTime);
+            if (!session.permanent) {
+                const TOKEN_VALIDITY = 3600 * 1000;
+                const remainingTime = (session.created + TOKEN_VALIDITY) - Date.now();
+
+                setTimeout(async () => {
+                    await Swal.fire({
+                        title: 'La session a expiré !',
+                        text: 'Veuillez recréer un accès et vous reconnecter.'
+                    });
+                    window.location.reload();
+                }, remainingTime);
+            }
         } catch (e) {
             console.error(e);
             return Swal.fire({

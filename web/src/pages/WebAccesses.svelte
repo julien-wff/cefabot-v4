@@ -1,9 +1,16 @@
 <script>
-    import { onDestroy, onMount } from 'svelte';
+    import { onDestroy } from 'svelte';
     import Swal from 'sweetalert2/dist/sweetalert2';
+    import dayjs from 'dayjs';
+    import CreationDisplay from '../components/web-accesses/CreationDisplay.svelte';
+    import UsageDisplay from '../components/web-accesses/UsageDisplay.svelte';
+    import IPDisplay from '../components/web-accesses/IPDisplay.svelte';
+    import WebAccessesHeader from '../components/web-accesses/WebAccessesHeader.svelte';
 
-    let webAccesses = [];
+    let tempWebAccesses = [];
+    let permanentWebAccesses = [];
     let currentAccess;
+    let displayTimeout;
 
     async function getWebAccesses() {
         try {
@@ -14,9 +21,12 @@
 
             const currentAccessIndex = waJson.findIndex(a => a.current);
             currentAccess = waJson.splice(currentAccessIndex, 1)[0];
-            webAccesses = waJson;
-            if (!remainingTime)
+            tempWebAccesses = waJson.filter(access => !access.permanent);
+            permanentWebAccesses = waJson.filter(access => access.permanent);
+            if (!displayTimeout && !currentAccess.permanent) {
                 setRemainingTime();
+                displayTimeout = setInterval(setRemainingTime, 1000);
+            }
         } catch (e) {
             Swal.fire({
                 title: 'Erreur lors de la requête',
@@ -28,29 +38,18 @@
 
     getWebAccesses();
 
-    let displayTimeout;
-    onMount(() => {
-        displayTimeout = setInterval(setRemainingTime, 1000);
-    });
     onDestroy(() => {
-        clearInterval(displayTimeout);
+        if (displayTimeout)
+            clearInterval(displayTimeout);
     });
 
-    const TOKEN_VALIDITY = 3600 * 1000;
     let remainingTime;
 
     function setRemainingTime() {
         if (!currentAccess)
             return;
-        const timeDelta = ((currentAccess.created + TOKEN_VALIDITY) - Date.now()) / 1000;
-        if (timeDelta > 60) {
-            const mins = Math.floor(timeDelta / 60);
-            const secs = Math.floor(timeDelta - mins * 60);
-            remainingTime = `${mins} minute${mins > 1 ? 's' : ''} ${secs} seconde${secs > 1 ? 's' : ''}`;
-        } else {
-            const secs = Math.floor(timeDelta);
-            remainingTime = `${secs} seconde${secs > 1 ? 's' : ''}`;
-        }
+        const TOKEN_VALIDITY = currentAccess.permanent ? 1e16 : 3600 * 1000;
+        remainingTime = dayjs(currentAccess.created + TOKEN_VALIDITY).fromNow(true);
     }
 
     async function copyInformations(info, message) {
@@ -65,58 +64,56 @@
         });
     }
 
-    const intlOptions = {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric',
-        second: 'numeric',
-        hour12: false
-    };
 
 </script>
 
 <div class="md:mx-10 md:mt-10 sm:mx-4 sm:mt-4 m-2 p-4 bg-gray-700 rounded">
 
-    <div class="flex sm:flex-row flex-col-reverse justify-between mb-2">
-        <h1 class="font-bold text-2xl">Accès web</h1>
-        <div>
-            <button class="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded" on:click={getWebAccesses}>
-                Rafraichir
-            </button>
-        </div>
-    </div>
+    <WebAccessesHeader on:refresh={getWebAccesses}/>
 
     {#if currentAccess}
         <div class="my-2">
             Accès actuel créé par {currentAccess.username}.<br/>
-            Disponible pendant {remainingTime}
+            {#if currentAccess.permanent}
+                Type d'accès : permanent
+            {:else}
+                Disponible pendant {remainingTime}
+            {/if}
         </div>
     {/if}
 
-    <h2 class="font-bold text-xl mt-4">Anciens accès</h2>
 
-    {#each webAccesses as access}
+    {#if permanentWebAccesses.length > 0}
+        <h2 class="font-bold text-xl mt-4">Accès permanents</h2>
+    {/if}
+
+    {#each permanentWebAccesses as access}
         <div class="flex flex-col cursor-pointer hover:bg-gray-600 rounded p-2">
-            <h3 on:click={() => copyInformations(access.userID, 'ID utilisateur copié')}>
-                Par <span title={access.userID}>{access.username}</span>,
-                créé le {new Intl.DateTimeFormat('FR', intlOptions).format(new Date(access.created))}
-            </h3>
-            <div>
-                <span class="{access.connected ? 'text-yellow-500' : 'text-green-500'}">
-                    {access.connected ? 'Utilisé' : 'Non utilisé'},
-                </span>
-                <span class="{access.active ? 'text-yellow-500' : 'text-red-500'}">
-                    {access.active ? 'actif' : 'inactif'}
-                </span>
-            </div>
-            {#if access.ip}
-                <div on:click={() => copyInformations(access.ip, 'IP copiée')}>
-                    IP :
-                    <pre class="inline">{access.ip}</pre>
-                </div>
-            {/if}
+            <CreationDisplay
+                    userID={access.userID}
+                    username={access.username}
+                    createdAt={access.created}
+                    on:copy={() => copyInformations(access.userID, 'ID utilisateur copié')}/>
+            <span>Nom : {access.sessionName}</span>
+            <UsageDisplay active={access.active} connected={access.connected}/>
+            <IPDisplay ip={access.ip} on:copy={() => copyInformations(access.ip, 'IP copiée')}/>
+        </div>
+    {/each}
+
+
+    {#if tempWebAccesses.length > 0}
+        <h2 class="font-bold text-xl mt-4">Accès temporaires</h2>
+    {/if}
+
+    {#each tempWebAccesses as access}
+        <div class="flex flex-col cursor-pointer hover:bg-gray-600 rounded p-2">
+            <CreationDisplay
+                    userID={access.userID}
+                    username={access.username}
+                    createdAt={access.created}
+                    on:copy={() => copyInformations(access.userID, 'ID utilisateur copié')}/>
+            <UsageDisplay active={access.active} connected={access.connected}/>
+            <IPDisplay ip={access.ip} on:copy={() => copyInformations(access.ip, 'IP copiée')}/>
         </div>
     {/each}
 

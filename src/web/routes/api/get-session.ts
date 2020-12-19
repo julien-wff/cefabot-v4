@@ -21,6 +21,7 @@ export default async function getsession(req: Request, res: Response) {
         connected: session.connected,
         active: session.active,
         current: true,
+        permanent: session.permanent,
         ip: session.ip,
     });
 

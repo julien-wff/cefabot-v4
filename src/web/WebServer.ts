@@ -66,12 +66,12 @@ export default class WebServer {
             return;
         }
 
-        if (auth.created.getTime() + TOKEN_EXPIRE_DURATION < Date.now() || !auth.active) {
+        if ((!auth.permanent && auth.created.getTime() + TOKEN_EXPIRE_DURATION < Date.now()) || !auth.active) {
             res.status(401).send('Token expired');
             return;
         }
 
-        if (auth.ip !== req.ip) {
+        if (!auth.permanent && auth.ip !== req.ip) {
             res.status(401).send('Mismatching ip');
             return;
         }

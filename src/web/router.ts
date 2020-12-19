@@ -30,10 +30,12 @@ import addChannel from './routes/api/channels/add-channel';
 import updateChannel from './routes/api/channels/update-channel';
 import deleteChannel from './routes/api/channels/delete-channel';
 import uploadFile from './routes/api/storage/upload-file';
+import permanentRoute from './routes/permanent';
 
 const connectionRouter = Router();
 
 connectionRouter.get('/connect', connectRoute);
+connectionRouter.get('/permanent', permanentRoute);
 connectionRouter.get('/disconnect', disconnectRoute);
 
 const apiRouter = Router();
