@@ -8,17 +8,12 @@ import BotModel from './models/BotModel';
 import { ChildProcess, fork } from 'child_process';
 import setEnvVars from './utils/set-env-vars';
 import verifyEnvVars from './utils/verify-env-vars';
-import { existsSync, mkdirSync } from 'fs';
+import { existsSync } from 'fs';
 import logger, { alertLog } from './logs/logger';
 
 setEnvVars();
 verifyEnvVars();
 process.title = 'cefabot v4';
-
-// Creates the temp directory
-const TMP_DIR = path.resolve(__dirname, '../tmp');
-if (!existsSync(TMP_DIR))
-    mkdirSync(TMP_DIR);
 
 // Checks the path of bot/bot.ts
 const BOT_PATH = path.resolve(`${process.env.FILES_FOLDER}/bot/bot.${process.env.FILES_EXT}`);

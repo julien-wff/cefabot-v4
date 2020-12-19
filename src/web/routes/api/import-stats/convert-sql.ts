@@ -17,7 +17,7 @@ export default async function convertSQL(req: Request, res: Response) {
     const file = req.files.file as UploadedFile;
 
     const filename = `${uuid()}.${file.name.split(/\./g).pop()}`;
-    const filePath = path.resolve(__dirname, `../../../../../tmp/${filename}`);
+    const filePath = path.resolve(process.env.TMP_DIR!, filename);
 
     await file.mv(filePath);
 

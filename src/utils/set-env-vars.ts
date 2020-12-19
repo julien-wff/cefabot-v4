@@ -1,5 +1,5 @@
 import path from 'path';
-import fs from 'fs';
+import fs, { existsSync, mkdirSync } from 'fs';
 
 export default function setEnvVars() {
 
@@ -20,5 +20,11 @@ export default function setEnvVars() {
     if (!fs.existsSync(storagePath))
         fs.mkdirSync(storagePath, { recursive: true });
     process.env.STORAGE_PATH = storagePath;
+
+    // Creates the temp directory
+    const TMP_DIR = path.resolve(__dirname, '../../tmp');
+    if (!existsSync(TMP_DIR))
+        mkdirSync(TMP_DIR);
+    process.env.TMP_DIR = TMP_DIR;
 
 }

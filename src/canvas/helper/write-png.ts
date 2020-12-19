@@ -5,7 +5,7 @@ import { v4 as uuid } from 'uuid';
 
 const writePng = (canvas: Canvas) => new Promise<string>(resolve => {
 
-    const outPath = path.resolve(__dirname, `../../../tmp/${uuid()}.png`);
+    const outPath = path.resolve(process.env.TMP_DIR!, `${uuid()}.png`);
 
     const out = createWriteStream(outPath);
     const stream = canvas.createPNGStream();
