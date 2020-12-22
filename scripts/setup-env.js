@@ -5,43 +5,48 @@ const prompts = require('prompts');
 const kleur = require('kleur');
 
 const questions = [
-    {
-        type: 'confirm',
-        name: 'production',
-        message: 'Is this environment a production environment?',
-    },
-    {
-        type: 'confirm',
-        name: 'genKey',
-        message: 'Automatically generate the bot encryption key?',
-    },
-    {
-        type: prev => prev === false ? 'password' : null,
-        name: 'key',
-        message: 'Custom bot encryption key',
-        validate: input => input.match(/^[a-zA-Z0-9]{32}$/),
-    },
+    // {
+    //     type: 'confirm',
+    //     name: 'production',
+    //     message: 'Is this environment a production environment?',
+    // },
+    // {
+    //     type: 'confirm',
+    //     name: 'genKey',
+    //     message: 'Automatically generate the bot encryption key?',
+    // },
+    // {
+    //     type: prev => prev === false ? 'password' : null,
+    //     name: 'key',
+    //     message: 'Custom bot encryption key',
+    //     validate: input => input.match(/^[a-zA-Z0-9]{32}$/),
+    // },
+    // {
+    //     type: 'text',
+    //     name: 'dbURI',
+    //     message: 'Database URI',
+    // },
+    // {
+    //     type: 'text',
+    //     name: 'storagePath',
+    //     message: 'Storage path',
+    // },
+    // {
+    //     type: 'text',
+    //     name: 'webBaseUrl',
+    //     message: 'Web panel base URL, without the ending slash (ex: http://host.ext, or https://192.168.1.2:8000)',
+    //     validate: input => input.match(/^https?:\/\/[a-zA-Z0-9.-\/:]{1,80}$/),
+    // },
+    // {
+    //     type: 'text',
+    //     name: 'webRootPath',
+    //     message: 'Web panel root path (ex: /, or /cefabot)',
+    //     validate: input => input.match(/^[a-zA-Z0-9.-\/:]{1,80}$/),
+    // },
     {
         type: 'text',
-        name: 'dbURI',
-        message: 'Database URI',
-    },
-    {
-        type: 'text',
-        name: 'storagePath',
-        message: 'Storage path',
-    },
-    {
-        type: 'text',
-        name: 'webBaseUrl',
-        message: 'Web panel base URL, without the ending slash (ex: http://host.ext, or https://192.168.1.2:8000)',
-        validate: input => input.match(/^https?:\/\/[a-zA-Z0-9.-\/:]{1,80}$/),
-    },
-    {
-        type: 'text',
-        name: 'webRootPath',
-        message: 'Web panel root path (ex: /, or /cefabot)',
-        validate: input => input.match(/^[a-zA-Z0-9.-\/:]{1,80}$/),
+        name: 'certPath',
+        message: 'HTTPS certificates folder path (leave blank if you want HTTP)',
     },
     {
         type: 'number',
@@ -65,6 +70,8 @@ const options = {
 (async () => {
 
     let res = await prompts(questions, options);
+    console.log(res);
+    process.exit(0)
 
     if (res.genKey) {
         res.key = uuid()
@@ -95,6 +102,9 @@ WEB_BASE_URL=${res.webBaseUrl}
 WEB_ROOT_PATH=${res.webRootPath}
 # The port of the web panel
 WEB_PORT=${res.webPort}
+
+# The certificates path to use HTTPS
+CERT_PATH=${res.certPath || ''}
 `);
 
     console.log(kleur.green('\nSuccessfully saved the .env file!'));

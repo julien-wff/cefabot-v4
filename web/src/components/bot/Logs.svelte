@@ -1,6 +1,7 @@
 <script>
     import { getContext, onDestroy, onMount } from 'svelte';
     import { Link } from 'svelte-routing';
+    import { createWebSocket } from '../../actions/createWebStocket';
     import { dateFormat } from '../../functions/date-format';
 
     const API_ROOT = getContext('API_ROOT');
@@ -11,7 +12,7 @@
     let socket;
 
     onMount(() => {
-        socket = new WebSocket(`ws://${window.location.host}${BASE_ROOT}/ws/`);
+        socket = createWebSocket(BASE_ROOT);
         socket.addEventListener('message', msg => {
             if (msg.data === 'new-log')
                 refreshLogs();

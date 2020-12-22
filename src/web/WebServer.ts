@@ -1,12 +1,14 @@
 import express, { Express, NextFunction, Request, Response } from 'express';
 import ms from 'ms';
 import path from 'path';
+import fs from 'fs';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import WebPanelAccess from '../models/WebPanelAccess';
 import { connectionRouter, apiRouter } from './router';
 import compression from 'compression';
 import http from 'http';
+import https from 'https';
 import ws from 'ws';
 import fileUpload from 'express-fileupload';
 
@@ -22,7 +24,7 @@ export default class WebServer {
     constructor() {
         // Setup server
         this.app = express();
-        const server = http.createServer(this.app);
+        const server = this.createServer();
         this.app.set('etag', false);
         // Setup socket
         this.ws = new ws.Server({ server, path: `${process.env.WEB_ROOT_PATH}/ws/` });
@@ -51,6 +53,20 @@ export default class WebServer {
     hidePoweredBy(req: Request, res: Response, next: NextFunction) {
         res.removeHeader('X-Powered-By');
         next();
+    }
+
+
+    createServer(): http.Server | https.Server {
+        const keyPath = path.resolve(process.env.CERT_PATH || '.', 'privkey.pem');
+        const certPath = path.resolve(process.env.CERT_PATH || '.', 'fullchain.pem');
+
+        if (process.env.CERT_PATH && fs.existsSync(keyPath) && fs.existsSync(certPath)) {
+            const key = fs.readFileSync(keyPath, 'utf8');
+            const cert = fs.readFileSync(certPath, 'utf8');
+            return https.createServer({ key, cert }, this.app);
+        } else {
+            return http.createServer(this.app);
+        }
     }
 
 

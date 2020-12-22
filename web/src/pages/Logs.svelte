@@ -1,6 +1,7 @@
 <script>
     import { getContext, onDestroy, onMount, setContext } from 'svelte';
     import { writable } from 'svelte/store';
+    import { createWebSocket } from '../actions/createWebStocket';
     import LogLine from '../components/logs/LogLine.svelte';
     import Options from '../components/logs/Options.svelte';
 
@@ -10,7 +11,7 @@
     let socket;
 
     onMount(() => {
-        socket = new WebSocket(`ws://${window.location.host}${BASE_ROOT}/ws/`);
+        socket = createWebSocket(BASE_ROOT);
         socket.addEventListener('message', msg => {
             if (msg.data === 'new-log') {
                 getBots().then(getLogs);
