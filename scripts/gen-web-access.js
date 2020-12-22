@@ -71,7 +71,7 @@ const WebPanelAccess = mongoose.model('WebPanelAccess', WebPanelAccessSchema);
 
     console.log(
         kleur.green('Access created. You can access to the panel through the following link once the bot is started:\n') +
-        kleur.cyan(kleur.underline(`${process.env.WEB_BASE_URL}/${permanentSessionName ? 'permanent' : 'connect'}?token=${token}`))
+        kleur.cyan(kleur.underline(`${process.env.WEB_BASE_URL}${process.env.WEB_ROOT_PATH}/${permanentSessionName ? 'permanent' : 'connect'}?token=${token}`))
     );
 
     await mongoose.disconnect();
