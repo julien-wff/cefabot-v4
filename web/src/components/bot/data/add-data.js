@@ -126,9 +126,10 @@ export const valueValidator = (value, type) => {
  * @param mixin {Swal}
  * @param currentStep {number}
  * @param data {{key: string, type: string, secret: Boolean, guild: *, botID: string}}
+ * @param API_ROOT {string}
  * @return {Promise<void>}
  */
-export async function getDataAndSend(mixin, currentStep, data) {
+export async function getDataAndSend(mixin, currentStep, data, API_ROOT) {
 
     await mixin.fire({
         text: 'Valeur',
@@ -151,7 +152,7 @@ export async function getDataAndSend(mixin, currentStep, data) {
             if (data.type === 'array' || data.type === 'object')
                 value = JSON.parse(value);
 
-            return fetch(`/api/data`, {
+            return fetch(`${API_ROOT}/data`, {
                 method: 'POST',
                 body: JSON.stringify({
                     key: data.key,

@@ -31,5 +31,7 @@ export default async function connectRoute(req: Request, res: Response) {
 
     await access.updateOne({ connected: true, ip: req.ip });
 
-    res.cookie('token', token, { httpOnly: true, sameSite: 'lax' }).redirect('/app');
+    res
+        .cookie('token', token, { httpOnly: true, sameSite: 'lax' })
+        .redirect(`${process.env.WEB_ROOT_PATH}/app`);
 }

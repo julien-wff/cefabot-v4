@@ -1,9 +1,13 @@
 <!--suppress ES6UnusedImports -->
 <script>
+    import { getContext } from 'svelte';
     import { Link } from 'svelte-routing';
     import NavLink from './NavLink.svelte';
     import ToggleButton from './ToggleButton.svelte';
     import disconnect from '../../actions/disconnect';
+
+
+    const BASE_ROOT = getContext('BASE_ROOT');
 
     let isOpen = false;
 
@@ -42,7 +46,7 @@
         <NavLink to="settings">Paramètres</NavLink>
         <div
                 class="cursor-pointer block px-4 py-2 font-semibold rounded text-red-500 hover:bg-gray-800"
-                on:click={disconnect}>
+                on:click={() => disconnect(BASE_ROOT)}>
             Se déconnecter
         </div>
     </nav>

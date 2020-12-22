@@ -1,10 +1,13 @@
 <script>
+    import { getContext } from 'svelte';
     import { Link } from 'svelte-routing';
     import BotCard from '../components/bots/BotCard.svelte';
     import Loading from '../components/Loading.svelte';
 
+    const API_ROOT = getContext('API_ROOT');
+
     async function getBots() {
-        const req = await fetch('/api/bots');
+        const req = await fetch(`${API_ROOT}/bots`);
         return await req.json();
     }
 </script>

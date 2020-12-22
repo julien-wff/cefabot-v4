@@ -1,5 +1,8 @@
 <script>
+    import { getContext } from 'svelte';
     import Swal from 'sweetalert2/dist/sweetalert2';
+
+    const API_ROOT = getContext('API_ROOT');
 
     let file;
     let stats;
@@ -13,7 +16,7 @@
         loading = true;
         const data = new FormData();
         data.append('file', file);
-        stats = await fetch('/api/import-stats/convert-sql', {
+        stats = await fetch(`${API_ROOT}/import-stats/convert-sql`, {
             method: 'POST',
             body: data,
         })
@@ -31,7 +34,7 @@
                 });
                 console.error(e);
             });
-        bots = await fetch('/api/bots')
+        bots = await fetch(`${API_ROOT}/bots`)
             .then(res => res.json());
 
         loading = false;
@@ -59,7 +62,7 @@
 
         const importStats = importedDBs.map(d => ({ ...d, stats: stats[d.name] }));
 
-        fetch('/api/import-stats/add-stats', {
+        fetch(`${API_ROOT}/import-stats/add-stats`, {
             method: 'POST',
             body: JSON.stringify(importStats),
             headers: {

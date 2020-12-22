@@ -3,6 +3,7 @@
     import { getContext } from 'svelte';
     import Channel from './guilds/Channel.svelte';
 
+    const BASE_ROOT = getContext('BASE_ROOT');
     const bot = getContext('bot');
     const guilds = getContext('guilds');
     const channels = getContext('channels');
@@ -54,7 +55,7 @@
     {#if managedGuild && managedGuild.guild}
         <div class="ml-4 mb-2">
             <img
-                    src="/icons/cross.svg"
+                    src="{BASE_ROOT}/icons/cross.svg"
                     alt="x"
                     class="inline-block h-4 cursor-pointer"
                     on:click={() => managedGuild = null}/>

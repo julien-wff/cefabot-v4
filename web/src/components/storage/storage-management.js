@@ -1,6 +1,6 @@
 import Swal from 'sweetalert2/dist/sweetalert2';
 
-export const uploadFile = async (path, botID) => Swal.fire({
+export const uploadFile = async (path, botID, API_ROOT) => Swal.fire({
     title: 'Ajouter un fichier',
     html: `Le fichier sera stocké dans l'emplacement suivant : <pre><code>/${path}</code></pre>`,
     input: 'file',
@@ -12,7 +12,7 @@ export const uploadFile = async (path, botID) => Swal.fire({
         let body = new FormData();
         body.append('file', file);
         body.append('path', path);
-        return fetch(`/api/storage/${botID}`, {
+        return fetch(`${API_ROOT}/storage/${botID}`, {
             method: 'POST',
             body,
         });

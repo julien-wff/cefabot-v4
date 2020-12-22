@@ -1,6 +1,6 @@
 <!--suppress UnnecessaryLabelJS, JSUnresolvedVariable -->
 <script>
-    import { setContext } from 'svelte';
+    import { getContext, setContext } from 'svelte';
     import { writable } from 'svelte/store';
     import Nanobar from 'nanobar';
     import Loading from '../components/Loading.svelte';
@@ -19,6 +19,9 @@
     const progressBar = new Nanobar();
     let currentProgress = 0;
     let totalProgress = 7;
+
+    const API_ROOT = getContext('API_ROOT');
+
 
     function increaseProgressBar() {
         currentProgress++;
@@ -47,7 +50,7 @@
     setContext('logs', logs);
 
     async function fetchData(url) {
-        const res = await fetch(url);
+        const res = await fetch(API_ROOT + url);
         const data = await res.json();
         if (data.error) {
             throw new Error(data.error);
@@ -60,20 +63,20 @@
         currentProgress = 0;
         totalProgress = 7;
         try {
-            $bot = await fetchData(`/api/bots/${id}`);
+            $bot = await fetchData(`/bots/${id}`);
             if ($bot.enabled)
                 totalProgress += $bot.guildsID.length;
             $initialData = $bot;
             $guilds = [];
             await Promise.all([
-                fetchData('/api/commands').then(data => $commands = data),
-                fetchData('/api/events').then(data => $events = data),
-                fetchData(`/api/data?botID=${id}`).then(data => $dataStorage = data),
-                fetchData(`/api/storage/${id}`).then(data => $files = data),
-                fetchData(`/api/channels?bot=${id}`).then(data => $channels = data),
-                fetchData(`/api/logs?bots=${id}&app=false&limit=10&sort=desc`).then(data => $logs = data.reverse()),
+                fetchData('/commands').then(data => $commands = data),
+                fetchData('/events').then(data => $events = data),
+                fetchData(`/data?botID=${id}`).then(data => $dataStorage = data),
+                fetchData(`/storage/${id}`).then(data => $files = data),
+                fetchData(`/channels?bot=${id}`).then(data => $channels = data),
+                fetchData(`/logs?bots=${id}&app=false&limit=10&sort=desc`).then(data => $logs = data.reverse()),
                 ...($bot.enabled
-                        ? $bot.guildsID.map(g => fetchData(`/api/bots/${id}/guild/${g}?iconsSize=64`)
+                        ? $bot.guildsID.map(g => fetchData(`/bots/${id}/guild/${g}?iconsSize=64`)
                             .then(g => $guilds = [...$guilds, g]))
                         : []
                 ),
@@ -100,7 +103,7 @@
             cancelButtonText: 'Retour',
             showLoaderOnConfirm: true,
             allowOutsideClick: () => !Swal.isLoading(),
-            preConfirm: () => fetch(`/api/bots/${id}`, {
+            preConfirm: () => fetch(`${API_ROOT}/bots/${id}`, {
                 method: 'PATCH',
                 body: JSON.stringify($bot),
                 headers: {

@@ -1,6 +1,8 @@
 <script>
-    import { createEventDispatcher } from 'svelte';
+    import { createEventDispatcher, getContext } from 'svelte';
     import Swal from 'sweetalert2/dist/sweetalert2';
+
+    const API_ROOT = getContext('API_ROOT');
 
     export let id = '';
     export let name = '';
@@ -17,7 +19,7 @@
             cancelButtonText: 'Retour',
             showLoaderOnConfirm: true,
             allowOutsideClick: () => !Swal.isLoading(),
-            preConfirm: () => fetch(`/api/trusted-accounts`, {
+            preConfirm: () => fetch(`${API_ROOT}/trusted-accounts`, {
                 method: 'DELETE',
                 body: JSON.stringify({ id }),
                 headers: {

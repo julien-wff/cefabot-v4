@@ -37,5 +37,5 @@ export default async function permanentRoute(req: Request, res: Response) {
             sameSite: 'lax',
             expires: new Date(new Date().getFullYear() + 1, new Date().getMonth(), new Date().getDate()),
         })
-        .redirect('/app');
+        .redirect(`${process.env.WEB_ROOT_PATH}/app`);
 }

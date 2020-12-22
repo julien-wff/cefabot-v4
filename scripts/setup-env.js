@@ -34,8 +34,14 @@ const questions = [
     {
         type: 'text',
         name: 'webBaseUrl',
-        message: 'Web panel base URL',
+        message: 'Web panel base URL, without the ending slash (ex: http://host.ext, or https://192.168.1.2:8000)',
         validate: input => input.match(/^https?:\/\/[a-zA-Z0-9.-\/:]{1,80}$/),
+    },
+    {
+        type: 'text',
+        name: 'webRootPath',
+        message: 'Web panel root path (ex: /, or /cefabot)',
+        validate: input => input.match(/^[a-zA-Z0-9.-\/:]{1,80}$/),
     },
     {
         type: 'number',
@@ -83,8 +89,10 @@ DB_URI=${res.dbURI}
 # Storage path, absolute or relative to the project root
 STORAGE_PATH=${res.storagePath}
 
-# The root URL of the web server (ex: http://host.ext, or https://192.168.1.2:8000)
+# The root URL of the web server, without the ending slash (ex: http://host.ext, or https://192.168.1.2:8000)
 WEB_BASE_URL=${res.webBaseUrl}
+# The root path (ex: /, or /cefabot)
+WEB_ROOT_PATH=${res.webRootPath}
 # The port of the web panel
 WEB_PORT=${res.webPort}
 `);

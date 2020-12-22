@@ -1,4 +1,5 @@
 <script>
+    import { getContext } from 'svelte';
     import { humanizeDataType } from '../../../functions/convert-data-type';
     import Swal from 'sweetalert2/dist/sweetalert2';
     import { getDataAndSend, getGuild, getSecret } from '../data/add-data';
@@ -8,6 +9,9 @@
     export let guilds = [];
     export let bot;
     export let getBotData = () => void 0;
+
+
+    const API_ROOT = getContext('API_ROOT');
 
     /** @param key {{key: String, type: String}} */
     async function addMissingKey(key) {
@@ -22,7 +26,7 @@
         const guild = await getGuild(alertBox, 1, guilds);
         if (!guild) return;
 
-        await getDataAndSend(alertBox, 2, { type: key.type, key: key.key, botID: $bot.id, guild, secret });
+        await getDataAndSend(alertBox, 2, { type: key.type, key: key.key, botID: $bot.id, guild, secret }, API_ROOT);
 
         getBotData();
     }

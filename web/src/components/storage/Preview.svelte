@@ -5,6 +5,8 @@
     import { mediaType } from '../../functions/file-type';
     import { sanitize } from '../../functions/sanitize';
 
+    const API_ROOT = getContext('API_ROOT');
+    const BASE_ROOT = getContext('BASE_ROOT');
     let filePath = getContext('file-preview');
     let bot = getContext('bot');
     let refresh = getContext('get-bot-data');
@@ -12,7 +14,7 @@
     let fileType, fileURL;
 
     $: fileType = mediaType($filePath);
-    $: fileURL = `/api/storage/${$bot.id}/file?path=${$filePath.join('/')}`;
+    $: fileURL = `${API_ROOT}/storage/${$bot.id}/file?path=${$filePath.join('/')}`;
 
     const deleteFile = () => Swal.fire({
         title: 'Supprimer un fichier',
@@ -45,7 +47,7 @@
 <div class="flex">
     <span class="flex-1 font-bold overflow-hidden">{$filePath.join('/')}</span>
     <img
-            src="/icons/cross.svg"
+            src="{BASE_ROOT}/icons/cross.svg"
             alt="Close preview"
             class="h-6 pl-2 cursor-pointer"
             on:click={() => $filePath = []}/>

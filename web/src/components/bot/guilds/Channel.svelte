@@ -6,6 +6,7 @@
     export let channelType;
     export let guild;
 
+    const API_ROOT = getContext('API_ROOT');
     const channels = getContext('channels');
     const bot = getContext('bot');
     let getBotData = getContext('get-bot-data');
@@ -31,7 +32,7 @@
             inputOptions,
             showLoaderOnConfirm: true,
             allowOutsideClick: () => !Swal.isLoading(),
-            preConfirm: value => fetch('/api/channels', {
+            preConfirm: value => fetch(`${API_ROOT}/channels`, {
                 method: actualChannel.id ? 'PATCH' : 'POST',
                 body: JSON.stringify({
                     bot: $bot.id,
@@ -68,7 +69,7 @@
             showCancelButton: true,
             showLoaderOnConfirm: true,
             allowOutsideClick: () => !Swal.isLoading(),
-            preConfirm: () => fetch('/api/channels', {
+            preConfirm: () => fetch(`${API_ROOT}/channels`, {
                 method: 'DELETE',
                 body: JSON.stringify({
                     bot: $bot.id,

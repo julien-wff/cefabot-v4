@@ -4,6 +4,7 @@
     import { dataTypes } from '../../../functions/convert-data-type';
     import { getDataAndSend, getGuild, getKey, getSecret, getType } from './add-data';
 
+    const API_ROOT = getContext('API_ROOT');
     let dataStorage = getContext('data-storage');
     let guilds = getContext('guilds');
     let bot = getContext('bot');
@@ -28,13 +29,18 @@
 
         const guild = await getGuild(alertBox, 3, $guilds);
 
-        await getDataAndSend(alertBox, multiGuilds ? 4 : 3, {
-            guild,
-            secret,
-            key,
-            type,
-            botID: $bot.id
-        });
+        await getDataAndSend(
+            alertBox,
+            multiGuilds ? 4 : 3,
+            {
+                guild,
+                secret,
+                key,
+                type,
+                botID: $bot.id
+            },
+            API_ROOT
+        );
 
         getBotData();
     }

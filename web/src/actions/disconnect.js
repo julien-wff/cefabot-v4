@@ -1,6 +1,6 @@
 import Swal from 'sweetalert2/dist/sweetalert2';
 
-export default async function disconnect() {
+export default async function disconnect(BASE_ROOT) {
     Swal.queue([{
         title: 'Se déconnecter',
         text: 'Êtes-vous sur de vouloir vous déconnecter ?',
@@ -9,7 +9,7 @@ export default async function disconnect() {
         cancelButtonText: 'Annuler',
         showLoaderOnConfirm: true,
         allowOutsideClick: () => !Swal.isLoading(),
-        preConfirm: () => fetch('/disconnect')
+        preConfirm: () => fetch(`${BASE_ROOT}/disconnect`)
             .then(async res => {
                 const data = await res.json();
                 if (data.code !== 200) {

@@ -7,11 +7,13 @@
     export let y = 0;
     export let path = [];
 
+    const API_ROOT = getContext('API_ROOT');
+
     let bot = getContext('bot');
     let getBotData = getContext('get-bot-data');
 
     async function startFileUpload() {
-        await uploadFile(path.slice(1).join('/'), $bot.id);
+        await uploadFile(path.slice(1).join('/'), $bot.id, API_ROOT);
         getBotData();
     }
 

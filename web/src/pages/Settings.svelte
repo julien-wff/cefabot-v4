@@ -1,20 +1,23 @@
 <script>
+    import { getContext } from 'svelte';
     import { Link } from 'svelte-routing';
     import Account from '../components/settings/Account.svelte';
     import Loading from '../components/Loading.svelte';
     import { addAccount } from '../components/settings/add-account';
     import { changePassword } from '../components/settings/change-password';
 
+    const API_ROOT = getContext('API_ROOT');
+
     let accounts = [];
 
     async function getSettings() {
-        const req = await fetch('/api/trusted-accounts');
+        const req = await fetch(`${API_ROOT}/trusted-accounts`);
         const acc = await req.json();
         accounts = Object.entries(acc);
     }
 
     async function handleAddAccount() {
-        await addAccount();
+        await addAccount(API_ROOT);
         await getSettings();
     }
 </script>
@@ -32,7 +35,7 @@
         </Link>
 
         <h3 class="font-semibold text-xl pl-2 mt-4">Mot de passe</h3>
-        <button class="bg-blue-500 px-4 py-2 rounded mt-2 ml-4" on:click={changePassword}>
+        <button class="bg-blue-500 px-4 py-2 rounded mt-2 ml-4" on:click={() => changePassword(API_ROOT)}>
             Changer le mot de passe
         </button>
 

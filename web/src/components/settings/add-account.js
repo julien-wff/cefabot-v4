@@ -1,6 +1,6 @@
 import Swal from 'sweetalert2/dist/sweetalert2';
 
-export const addAccount = () => new Promise(async resolve => {
+export const addAccount = (API_ROOT) => new Promise(async resolve => {
 
     const { value: id } = await Swal.fire({
         title: 'Ajouter un compte',
@@ -18,7 +18,7 @@ export const addAccount = () => new Promise(async resolve => {
         input: 'text',
         showCancelButton: true,
         inputValidator: v => !v.match(/^[a-zA-Z0-9#_\- \/]{2,30}$/) && 'Nom invalide',
-        preConfirm: name => fetch('/api/trusted-accounts', {
+        preConfirm: name => fetch(`${API_ROOT}/trusted-accounts`, {
             method: 'POST',
             body: JSON.stringify({
                 id,

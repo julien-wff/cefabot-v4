@@ -1,3 +1,4 @@
+import { getContext } from 'svelte';
 import Swal from 'sweetalert2/dist/sweetalert2';
 
 const Mixin = Swal.mixin({
@@ -6,7 +7,8 @@ const Mixin = Swal.mixin({
     progressSteps: [1, 2, 3],
 });
 
-export async function changePassword() {
+export async function changePassword(API_ROOT) {
+
     const { value: current } = await Mixin.fire({
         currentProgressStep: 0,
         text: 'Mot de passe actuel',
@@ -30,7 +32,7 @@ export async function changePassword() {
         inputValidator: input => input !== newPwd && 'Les deux mots de passe doivent être identiques',
         showLoaderOnConfirm: true,
         allowOutsideClick: () => !Swal.isLoading(),
-        preConfirm: () => fetch('/api/reset-password', {
+        preConfirm: () => fetch(`${API_ROOT}/reset-password`, {
             method: 'POST',
             body: JSON.stringify({
                 current,

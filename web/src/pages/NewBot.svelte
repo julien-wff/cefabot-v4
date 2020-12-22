@@ -1,7 +1,10 @@
 <!--suppress CheckEmptyScriptTag -->
 <script>
+    import { getContext } from 'svelte';
     import Swal from 'sweetalert2/dist/sweetalert2';
     import { navigate } from 'svelte-routing';
+
+    const API_ROOT = getContext('API_ROOT');
 
     let token = '';
     let clientID = '';
@@ -18,7 +21,7 @@
             cancelButtonText: 'Retour',
             showLoaderOnConfirm: true,
             allowOutsideClick: () => !Swal.isLoading(),
-            preConfirm: () => fetch(`/api/bots`, {
+            preConfirm: () => fetch(`${API_ROOT}/bots`, {
                 method: 'POST',
                 body: JSON.stringify({ token, clientID, name, commandStart }),
                 headers: {

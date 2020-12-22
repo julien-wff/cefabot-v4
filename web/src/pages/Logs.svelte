@@ -1,13 +1,16 @@
 <script>
-    import { onDestroy, onMount, setContext } from 'svelte';
+    import { getContext, onDestroy, onMount, setContext } from 'svelte';
     import { writable } from 'svelte/store';
     import LogLine from '../components/logs/LogLine.svelte';
     import Options from '../components/logs/Options.svelte';
 
+    const API_ROOT = getContext('API_ROOT');
+    const BASE_ROOT = getContext('BASE_ROOT');
+
     let socket;
 
     onMount(() => {
-        socket = new WebSocket(`ws://${window.location.host}/ws/`);
+        socket = new WebSocket(`ws://${window.location.host}${BASE_ROOT}/ws/`);
         socket.addEventListener('message', msg => {
             if (msg.data === 'new-log') {
                 getBots().then(getLogs);
@@ -45,7 +48,7 @@
     setContext('options', options);
 
     async function getBots() {
-        const req = await fetch('/api/bots');
+        const req = await fetch(`${API_ROOT}/bots`);
         $bots = await req.json();
     }
 
@@ -55,7 +58,7 @@
             params.set('bots', $filters.bots.join(','));
         else
             params.delete('bots');
-        const res = await fetch(`/api/logs?${params.toString()}`);
+        const res = await fetch(`${API_ROOT}/logs?${params.toString()}`);
         $logs = await res.json();
     }
 

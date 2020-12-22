@@ -1,7 +1,7 @@
 <!--suppress ES6UnusedImports -->
 <script>
     import Import from './pages/Import.svelte';
-    import { onMount } from 'svelte';
+    import { onMount, setContext } from 'svelte';
     import Swal from 'sweetalert2/dist/sweetalert2';
     import { Router, Route } from 'svelte-routing';
     import Index from './pages/Index.svelte';
@@ -14,9 +14,16 @@
 
     export let url = '';
 
+    const BASE_ROOT = '/cefabot';
+    setContext('BASE_ROOT', BASE_ROOT);
+    const APP_ROOT = `${BASE_ROOT}/app`;
+    setContext('APP_ROOT', APP_ROOT);
+    const API_ROOT = `${BASE_ROOT}/api`;
+    setContext('API_ROOT', API_ROOT);
+
     onMount(async () => {
         try {
-            const res = await fetch('/api/session');
+            const res = await fetch(`${API_ROOT}/session`);
 
             if (!res.headers.get('Content-Type')?.match('application/json'))
                 throw new Error(await res.text());
@@ -47,7 +54,7 @@
 </script>
 
 
-<Router {url} basepath="/app">
+<Router {url} basepath={APP_ROOT}>
     <Nav/>
     <div>
         <Route path="/" component={Index}/>

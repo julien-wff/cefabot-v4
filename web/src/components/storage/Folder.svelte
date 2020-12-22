@@ -28,12 +28,12 @@
 <style>
     span {
         padding: 0 0 0 1.5em;
-        background: url("/icons/folder.svg") 0 0.1em no-repeat;
+        background: url("/cefabot/icons/folder.svg") 0 0.1em no-repeat;
         background-size: 1em 1em;
     }
 
     .expanded {
-        background-image: url("/icons/folder-open.svg");
+        background-image: url("/cefabot/icons/folder-open.svg");
     }
 
     ul {

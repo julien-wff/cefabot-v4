@@ -5,6 +5,7 @@
     import AddData from './data/AddData.svelte';
     import DataDetails from './data/DataDetails.svelte';
 
+    const API_ROOT = getContext('API_ROOT');
     let dataStorage = getContext('data-storage');
     const getBotData = getContext('get-bot-data');
     const guilds = getContext('guilds');
@@ -31,7 +32,7 @@
             cancelButtonText: 'Retour',
             showLoaderOnConfirm: true,
             allowOutsideClick: () => !Swal.isLoading(),
-            preConfirm: () => fetch(`/api/data/${id}`, {
+            preConfirm: () => fetch(`${API_ROOT}/data/${id}`, {
                 method: 'DELETE'
             })
         })

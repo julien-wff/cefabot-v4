@@ -3,13 +3,15 @@
     import { Link } from 'svelte-routing';
     import { dateFormat } from '../../functions/date-format';
 
+    const API_ROOT = getContext('API_ROOT');
+    const BASE_ROOT = getContext('BASE_ROOT');
     let logs = getContext('logs');
     let bot = getContext('bot');
 
     let socket;
 
     onMount(() => {
-        socket = new WebSocket(`ws://${window.location.host}/ws/`);
+        socket = new WebSocket(`ws://${window.location.host}${BASE_ROOT}/ws/`);
         socket.addEventListener('message', msg => {
             if (msg.data === 'new-log')
                 refreshLogs();
@@ -21,7 +23,7 @@
     });
 
     async function refreshLogs() {
-        const res = await fetch(`/api/logs?bots=${$bot.id}&app=false&limit=10&sort=desc`);
+        const res = await fetch(`${API_ROOT}/logs?bots=${$bot.id}&app=false&limit=10&sort=desc`);
         const l = await res.json();
         $logs = l.reverse();
     }

@@ -3,6 +3,7 @@
     import Swal from 'sweetalert2/dist/sweetalert2';
     import StatusIndicator from './StatusIndicator.svelte';
 
+    const API_ROOT = getContext('API_ROOT');
     let bot = getContext('bot');
 
     function toggleBotStatus() {
@@ -18,7 +19,7 @@
             cancelButtonText: 'Annuler',
             showLoaderOnConfirm: true,
             allowOutsideClick: () => !Swal.isLoading(),
-            preConfirm: () => fetch(`/api/bots/${$bot.id}/reboot`)
+            preConfirm: () => fetch(`${API_ROOT}/bots/${$bot.id}/reboot`)
                     .then(async res => {
                         const data = await res.json();
                         if (res.status !== 200) {

@@ -25,22 +25,23 @@ export default class WebServer {
         const server = http.createServer(this.app);
         this.app.set('etag', false);
         // Setup socket
-        this.ws = new ws.Server({ server, path: '/ws/' });
+        this.ws = new ws.Server({ server, path: `${process.env.WEB_ROOT_PATH}/ws/` });
         this.ws.on('connection', this.handleWSConnection);
         // Middlewares and routes
         this.app.use(compression());
         this.app.use(cookieParser());
         this.app.use(this.hidePoweredBy);
-        this.app.use('/', connectionRouter);
+        this.app.use(`${process.env.WEB_ROOT_PATH}/`, connectionRouter);
         this.app.use(fileUpload({ createParentPath: true }));
-        this.app.get('/favicons/site.webmanifest', (_, res) => res.sendFile(path.resolve(WEB_DIR, 'favicons/site.webmanifest')))
+        this.app.get(`${process.env.WEB_ROOT_PATH}/favicons/site.webmanifest`, (_, res) => res.sendFile(path.resolve(WEB_DIR, 'favicons/site.webmanifest')));
         this.checkAuth = this.checkAuth.bind(this);
         this.app.use(this.checkAuth);
-        this.app.use(express.static(WEB_DIR, { etag: false }));
+        this.app.use(process.env.WEB_ROOT_PATH || '/', express.static(WEB_DIR, { etag: false }));
         this.app.use(bodyParser.json());
         this.app.use(bodyParser.urlencoded({ extended: true }));
-        this.app.use('/api', apiRouter);
-        this.app.get([ '/app', '/app/*' ], (_, res) => res.sendFile(path.join(WEB_DIR, 'index.html')));
+        this.app.use(`${process.env.WEB_ROOT_PATH}/api`, apiRouter);
+        this.app.get([ `${process.env.WEB_ROOT_PATH}/app`, `${process.env.WEB_ROOT_PATH}/app/*` ], (_, res) =>
+            res.sendFile(path.join(WEB_DIR, 'index.html')));
 
         const listener = server.listen(process.env.WEB_PORT);
         listener.setTimeout(15000);

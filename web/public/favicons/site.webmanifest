@@ -1,6 +1,8 @@
 {
     "name": "cefabot v4 panel",
     "short_name": "cefabot",
+    "start_url": "/cefabot/app",
+    "lang": "fr",
     "icons": [
         {
             "src": "/android-chrome-192x192.png",

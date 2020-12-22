@@ -1,11 +1,13 @@
 <script>
-    import { onDestroy } from 'svelte';
+    import { getContext, onDestroy } from 'svelte';
     import Swal from 'sweetalert2/dist/sweetalert2';
     import dayjs from 'dayjs';
     import CreationDisplay from '../components/web-accesses/CreationDisplay.svelte';
     import UsageDisplay from '../components/web-accesses/UsageDisplay.svelte';
     import IPDisplay from '../components/web-accesses/IPDisplay.svelte';
     import WebAccessesHeader from '../components/web-accesses/WebAccessesHeader.svelte';
+
+    const API_ROOT = getContext('API_ROOT');
 
     let tempWebAccesses = [];
     let permanentWebAccesses = [];
@@ -14,7 +16,7 @@
 
     async function getWebAccesses() {
         try {
-            const wa = await fetch('/api/web-accesses');
+            const wa = await fetch(`${API_ROOT}/web-accesses`);
             if (wa.status !== 200) throw new Error(wa.statusMessage);
             const waJson = await wa.json();
             if (waJson.error) throw new Error(waJson.error);
