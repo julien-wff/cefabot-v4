@@ -26,6 +26,7 @@ export default class WebServer {
         this.app = express();
         const server = this.createServer();
         this.app.set('etag', false);
+        this.app.set('view engine', 'ejs');
         // Setup socket
         this.ws = new ws.Server({ server, path: `${process.env.WEB_ROOT_PATH}/ws/` });
         this.ws.on('connection', this.handleWSConnection);
@@ -42,8 +43,12 @@ export default class WebServer {
         this.app.use(bodyParser.json());
         this.app.use(bodyParser.urlencoded({ extended: true }));
         this.app.use(`${process.env.WEB_ROOT_PATH}/api`, apiRouter);
-        this.app.get([ `${process.env.WEB_ROOT_PATH}/app`, `${process.env.WEB_ROOT_PATH}/app/*` ], (_, res) =>
-            res.sendFile(path.join(WEB_DIR, 'index.html')));
+        this.app.get([ `${process.env.WEB_ROOT_PATH}/app`, `${process.env.WEB_ROOT_PATH}/app/*` ], (_, res) => {
+            res.render(path.join(WEB_DIR, 'index.ejs'), {
+                WEB_ROOT_PATH: process.env.WEB_ROOT_PATH,
+                TOKEN_EXPIRE_DURATION,
+            });
+        });
 
         const listener = server.listen(process.env.WEB_PORT);
         listener.setTimeout(15000);

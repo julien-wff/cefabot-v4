@@ -50,8 +50,7 @@
     function setRemainingTime() {
         if (!currentAccess)
             return;
-        const TOKEN_VALIDITY = currentAccess.permanent ? 1e16 : 3600 * 1000;
-        remainingTime = dayjs(currentAccess.created + TOKEN_VALIDITY).fromNow(true);
+        remainingTime = dayjs(currentAccess.created + window.TOKEN_EXPIRE_DURATION).fromNow(true);
     }
 
     async function copyInformations(info, message) {

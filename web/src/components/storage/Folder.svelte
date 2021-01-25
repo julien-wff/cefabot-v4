@@ -26,6 +26,7 @@
 </script>
 
 <style>
+  /* TODO: make dynamic URLs */
     span {
         padding: 0 0 0 1.5em;
         background: url("/cefabot/icons/folder.svg") 0 0.1em no-repeat;

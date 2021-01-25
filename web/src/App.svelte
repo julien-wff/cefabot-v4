@@ -14,7 +14,7 @@
 
     export let url = '';
 
-    const BASE_ROOT = '/cefabot';
+    const BASE_ROOT = window.WEB_ROOT || '/cefabot';
     setContext('BASE_ROOT', BASE_ROOT);
     const APP_ROOT = `${BASE_ROOT}/app`;
     setContext('APP_ROOT', APP_ROOT);
@@ -31,8 +31,7 @@
             const session = await res.json();
 
             if (!session.permanent) {
-                const TOKEN_VALIDITY = 3600 * 1000;
-                const remainingTime = (session.created + TOKEN_VALIDITY) - Date.now();
+                const remainingTime = (session.created + window.TOKEN_EXPIRE_DURATION) - Date.now();
 
                 setTimeout(async () => {
                     await Swal.fire({
