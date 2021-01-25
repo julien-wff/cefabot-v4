@@ -4,7 +4,7 @@ module.exports = {
     purge: {
         content: [
             './src/**/*.svelte',
-            './public/index.html'
+            './public/index.ejs'
         ],
         options: {
             safelist: [
