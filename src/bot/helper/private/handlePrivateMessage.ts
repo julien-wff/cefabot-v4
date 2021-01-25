@@ -40,7 +40,7 @@ export default async function handlePrivateMessage(message: Message, bot: BotIns
         } as WebPanelAccessType);
         await access.save();
 
-        const URLMessage = await message.channel.send(`${process.env.WEB_BASE_URL}${process.env.WEB_ROOT_PATH}/connect?token=${access.token}`);
+        const URLMessage = await message.channel.send(`${process.env.WEB_BASE_URL}${process.env.WEB_ROOT_PATH}${process.env.WEB_ROOT_PATH?.endsWith('/') ? '' : '/'}connect?token=${access.token}`);
 
         await addTask(bot, '15s', {
             type: 'DELETE_PRIVATE_MSG',
