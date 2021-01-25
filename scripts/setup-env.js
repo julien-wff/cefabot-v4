@@ -5,44 +5,44 @@ const prompts = require('prompts');
 const kleur = require('kleur');
 
 const questions = [
-    // {
-    //     type: 'confirm',
-    //     name: 'production',
-    //     message: 'Is this environment a production environment?',
-    // },
-    // {
-    //     type: 'confirm',
-    //     name: 'genKey',
-    //     message: 'Automatically generate the bot encryption key?',
-    // },
-    // {
-    //     type: prev => prev === false ? 'password' : null,
-    //     name: 'key',
-    //     message: 'Custom bot encryption key',
-    //     validate: input => input.match(/^[a-zA-Z0-9]{32}$/),
-    // },
-    // {
-    //     type: 'text',
-    //     name: 'dbURI',
-    //     message: 'Database URI',
-    // },
-    // {
-    //     type: 'text',
-    //     name: 'storagePath',
-    //     message: 'Storage path',
-    // },
-    // {
-    //     type: 'text',
-    //     name: 'webBaseUrl',
-    //     message: 'Web panel base URL, without the ending slash (ex: http://host.ext, or https://192.168.1.2:8000)',
-    //     validate: input => input.match(/^https?:\/\/[a-zA-Z0-9.-\/:]{1,80}$/),
-    // },
-    // {
-    //     type: 'text',
-    //     name: 'webRootPath',
-    //     message: 'Web panel root path (ex: /, or /cefabot)',
-    //     validate: input => input.match(/^[a-zA-Z0-9.-\/:]{1,80}$/),
-    // },
+    {
+        type: 'confirm',
+        name: 'production',
+        message: 'Is this environment a production environment?',
+    },
+    {
+        type: 'confirm',
+        name: 'genKey',
+        message: 'Automatically generate the bot encryption key?',
+    },
+    {
+        type: prev => prev === false ? 'password' : null,
+        name: 'key',
+        message: 'Custom bot encryption key',
+        validate: input => input.match(/^[a-zA-Z0-9]{32}$/),
+    },
+    {
+        type: 'text',
+        name: 'dbURI',
+        message: 'Database URI',
+    },
+    {
+        type: 'text',
+        name: 'storagePath',
+        message: 'Storage path',
+    },
+    {
+        type: 'text',
+        name: 'webBaseUrl',
+        message: 'Web panel base URL, without the ending slash (ex: http://host.ext, or https://192.168.1.2:8000)',
+        validate: input => input.match(/^https?:\/\/[a-zA-Z0-9.-\/:]{1,80}$/),
+    },
+    {
+        type: 'text',
+        name: 'webRootPath',
+        message: 'Web panel root path (ex: /, or /cefabot)',
+        validate: input => input.match(/^[a-zA-Z0-9.-\/:]{1,80}$/),
+    },
     {
         type: 'text',
         name: 'certPath',
