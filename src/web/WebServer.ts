@@ -76,25 +76,33 @@ export default class WebServer {
 
 
     async checkAuth(req: Request, res: Response, next: NextFunction) {
+
+        function sendError(errorMsg: string, code = 400) {
+            if (req.path.startsWith(`${process.env.WEB_ROOT_PATH}/api`))
+                res.status(code).json({ error: errorMsg });
+            else
+                res.status(code).send(errorMsg);
+        }
+
         const token = req.cookies?.token as string | undefined;
         if (!token) {
-            res.status(401).send('Token missing');
+            sendError('Token missing', 401);
             return;
         }
 
         const auth = await WebPanelAccess.findOne({ token });
         if (!auth) {
-            res.status(401).send('Authorisation not found');
+            sendError('Authorisation not found', 401);
             return;
         }
 
         if ((!auth.permanent && auth.created.getTime() + TOKEN_EXPIRE_DURATION < Date.now()) || !auth.active) {
-            res.status(401).send('Token expired');
+            sendError('Token expired', 401);
             return;
         }
 
         if (!auth.permanent && auth.ip !== req.ip) {
-            res.status(401).send('Mismatching ip');
+            sendError('Mismatching ip', 401);
             return;
         }
 
