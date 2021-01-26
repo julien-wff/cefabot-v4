@@ -6,7 +6,6 @@ export default async function disconnectRoute(req: Request, res: Response) {
     const token = req.cookies.token as string | undefined;
     if (!token) {
         sendResponse(res, 400, 'Please supply a token');
-        res.status(400).send();
         return;
     }
 
