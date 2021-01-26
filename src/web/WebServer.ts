@@ -5,6 +5,7 @@ import fs from 'fs';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import WebPanelAccess from '../models/WebPanelAccess';
+import { sendError } from './error/sendError';
 import { connectionRouter, apiRouter } from './router';
 import compression from 'compression';
 import http from 'http';
@@ -50,6 +51,10 @@ export default class WebServer {
             });
         });
 
+        this.app.use(((req, res) => {
+            sendError(req, res, 'Page not found', 404);
+        }));
+
         const listener = server.listen(process.env.WEB_PORT);
         listener.setTimeout(15000);
     }
@@ -77,32 +82,25 @@ export default class WebServer {
 
     async checkAuth(req: Request, res: Response, next: NextFunction) {
 
-        function sendError(errorMsg: string, code = 400) {
-            if (req.path.startsWith(`${process.env.WEB_ROOT_PATH}/api`))
-                res.status(code).json({ error: errorMsg });
-            else
-                res.status(code).send(errorMsg);
-        }
-
         const token = req.cookies?.token as string | undefined;
         if (!token) {
-            sendError('Token missing', 401);
+            sendError(req, res, 'Token missing', 401);
             return;
         }
 
         const auth = await WebPanelAccess.findOne({ token });
         if (!auth) {
-            sendError('Authorisation not found', 401);
+            sendError(req, res, 'Authorisation not found', 401);
             return;
         }
 
         if ((!auth.permanent && auth.created.getTime() + TOKEN_EXPIRE_DURATION < Date.now()) || !auth.active) {
-            sendError('Token expired', 401);
+            sendError(req, res, 'Token expired', 401);
             return;
         }
 
         if (!auth.permanent && auth.ip !== req.ip) {
-            sendError('Mismatching ip', 401);
+            sendError(req, res, 'Mismatching ip', 401);
             return;
         }
 
