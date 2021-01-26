@@ -55,7 +55,7 @@
     }
 </script>
 
-<div class="block cursor-pointer rounded duration-100 px-1"
+<div class="block cursor-pointer rounded duration-100 px-1 break-words overflow-y-hidden"
      class:text-gray-300={type === 'debug'}
      class:text-orange-400={type === 'warning'}
      class:text-red-400={type === 'error'}

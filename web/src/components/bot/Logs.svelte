@@ -46,7 +46,7 @@
 
     <div class="p-2 ml-2">
         {#each $logs as { type, message, date }}
-            <div class="block"
+            <div class="block break-words overflow-y-hidden"
                  class:text-gray-300={type === 'debug'}
                  class:text-orange-400={type === 'warning'}
                  class:text-red-400={type === 'error'}>
