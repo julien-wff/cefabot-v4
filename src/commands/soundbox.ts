@@ -11,7 +11,7 @@ const properties: Command = {
         'soundbox',
         'sb',
     ],
-    permission: 'MANAGE_CHANNELS',
+    permission: 'SEND_MESSAGES',
     removable: true,
     paths: [
         {
