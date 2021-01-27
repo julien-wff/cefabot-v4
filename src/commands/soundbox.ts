@@ -31,7 +31,7 @@ const properties: Command = {
             run: idleConnect,
         },
         {
-            help: 'play `<son>`',
+            help: 'play <son>',
             description: 'Jouer le son spécifier dans le salon vocal de la personne qui effectue la commande.',
             args: [
                 { argType: 'static', triggers: [ 'play' ] },

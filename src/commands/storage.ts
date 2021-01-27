@@ -24,7 +24,7 @@ const properties: Command = {
             run: storageList,
         },
         {
-            help: 'upload `chemin`',
+            help: 'upload <chemin>',
             description: 'Uploader un fichier dans le stockage du bot',
             args: [
                 { argType: 'static', triggers: [ 'upload', 'add' ] },
