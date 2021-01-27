@@ -47,22 +47,29 @@ export default logger;
  * @param message The message of the log.
  * @param data Some additional data to save.
  */
-function log(level: LogLevel, type: LogType, message: string, data?: AdditionalData) {
+function log(level: LogLevel, type: LogType, message: string | Error, data?: AdditionalData) {
 
     // If the message is empty, mongoose will throw an error
     if (!message) return;
 
     if (mongoose.connection.readyState === 1 && process.env.NODE_ENV === 'prod') {
 
-        const stackTrace = new StackTracey()
-            .clean()
-            .filter(e => !e.fileName.match(/logger\.[jt]s/))   // Remove this trace
-            .items;
+        let stackTrace: StackTracey['items'];
+
+        if (message instanceof Error)
+            stackTrace = new StackTracey(message)
+                .clean()
+                .items;
+        else
+            stackTrace = new StackTracey()
+                .clean()
+                .filter(e => !e.fileName.match(/logger\.[jt]s/))   // Remove this trace
+                .items;
 
         new LogModel({
             level,
             type,
-            message,
+            message: message instanceof Error && message.message ? message.message : message,
             stackTrace,
             ...data,
         } as Log)
