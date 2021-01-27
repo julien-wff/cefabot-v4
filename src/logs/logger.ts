@@ -2,6 +2,7 @@ import { LogLevel, LogType } from './logTypes';
 import LogModel, { Log } from '../models/LogModel';
 import mongoose from 'mongoose';
 import { BotPacket } from '../bot/botTypes';
+import StackTracey from 'stacktracey';
 
 
 /**
@@ -53,10 +54,16 @@ function log(level: LogLevel, type: LogType, message: string, data?: AdditionalD
 
     if (mongoose.connection.readyState === 1 && process.env.NODE_ENV === 'prod') {
 
+        const stackTrace = new StackTracey()
+            .clean()
+            .filter(e => !e.fileName.match(/logger\.[jt]s/))   // Remove this trace
+            .items;
+
         new LogModel({
             level,
             type,
             message,
+            stackTrace,
             ...data,
         } as Log)
             .save()

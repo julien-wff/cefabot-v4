@@ -1,5 +1,6 @@
 import { Schema, model, Document } from 'mongoose';
 import { LogLevel, LogType } from '../logs/logTypes';
+import StackTracey from 'stacktracey';
 
 
 const Log = new Schema({
@@ -19,6 +20,7 @@ const Log = new Schema({
     location: String,
     botID: Schema.Types.ObjectId,
     data: Schema.Types.Mixed,
+    stackTrace: Schema.Types.Mixed,
     date: {
         type: Date,
         default: Date.now,
@@ -43,6 +45,9 @@ export interface Log {
 
     /** The ID of the bot associated with the log. */
     botID?: any,
+
+    /** The full stack trace */
+    stackTrace: StackTracey['items'],
 
     /** Some additional data about the log. */
     data?: any,
