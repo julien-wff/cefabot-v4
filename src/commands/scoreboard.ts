@@ -9,8 +9,6 @@ import deleteFile from '../canvas/helper/delete-file';
 
 const genAndSendScoreboard = async (message: Message, users: FormattedUser[], bot: BotInstance) => {
 
-    message.channel.startTyping();
-
     try {
         const imgURI = await createScoreboard(users);
 
@@ -29,8 +27,8 @@ const genAndSendScoreboard = async (message: Message, users: FormattedUser[], bo
 
 };
 
-
 const runWithoutArgs: PathRun = async (message, params, bot) => {
+    message.channel.startTyping();
     const users = await getUsers('messages', message, bot);
     await genAndSendScoreboard(message, users, bot);
 };
@@ -38,12 +36,14 @@ const runWithoutArgs: PathRun = async (message, params, bot) => {
 
 // TODO: fix the command parser to use that
 // const runWithCount: PathRun<{ count?: number }> = async (message, params, bot) => {
+//     message.channel.startTyping();
 //     const users = await getUsers('messages', message, bot, params.count);
 //     await genAndSendScoreboard(message, users, bot);
 // };
 
 
 const runWithStat: PathRun<{ stat: string, count?: number }> = async (message, params, bot) => {
+    message.channel.startTyping();
     let stat: ScoreType | undefined;
     if (params.stat.match(/msg|messages?/))
         stat = 'messages';
