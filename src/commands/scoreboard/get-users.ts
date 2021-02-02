@@ -1,11 +1,30 @@
 import { DiscordAPIError, Message } from 'discord.js';
 import { BotInstance } from '../../bot/botTypes';
 import { FormattedUser } from '../../canvas/create-scoreboard';
-import UserStatsModel from '../../models/UserStatsModel';
+import UserStatsModel, { UserStatsDoc } from '../../models/UserStatsModel';
 
-type ScoreType = 'messages' | 'commands' | 'level' | 'xp';
 
+export type ScoreType = 'messages' | 'commands' | 'level' | 'xp';
+type DBProperty = 'messagesCount' | 'commandsCount' | 'xp.count'
+
+
+//TODO: support the level param
 export default async function getUsers(scoreType: ScoreType, message: Message, bot: BotInstance, count = 5) {
+
+    let property: DBProperty;
+
+    switch (scoreType) {
+        case 'messages':
+            property = 'messagesCount';
+            break;
+        case 'commands':
+            property = 'commandsCount';
+            break;
+        case 'xp':
+        case 'level':
+            property = 'xp.count';
+            break;
+    }
 
     const users = await UserStatsModel
         .find({
@@ -13,7 +32,7 @@ export default async function getUsers(scoreType: ScoreType, message: Message, b
             guildID: message.guild!.id,
             onServer: true,
         })
-        .sort({ messagesCount: 'desc' })
+        .sort({ [property]: 'desc' })
         .limit(count);
 
     // Get and organize stats about members
@@ -31,13 +50,28 @@ export default async function getUsers(scoreType: ScoreType, message: Message, b
             return null;
         }
 
+        const count = getStat(user, scoreType);
+
         return {
             name: member?.displayName || user.userID,
-            count: user.messagesCount,
+            count,
             position: ind + 1,
             avatarURL: member?.user.displayAvatarURL({ size: 128, format: 'png' }),
-            percentage: user.messagesCount / users[0].messagesCount * 100,
+            percentage: count / getStat(users[0], scoreType) * 100,
         } as FormattedUser;
     }))
         .then(l => l.filter(u => u)) as Promise<FormattedUser[]>;
+}
+
+
+function getStat(user: UserStatsDoc, property: ScoreType): number {
+    switch (property) {
+        case 'messages':
+            return user.messagesCount;
+        case 'commands':
+            return user.commandsCount;
+        case 'xp':
+        case 'level':
+            return user.xp.count;
+    }
 }
