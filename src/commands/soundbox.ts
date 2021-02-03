@@ -13,6 +13,7 @@ const properties: Command = {
     ],
     permission: 'SEND_MESSAGES',
     removable: true,
+    channel: 'commands',
     paths: [
         {
             help: 'list',
