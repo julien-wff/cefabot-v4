@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import WebPanelAccess from '../../models/WebPanelAccess';
 import ms from 'ms';
-import { sendError } from '../error/sendError';
+import { sendError } from '../helpers/sendError';
 
 const TOKEN_EXPIRE_DURATION = ms('10m');
 

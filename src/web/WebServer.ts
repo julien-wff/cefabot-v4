@@ -5,7 +5,7 @@ import fs from 'fs';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import WebPanelAccess from '../models/WebPanelAccess';
-import { sendError } from './error/sendError';
+import { sendError } from './helpers/sendError';
 import { connectionRouter, apiRouter } from './router';
 import compression from 'compression';
 import http from 'http';
@@ -28,6 +28,7 @@ export default class WebServer {
         const server = this.createServer();
         this.app.set('etag', false);
         this.app.set('view engine', 'ejs');
+        this.app.set('views', path.resolve(__dirname, 'views'));
         // Setup socket
         this.ws = new ws.Server({ server, path: `${process.env.WEB_ROOT_PATH}/ws/` });
         this.ws.on('connection', this.handleWSConnection);
