@@ -8,6 +8,7 @@
 </script>
 
 <script>
+    import StackTrace from './StackTrace.svelte';
     import { getContext } from 'svelte';
     import { shortpress } from '../../functions/shortpress';
     import { dateFormat } from '../../functions/date-format';
@@ -21,6 +22,7 @@
     export let botID;
     export let location;
     export let data;
+    export let stackTrace;
 
     let showDetails = false;
 
@@ -82,6 +84,7 @@
             {#if location}<span class="block">Location : {location}</span>{/if}
             {#if !$options.showTime}<span class="block">Heure : {formattedDate}</span>{/if}
             {#if data}<span class="block">Données : {@html sanitizeJSON(data)}</span>{/if}
+            {#if stackTrace}<StackTrace {stackTrace}/>{/if}
         </div>
     {/if}
 </div>

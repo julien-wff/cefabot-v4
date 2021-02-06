@@ -24,6 +24,27 @@
     });
 
 
+    // Load prism.js if not already
+    onMount(() => {
+        if (document.getElementById('prismjs'))
+            return;
+
+        const js = document.createElement('script');
+        js.async = true;
+        js.src = `${BASE_ROOT}/prism.min.js`;
+        js.id = 'prismjs';
+        js.addEventListener('load', () => {
+            Prism.manual = true;
+        });
+        document.body.append(js);
+
+        const css = document.createElement('link');
+        css.rel = 'stylesheet';
+        css.href = `${BASE_ROOT}/prism.min.css`;
+        document.head.append(css);
+    });
+
+
     let logs = writable([]);
     let bots = writable([]);
     let filters = writable({
@@ -32,6 +53,7 @@
         bots: null,
         app: true,
         sort: 'asc',
+        stack: true,
     });
 
     let options = writable({
