@@ -54,7 +54,10 @@ export default async function parseCommand(content: string, cmdProps: Command, m
 
     // If no paths found return an error
     if (!path) {
-        result.error = bot.localeService.translate('error.something went wrong', { code: 'ERR_PATH_NOT_FOUND' });
+        result.error = bot.localeService.translate(
+            'error.unknown path',
+            { arg: content.replace(/`/g, ''), command: cmdProps.name },
+        );
         return result;
     }
 

@@ -10,6 +10,7 @@
   "error.cannot define a duration greater than 24 days": "impossible de définir une durée de plus de 24 jours",
   "error.something went wrong": "une erreur est survenue. Code : `{{code}}`.",
   "error.missing flag": "le drapeau {{flag}} est manquant",
+  "error.unknown path": "impossible de trouver l'argument `{{arg}}`. Veuillez faire `!help {{command}}` pour obtenir de l'aide.",
   "error.flag present under multiple versions": "le drapeau {{flag}} est présent sous plusieurs versions",
   "error.the flag is invalid": "le drapeau {{flag}} est invalide",
   "error.missing key in db": "clé manquante dans la base de données : `{{key}}`. Veuillez l'ajouter.",

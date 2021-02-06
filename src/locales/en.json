@@ -10,6 +10,7 @@
   "error.cannot define a duration greater than 24 days": "cannot define a duration greater than 24 days",
   "error.something went wrong": "something went wrong. Code : `{{code}}`.",
   "error.missing flag": "the flag {{flag}} is missing",
+  "error.unknown path": "unable to find the argument `{{arg}}`. Please do `!help {{command}}` for help.",
   "error.flag present under multiple versions": "the flag {{flag}} is present under multiple versions ({{flag}}, {{secondFlag}})",
   "error.the flag is invalid": "the flag {{flag}} is invalid",
   "error.missing key in db": "missing key in the database : `{{key}}`. Please add it.",
