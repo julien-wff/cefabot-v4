@@ -117,7 +117,7 @@ interface StackTrace {
     file: string,
     line: number | undefined,
     column: number | undefined,
-    calee: string,
+    callee: string,
 }
 
 
@@ -137,7 +137,7 @@ function formatStackTrace(stackTrace: StackTracey['items'] | undefined): StackTr
             file: stack.fileRelative,
             line: stack.line,
             column: stack.column,
-            calee: stack.callee,
+            callee: stack.callee,
         }))
         .filter(((value, index, stack) => JSON.stringify(value) !== JSON.stringify(stack[index - 1])));
 }
