@@ -1,7 +1,9 @@
 import { Request, Response } from 'express';
+import StackTracey from 'stacktracey';
 import { isMongooseID } from '../helper/isID';
 import LogModel, { Log } from '../../../../models/LogModel';
 import { MongooseFilterQuery, Document, Types } from 'mongoose';
+
 
 interface LogsRequestParams {
     limit: number,
@@ -61,6 +63,14 @@ export default async function getLogs(req: Request, res: Response) {
             requestParams.sort = sort;
     }
 
+    let includeStack = false;
+
+    if (req.query.stack !== undefined) {
+        let stack = req.query.stack;
+        if (stack !== '0' && stack !== 'false')
+            includeStack = true;
+    }
+
     let queries: MongooseFilterQuery<Document & Log>[] = [];
     if (requestParams.app)
         queries.push({
@@ -85,5 +95,49 @@ export default async function getLogs(req: Request, res: Response) {
         .skip(requestParams.offset)
         .sort({ date: requestParams.sort });
 
-    res.json(logs);
+    res.json(
+        logs.map(l => ({
+            _id: l._id,
+            type: l.type,
+            message: l.message,
+            level: l.level,
+            location: l.location,
+            botID: l.botID,
+            stackTrace: includeStack ? formatStackTrace(l.stackTrace) : undefined,
+            data: l.data,
+            date: l.date.toISOString(),
+        })),
+    );
+
+}
+
+
+interface StackTrace {
+    source: string | undefined,
+    file: string,
+    line: number | undefined,
+    column: number | undefined,
+    calee: string,
+}
+
+
+function formatStackTrace(stackTrace: StackTracey['items'] | undefined): StackTrace[] | undefined {
+    if (!stackTrace)
+        return undefined;
+
+    return stackTrace
+        .map(stack => ({
+            source: stack.sourceFile?.lines && stack.line
+                ? stack.sourceFile?.lines
+                    ?.slice(stack.line - 3, stack.line + 3)
+                    .map(l => l.trimEnd())
+                    .join('\n')
+                    .trimEnd()
+                : undefined,
+            file: stack.fileRelative,
+            line: stack.line,
+            column: stack.column,
+            calee: stack.callee,
+        }))
+        .filter(((value, index, stack) => JSON.stringify(value) !== JSON.stringify(stack[index - 1])));
 }
