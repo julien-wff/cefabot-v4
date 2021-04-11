@@ -14,7 +14,7 @@
 
     export let url = '';
 
-    const BASE_ROOT = window.WEB_ROOT || '/cefabot';
+    const BASE_ROOT = window.WEB_ROOT ?? '';
     setContext('BASE_ROOT', BASE_ROOT);
     const APP_ROOT = `${BASE_ROOT}/app`;
     setContext('APP_ROOT', APP_ROOT);
