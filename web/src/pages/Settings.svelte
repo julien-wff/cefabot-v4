@@ -28,7 +28,7 @@
     <div class="md:mx-10 md:mt-10 sm:mx-4 sm:mt-4 m-2 p-4 bg-gray-700 rounded">
 
         <h3 class="font-semibold text-xl pl-2 mt-2">Ancienne version de stats (v1)</h3>
-        <Link to="./import">
+        <Link to="./import-stats">
             <button class="bg-blue-500 px-4 py-2 rounded mt-2 ml-4">
                 Importer un fichier
             </button>
