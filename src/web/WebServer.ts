@@ -38,7 +38,7 @@ export default class WebServer {
         this.app.use(this.hidePoweredBy);
         this.app.use(`${process.env.WEB_ROOT_PATH}/`, connectionRouter);
         this.app.use(fileUpload({ createParentPath: true }));
-        this.app.get(`${process.env.WEB_ROOT_PATH}/favicons/site.webmanifest`, (_, res) => res.sendFile(path.resolve(WEB_DIR, 'favicons/site.webmanifest')));
+        this.app.get(`${process.env.WEB_ROOT_PATH}/favicons/site.webmanifest`, this.sendManifest);
         this.checkAuth = this.checkAuth.bind(this);
         this.app.use(this.checkAuth);
         this.app.use(process.env.WEB_ROOT_PATH || '/', express.static(WEB_DIR, { etag: false }));
@@ -121,6 +121,15 @@ export default class WebServer {
         socket.once('close', () => {
             process.off('log', onLog);
         });
+    }
+
+
+    sendManifest(req: Request, res: Response) {
+        let manifestContent = fs.readFileSync(path.resolve(WEB_DIR, 'favicons/site.webmanifest')).toString();
+        manifestContent = manifestContent.replace(/%ROOT_PATH%/g, process.env.WEB_ROOT_PATH || '/');
+        res
+            .header('Content-Type', 'application/json')
+            .send(manifestContent);
     }
 
 }

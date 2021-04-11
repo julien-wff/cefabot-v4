@@ -1,5 +1,6 @@
 <!--suppress UnnecessaryLabelJS -->
 <script>
+    import { getContext } from 'svelte';
     import File from './File.svelte';
     import FolderContextMenu from './context-menu/FolderContextMenu.svelte';
 
@@ -7,6 +8,8 @@
     export let name;
     export let children;
     export let path = [];
+
+    const BASE_ROOT = getContext('BASE_ROOT');
 
     $: path = [...path, ...(name ? [name] : [])];
 
@@ -26,15 +29,10 @@
 </script>
 
 <style>
-  /* TODO: make dynamic URLs */
     span {
         padding: 0 0 0 1.5em;
-        background: url("/cefabot/icons/folder.svg") 0 0.1em no-repeat;
+        background: none 0 0.1em no-repeat;
         background-size: 1em 1em;
-    }
-
-    .expanded {
-        background-image: url("/cefabot/icons/folder-open.svg");
     }
 
     ul {
@@ -54,7 +52,7 @@
 
 <span
         class="cursor-pointer font-bold"
-        class:expanded
+        style="background-image: url('{BASE_ROOT}/icons/folder{expanded ? '-open' : ''}.svg')"
         on:click={toggle}
         on:contextmenu|preventDefault={contextMenu}>
     {name}
