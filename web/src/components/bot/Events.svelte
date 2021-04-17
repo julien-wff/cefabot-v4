@@ -9,6 +9,7 @@
     let dataStorage = getContext('data-storage');
     const guilds = getContext('guilds');
     const getBotData = getContext('get-bot-data');
+    const API_ROOT = getContext('API_ROOT');
 
     function toggleEvent(name) {
         if ($bot.events.includes(name)) {  // Remove the data
@@ -34,7 +35,7 @@
                     });
                     new MissingKeys({
                         target: document.getElementById('swal-svelte-missing-event'),
-                        props: { missingKeys, guilds: $guilds, bot, getBotData },
+                        props: { missingKeys, guilds: $guilds, bot, getBotData, API_ROOT },
                     });
                     return;
                 }

@@ -9,9 +9,8 @@
     export let guilds = [];
     export let bot;
     export let getBotData = () => void 0;
+    export let API_ROOT;
 
-
-    const API_ROOT = getContext('API_ROOT');
 
     /** @param key {{key: String, type: String}} */
     async function addMissingKey(key) {
