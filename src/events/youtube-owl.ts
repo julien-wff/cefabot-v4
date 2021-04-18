@@ -64,18 +64,27 @@ async function youtubeOWL() {
         });
     }
 
-    const response = await axios({
-        url: 'https://www.googleapis.com/youtube/v3/search',
-        params: {
-            part: 'snippet',
-            channelId: CHANNEL_ID,
-            maxResults: 1,
-            eventType: 'live',
-            type: 'video',
-            key: API_KEY,
-        },
-        responseType: 'json',
-    });
+    let response: any;
+    try {
+        response = await axios({
+            url: 'https://www.googleapis.com/youtube/v3/search',
+            params: {
+                part: 'snippet',
+                channelId: CHANNEL_ID,
+                maxResults: 1,
+                eventType: 'live',
+                type: 'video',
+                key: API_KEY,
+            },
+            responseType: 'json',
+        });
+    } catch (e) {
+        return logger.bot.error(e, {
+            data: e,
+            location: 'youtube-owl.ts',
+            botID: botInstance.config._id,
+        });
+    }
 
     const live: YoutubeAPILive | undefined = response.data.items[0];
 
