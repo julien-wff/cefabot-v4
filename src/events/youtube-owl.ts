@@ -10,7 +10,7 @@ import logger from '../logs/logger';
 let botInstance: BotInstance;
 let data: DataStorage[];
 let interval: number;
-let isLive: boolean;
+let wasPreviouslyLive: boolean;
 
 
 interface YoutubeAPILive {
@@ -86,22 +86,22 @@ async function youtubeOWL() {
         });
     }
 
-    const live: YoutubeAPILive | undefined = response.data.items[0];
+    const isLive: YoutubeAPILive | undefined = response.data.items[0];
 
-    if (!live && isLive) {
+    if (!isLive && wasPreviouslyLive) {
 
-        isLive = false;
+        wasPreviouslyLive = false;
         await botInstance.client.user!.setPresence(botInstance.config.presence || {});
 
-    } else if (live && !isLive) {
+    } else if (isLive && !wasPreviouslyLive) {
 
-        isLive = true;
-        const thumbnail = live.snippet.thumbnails.medium;
-        const streamURL = `https://www.youtube.com/watch?v=${live.id.videoId}`;
+        wasPreviouslyLive = true;
+        const thumbnail = isLive.snippet.thumbnails.medium;
+        const streamURL = `https://www.youtube.com/watch?v=${isLive.id.videoId}`;
         await Promise.all([
             announcementChannel.send(new MessageEmbed({
                 title: 'L\'Overwatch League est en direct !',
-                description: live.snippet.title,
+                description: isLive.snippet.title,
                 color: '#f89c2d',
                 fields: [ {
                     name: 'Regarde en direct',
