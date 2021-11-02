@@ -9,8 +9,11 @@ export const properties: Command = {
     name: 'send',
     triggers: [
         'send',
+        'say',
+        'tell',
         'message',
         'envoyer',
+        'dire',
     ],
     removable: true,
     description: 'Envoyer un message avec le compte du bot',
