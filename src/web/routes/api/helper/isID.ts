@@ -7,7 +7,7 @@ export function isGuildID(id: any) {
 }
 
 export function isClientToken(token: any) {
-    return !!(typeof token === 'string' && token.match(/^[MN][A-Za-z\d]{23}\.[\w-]{6}\.[\w-]{27}$/));
+    return !!(typeof token === 'string' && token.match(/^[M-Q][A-Za-z\d]{23}\.[\w-]{6}\.[\w-]{27}$/));
 }
 
 export function isClientID(id: any) {

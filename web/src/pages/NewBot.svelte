@@ -71,7 +71,7 @@
             <input
                     class="shadow appearance-none bg-gray-600 border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
                     bind:value={token}
-                    pattern={"^[MN][A-Za-z\\d]{23}\\.[\\w-]{6}\\.[\\w-]{27}$"}
+                    pattern={"^[M-Q][A-Za-z\\d]{23}\\.[\\w-]{6}\\.[\\w-]{27}$"}
                     required/>
         </label>
     </div>
