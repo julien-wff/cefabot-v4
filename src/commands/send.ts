@@ -18,12 +18,14 @@ export const properties: Command = {
     removable: true,
     description: 'Envoyer un message avec le compte du bot',
     permission: 'MANAGE_MESSAGES',
-    rootPath: {
-        help: '<message>',
-        description: 'Envoyer un message',
-        args: [
-            { argType: 'dynamic', displayName: 'message', valueName: 'message', valueType: 'listUntilEnd' },
-        ],
-        run: sendMessage,
-    },
+    paths: [
+        {
+            help: '<message>',
+            description: 'Envoyer un message',
+            args: [
+                { argType: 'dynamic', displayName: 'message', valueName: 'message', valueType: 'listUntilEnd' },
+            ],
+            run: sendMessage,
+        },
+    ],
 };
