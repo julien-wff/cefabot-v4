@@ -31,6 +31,7 @@ export default async function getUsers(scoreType: ScoreType, message: Message, b
             botID: bot.config._id,
             guildID: message.guild!.id,
             onServer: true,
+            bot: { $ne: true },
         })
         .sort({ [property]: 'desc' })
         .limit(count);
