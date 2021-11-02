@@ -1,6 +1,7 @@
 yarn.lock
 yarn-error.log
 package.lock
+pnpm-lock.yaml
 node_modules/
 .env
 
