@@ -15,27 +15,27 @@
     "dev": "concurrently -n rollup,tailwind -c red,cyan \"yarn watch:rollup\" \"yarn watch:tailwind\""
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "17.0.0",
-    "@rollup/plugin-node-resolve": "10.0.0",
-    "autoprefixer": "10.0.4",
+    "@rollup/plugin-commonjs": "21.0.1",
+    "@rollup/plugin-node-resolve": "13.0.6",
+    "autoprefixer": "10.4.0",
     "cross-env": "7.0.3",
-    "cssnano": "4.1.10",
-    "postcss": "8.1.14",
-    "postcss-cli": "8.3.0",
+    "cssnano": "5.0.9",
+    "postcss": "8.3.11",
+    "postcss-cli": "9.0.1",
     "postcss-easy-import": "3.0.0",
-    "rollup": "2.34.1",
-    "rollup-plugin-css-only": "^3.0.0",
-    "rollup-plugin-svelte": "7.0.0",
+    "rollup": "2.59.0",
+    "rollup-plugin-css-only": "3.1.0",
+    "rollup-plugin-svelte": "7.1.0",
     "rollup-plugin-terser": "7.0.2",
-    "tailwindcss": "2.0.1"
+    "tailwindcss": "2.2.19"
   },
   "dependencies": {
-    "@sweetalert2/theme-dark": "4.0.1",
-    "dayjs": "^1.9.7",
+    "@sweetalert2/theme-dark": "5.0.7",
+    "dayjs": "1.10.7",
     "deep-equal": "2.0.5",
     "nanobar": "0.4.2",
-    "svelte": "3.31.0",
-    "svelte-routing": "1.4.2",
-    "sweetalert2": "10.11.1"
+    "svelte": "3.44.1",
+    "svelte-routing": "1.6.0",
+    "sweetalert2": "11.1.9"
   }
 }

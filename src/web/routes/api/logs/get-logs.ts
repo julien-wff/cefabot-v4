@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import StackTracey from 'stacktracey';
 import { isMongooseID } from '../helper/isID';
 import LogModel, { Log } from '../../../../models/LogModel';
-import { MongooseFilterQuery, Document, Types } from 'mongoose';
+import { FilterQuery, Document, Types } from 'mongoose';
 
 
 interface LogsRequestParams {
@@ -71,7 +71,7 @@ export default async function getLogs(req: Request, res: Response) {
             includeStack = true;
     }
 
-    let queries: MongooseFilterQuery<Document & Log>[] = [];
+    let queries: FilterQuery<Document & Log>[] = [];
     if (requestParams.app)
         queries.push({
             level: 'app',
