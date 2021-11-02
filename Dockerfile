@@ -1,5 +1,5 @@
 # ----- Base node -----
-FROM node:12.18.2-stretch-slim AS base
+FROM node:12.22.7-stretch-slim AS base
 WORKDIR /cefabot
 RUN apt update && apt install -y libcairo2-dev libpango1.0-dev libjpeg-dev && rm -rf /var/lib/apt/lists/*
 
