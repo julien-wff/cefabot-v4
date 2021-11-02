@@ -70,8 +70,6 @@ const options = {
 (async () => {
 
     let res = await prompts(questions, options);
-    console.log(res);
-    process.exit(0)
 
     if (res.genKey) {
         res.key = uuid()
