@@ -2,6 +2,7 @@ import { Command } from './commands';
 import changeUsername from './bot/change-username';
 import changePresence from './bot/change-presence';
 import changeLang from './bot/change-lang';
+import { verifyStats } from './bot/verify-stats';
 
 
 // noinspection JSUnusedGlobalSymbols
@@ -89,6 +90,14 @@ const properties: Command = {
                 },
             ],
             run: changePresence,
+        },
+        {
+            help: 'verify-stats',
+            description: 'Vérifier les stats des utilisateurs d\'un salon et rajouter les manquants.',
+            args: [
+                { argType: 'static', triggers: [ 'verify', 'verify-stats', 'stats' ] },
+            ],
+            run: verifyStats,
         },
     ],
 };
