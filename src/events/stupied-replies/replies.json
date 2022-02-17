@@ -1,0 +1,113 @@
+[
+  {
+    "triggers": [
+      "quoi"
+    ],
+    "type": "ends_with",
+    "reply": "feur"
+  },
+  {
+    "triggers": [
+      "oui"
+    ],
+    "type": "ends_with",
+    "reply": "stiti"
+  },
+  {
+    "triggers": [
+      "tg",
+      "ta gueule",
+      "ftg"
+    ],
+    "type": "contains",
+    "reply": [
+      "nan toi %%TRIGGER%%",
+      "du calme oh",
+      "t ban",
+      "eh pas de violence ici"
+    ]
+  },
+  {
+    "triggers": [
+      "ferme la"
+    ],
+    "type": "contains",
+    "reply": "toi %%TRIGGER%% oh"
+  },
+  {
+    "triggers": [
+      "salope",
+      "salop",
+      "pute",
+      "conasse"
+    ],
+    "type": "contains",
+    "reply": [
+      "%%TRIGGER%% toi même",
+      "c'est toi la %%TRIGGER%%"
+    ]
+  },
+  {
+    "triggers": [
+      "comment tu vas",
+      "comment tu va",
+      "comment ca va",
+      "comment ça va",
+      "comment vas tu",
+      "comment vas-tu",
+      "comment va-tu",
+      "comment va tu"
+    ],
+    "type": "contains",
+    "reply": [
+      "oh moi ça va, tranquille",
+      "moi ça va, et toi bg ?",
+      "dans l'ensemble moi ça va"
+    ]
+  },
+  {
+    "triggers": [
+      "men fou",
+      "menfou",
+      "men fout",
+      "men fous",
+      "rien à foutre",
+      "rien a foutre",
+      "rien à battre",
+      "rien a battre",
+      "blc",
+      "bas les couilles",
+      "bat les couilles",
+      "ba les couilles",
+      "bas la race",
+      "bat la race",
+      "ba la race",
+      "bas les steak",
+      "bat les steak",
+      "ba les steaks",
+      "bas les steaks",
+      "bat les steaks",
+      "ba les steak"
+    ],
+    "type": "contains",
+    "reply": [
+      "oh parle mieux stp",
+      "la même",
+      "la même ouais",
+      "j'avoue",
+      "de ouf",
+      "tellement",
+      "c'est réel",
+      "réel"
+    ]
+  },
+  {
+    "triggers": [
+      "tranquille"
+    ],
+    "type": "contains",
+    "reply": [
+      "posé"
+    ]
+  }
+]
