@@ -3,7 +3,7 @@ import { BotInstance } from '../bot/botTypes';
 import logger from '../logs/logger';
 import DataModel from '../models/DataModel';
 import { BotEvent, EventCancel, EventRun } from './events';
-import replies from './stupied-replies/replies.json';
+import replies from './stupid-replies/replies.json';
 
 
 const DEFAULT_STUPID_REPLY_FREQUENCY = 0.1;
